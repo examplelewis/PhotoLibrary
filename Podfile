@@ -5,18 +5,9 @@ use_frameworks!
 
 target 'PhotoLibrary' do
 
-pod 'AFNetworking'
-pod 'CocoaLumberjack'
-pod 'BlocksKit'
-pod 'SDWebImage'
-pod 'Masonry'
-pod 'DateTools'
-pod 'Toast'
 pod 'SSZipArchive'
 pod 'FMDB'
-pod 'IQKeyboardManager'
 pod 'YYText'
-pod 'MJRefresh'
 pod 'SMBClient'
 
 end

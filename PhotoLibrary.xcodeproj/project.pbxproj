@@ -135,10 +135,8 @@
 				AC2624F8265812A900939375 /* ViewController.h */,
 				AC2624F9265812A900939375 /* ViewController.m */,
 				AC2624FB265812A900939375 /* Main.storyboard */,
-				AC2624FE265812AA00939375 /* Assets.xcassets */,
 				AC262500265812AA00939375 /* LaunchScreen.storyboard */,
-				AC262503265812AA00939375 /* Info.plist */,
-				AC262504265812AA00939375 /* main.m */,
+				AC26254C265813E200939375 /* Resources */,
 			);
 			path = PhotoLibrary;
 			sourceTree = "<group>";
@@ -159,6 +157,16 @@
 				AC26251B265812AB00939375 /* Info.plist */,
 			);
 			path = PhotoLibraryUITests;
+			sourceTree = "<group>";
+		};
+		AC26254C265813E200939375 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				AC2624FE265812AA00939375 /* Assets.xcassets */,
+				AC262503265812AA00939375 /* Info.plist */,
+				AC262504265812AA00939375 /* main.m */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -512,7 +520,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2G352K7NR7;
-				INFOPLIST_FILE = PhotoLibrary/Info.plist;
+				INFOPLIST_FILE = PhotoLibrary/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -532,7 +540,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2G352K7NR7;
-				INFOPLIST_FILE = PhotoLibrary/Info.plist;
+				INFOPLIST_FILE = PhotoLibrary/Resources/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
