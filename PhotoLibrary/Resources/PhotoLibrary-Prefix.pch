@@ -21,6 +21,7 @@
 //#import <YYModel.h>
 #import <UIView+Toast.h>
 #import <YYCategories.h>
+#import <SVProgressHUD.h>
 
 #import "RACEXTScope.h"
 

@@ -17,6 +17,7 @@
 		AC262505265812AA00939375 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AC262504265812AA00939375 /* main.m */; };
 		AC26250F265812AB00939375 /* PhotoLibraryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC26250E265812AB00939375 /* PhotoLibraryTests.m */; };
 		AC26251A265812AB00939375 /* PhotoLibraryUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC262519265812AB00939375 /* PhotoLibraryUITests.m */; };
+		ACE56CCA265939B20027A68A /* PLServerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56CC9265939B20027A68A /* PLServerModel.m */; };
 		ACEBB79A26588A07005778FB /* GYLogManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB77526588A07005778FB /* GYLogManager.m */; };
 		ACEBB79B26588A07005778FB /* GYUtilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB77626588A07005778FB /* GYUtilityManager.m */; };
 		ACEBB79C26588A07005778FB /* GYExceptionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB77726588A07005778FB /* GYExceptionManager.m */; };
@@ -83,6 +84,8 @@
 		AC262519265812AB00939375 /* PhotoLibraryUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoLibraryUITests.m; sourceTree = "<group>"; };
 		AC26251B265812AB00939375 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AC26270D26581CD900939375 /* PhotoLibrary-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PhotoLibrary-Prefix.pch"; sourceTree = "<group>"; };
+		ACE56CC8265939B20027A68A /* PLServerModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLServerModel.h; sourceTree = "<group>"; };
+		ACE56CC9265939B20027A68A /* PLServerModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLServerModel.m; sourceTree = "<group>"; };
 		ACEBB77526588A07005778FB /* GYLogManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GYLogManager.m; sourceTree = "<group>"; };
 		ACEBB77626588A07005778FB /* GYUtilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GYUtilityManager.m; sourceTree = "<group>"; };
 		ACEBB77726588A07005778FB /* GYExceptionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GYExceptionManager.m; sourceTree = "<group>"; };
@@ -197,6 +200,7 @@
 				AC2624F9265812A900939375 /* ViewController.m */,
 				AC2624FB265812A900939375 /* Main.storyboard */,
 				AC262500265812AA00939375 /* LaunchScreen.storyboard */,
+				ACE56CB3265938C50027A68A /* Main */,
 				ACEBB77226588A07005778FB /* Universal */,
 				ACEBB7A926588A0D005778FB /* Third Parties */,
 				AC26254C265813E200939375 /* Resources */,
@@ -231,6 +235,31 @@
 				AC26270D26581CD900939375 /* PhotoLibrary-Prefix.pch */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		ACE56CB3265938C50027A68A /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				ACE56CB4265938D50027A68A /* Server */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		ACE56CB4265938D50027A68A /* Server */ = {
+			isa = PBXGroup;
+			children = (
+				ACE56CB5265938E70027A68A /* Models */,
+			);
+			path = Server;
+			sourceTree = "<group>";
+		};
+		ACE56CB5265938E70027A68A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				ACE56CC8265939B20027A68A /* PLServerModel.h */,
+				ACE56CC9265939B20027A68A /* PLServerModel.m */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		ACEBB77226588A07005778FB /* Universal */ = {
@@ -533,6 +562,7 @@
 				ACEBB7A126588A07005778FB /* NSObject+GYAdd.m in Sources */,
 				ACEBB79E26588A07005778FB /* GYFileManager.m in Sources */,
 				ACEBB79D26588A07005778FB /* GYHTTPManager.m in Sources */,
+				ACE56CCA265939B20027A68A /* PLServerModel.m in Sources */,
 				AC262505265812AA00939375 /* main.m in Sources */,
 				AC2624F7265812A900939375 /* SceneDelegate.m in Sources */,
 				ACEBB7A626588A07005778FB /* NSString+GYAdd.m in Sources */,
