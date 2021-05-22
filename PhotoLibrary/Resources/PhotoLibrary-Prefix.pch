@@ -1,0 +1,34 @@
+//
+//  PhotoLibrary-Prefix.pch
+//  PhotoLibrary
+//
+//  Created by 龚宇 on 21/05/22.
+//
+
+#ifndef PhotoLibrary_Prefix_pch
+#define PhotoLibrary_Prefix_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
+#import <CocoaLumberjack.h>
+//#import <DateTools/NSDate+DateTools.h>
+#import <BlocksKit/BlocksKit.h>
+#import <Masonry.h>
+//#import <YYModel.h>
+#import <UIView+Toast.h>
+#import <YYCategories.h>
+
+#import "RACEXTScope.h"
+
+#import "GYOCHeader.h"
+#import "GYConstHeader.h"
+#import "GYCategoriesHeader.h"
+#import "GYManagersHeader.h"
+
+static DDLogLevel ddLogLevel = DDLogLevelAll;
+
+#endif /* PhotoLibrary_Prefix_pch */

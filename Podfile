@@ -4,10 +4,21 @@ platform :ios, '14.0'
 use_frameworks!
 
 target 'PhotoLibrary' do
+  
+  pod 'AFNetworking'
+  pod 'CocoaLumberjack'
+  pod 'BlocksKit'
+  pod 'SDWebImage'
+  pod 'Masonry'
+  pod 'DateTools'
+  pod 'Toast'
+  pod 'IQKeyboardManager'
+  pod 'MJRefresh'
+  pod 'YYCategories'
 
-pod 'SSZipArchive'
-pod 'FMDB'
-pod 'YYText'
-pod 'SMBClient'
+  pod 'SSZipArchive'
+  pod 'FMDB'
+  pod 'YYText'
+  pod 'SMBClient'
 
 end
