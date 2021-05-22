@@ -30,9 +30,9 @@ FOUNDATION_EXPORT double SMBClientVersionNumber;
 //! Project version string for SMBClient.
 FOUNDATION_EXPORT const unsigned char SMBClientVersionString[];
 
-#import <SMBClient/SMBDiscovery.h>
-#import <SMBClient/SMBDevice.h>
-#import <SMBClient/SMBFileServer.h>
-#import <SMBClient/SMBShare.h>
-#import <SMBClient/SMBFile.h>
+#import "SMBDiscovery.h"
+#import "SMBDevice.h"
+#import "SMBFileServer.h"
+#import "SMBShare.h"
+#import "SMBFile.h"
 

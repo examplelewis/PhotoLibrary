@@ -23,7 +23,7 @@
 #import <YYCategories.h>
 #import <SVProgressHUD.h>
 
-#import "RACEXTScope.h"
+#import "SMBClient.h"
 
 #import "GYOCHeader.h"
 #import "GYConstHeader.h"
