@@ -236,10 +236,10 @@
 		ACEBB77226588A07005778FB /* Universal */ = {
 			isa = PBXGroup;
 			children = (
-				ACEBB77326588A07005778FB /* Classes */,
-				ACEBB77426588A07005778FB /* Managers */,
-				ACEBB78826588A07005778FB /* Headers */,
 				ACEBB78D26588A07005778FB /* Categories */,
+				ACEBB77326588A07005778FB /* Classes */,
+				ACEBB78826588A07005778FB /* Headers */,
+				ACEBB77426588A07005778FB /* Managers */,
 			);
 			path = Universal;
 			sourceTree = "<group>";
@@ -254,15 +254,15 @@
 		ACEBB77426588A07005778FB /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				ACEBB77526588A07005778FB /* GYLogManager.m */,
-				ACEBB77626588A07005778FB /* GYUtilityManager.m */,
+				ACEBB78026588A07005778FB /* GYExceptionManager.h */,
 				ACEBB77726588A07005778FB /* GYExceptionManager.m */,
 				ACEBB77826588A07005778FB /* GYFileManager.h */,
-				ACEBB77926588A07005778FB /* GYLogManager.h */,
-				ACEBB77A26588A07005778FB /* HTTP */,
-				ACEBB77E26588A07005778FB /* GYUtilityManager.h */,
 				ACEBB77F26588A07005778FB /* GYFileManager.m */,
-				ACEBB78026588A07005778FB /* GYExceptionManager.h */,
+				ACEBB77926588A07005778FB /* GYLogManager.h */,
+				ACEBB77526588A07005778FB /* GYLogManager.m */,
+				ACEBB77E26588A07005778FB /* GYUtilityManager.h */,
+				ACEBB77626588A07005778FB /* GYUtilityManager.m */,
+				ACEBB77A26588A07005778FB /* HTTP */,
 				ACEBB78126588A07005778FB /* Setting */,
 				ACEBB78426588A07005778FB /* SQL */,
 			);
@@ -272,8 +272,8 @@
 		ACEBB77A26588A07005778FB /* HTTP */ = {
 			isa = PBXGroup;
 			children = (
-				ACEBB77B26588A07005778FB /* GYHTTPManager.h */,
 				ACEBB77C26588A07005778FB /* GYHTTPHeader.h */,
+				ACEBB77B26588A07005778FB /* GYHTTPManager.h */,
 				ACEBB77D26588A07005778FB /* GYHTTPManager.m */,
 			);
 			path = HTTP;
@@ -291,8 +291,8 @@
 		ACEBB78426588A07005778FB /* SQL */ = {
 			isa = PBXGroup;
 			children = (
-				ACEBB78526588A07005778FB /* GYSQLiteSettingManager.h */,
 				ACEBB78626588A07005778FB /* GYSQLiteHeader.h */,
+				ACEBB78526588A07005778FB /* GYSQLiteSettingManager.h */,
 				ACEBB78726588A07005778FB /* GYSQLiteSettingManager.m */,
 			);
 			path = SQL;
@@ -301,10 +301,10 @@
 		ACEBB78826588A07005778FB /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				ACEBB78926588A07005778FB /* GYConstHeader.h */,
 				ACEBB78A26588A07005778FB /* GYCategoriesHeader.h */,
-				ACEBB78B26588A07005778FB /* GYOCHeader.h */,
+				ACEBB78926588A07005778FB /* GYConstHeader.h */,
 				ACEBB78C26588A07005778FB /* GYManagersHeader.h */,
+				ACEBB78B26588A07005778FB /* GYOCHeader.h */,
 			);
 			path = Headers;
 			sourceTree = "<group>";
@@ -312,18 +312,18 @@
 		ACEBB78D26588A07005778FB /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				ACEBB78E26588A07005778FB /* NSDictionary+GYAdd.h */,
-				ACEBB78F26588A07005778FB /* NSString+GYAdd.h */,
-				ACEBB79026588A07005778FB /* NSObject+GYAdd.m */,
-				ACEBB79126588A07005778FB /* UIColor+GYAdd.m */,
-				ACEBB79226588A07005778FB /* NSError+GYAdd.m */,
-				ACEBB79326588A07005778FB /* NSArray+GYAdd.m */,
-				ACEBB79426588A07005778FB /* NSDictionary+GYAdd.m */,
-				ACEBB79526588A07005778FB /* NSString+GYAdd.m */,
-				ACEBB79626588A07005778FB /* NSObject+GYAdd.h */,
-				ACEBB79726588A07005778FB /* UIColor+GYAdd.h */,
-				ACEBB79826588A07005778FB /* NSError+GYAdd.h */,
 				ACEBB79926588A07005778FB /* NSArray+GYAdd.h */,
+				ACEBB79326588A07005778FB /* NSArray+GYAdd.m */,
+				ACEBB78E26588A07005778FB /* NSDictionary+GYAdd.h */,
+				ACEBB79426588A07005778FB /* NSDictionary+GYAdd.m */,
+				ACEBB79826588A07005778FB /* NSError+GYAdd.h */,
+				ACEBB79226588A07005778FB /* NSError+GYAdd.m */,
+				ACEBB79626588A07005778FB /* NSObject+GYAdd.h */,
+				ACEBB79026588A07005778FB /* NSObject+GYAdd.m */,
+				ACEBB78F26588A07005778FB /* NSString+GYAdd.h */,
+				ACEBB79526588A07005778FB /* NSString+GYAdd.m */,
+				ACEBB79726588A07005778FB /* UIColor+GYAdd.h */,
+				ACEBB79126588A07005778FB /* UIColor+GYAdd.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
