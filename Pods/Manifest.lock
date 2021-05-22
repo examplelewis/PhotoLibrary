@@ -48,6 +48,7 @@ PODS:
   - YYCategories (1.0.4):
     - YYCategories/no-arc (= 1.0.4)
   - YYCategories/no-arc (1.0.4)
+  - YYModel (1.0.4)
   - YYText (1.0.7)
 
 DEPENDENCIES:
@@ -64,6 +65,7 @@ DEPENDENCIES:
   - SSZipArchive
   - Toast
   - YYCategories
+  - YYModel
   - YYText
 
 SPEC REPOS:
@@ -81,6 +83,7 @@ SPEC REPOS:
     - SSZipArchive
     - Toast
     - YYCategories
+    - YYModel
     - YYText
 
 SPEC CHECKSUMS:
@@ -97,8 +100,9 @@ SPEC CHECKSUMS:
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   YYCategories: 6bcd4314c6661a561410dce4a793379ebd306abd
+  YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
 
-PODFILE CHECKSUM: 956fe8be41a707356b4380d5df663786dd4f81b6
+PODFILE CHECKSUM: 4054365489352c33e6cb03a702e422f5727d8e55
 
 COCOAPODS: 1.10.1

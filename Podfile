@@ -15,6 +15,7 @@ target 'PhotoLibrary' do
   pod 'IQKeyboardManager'
   pod 'MJRefresh'
   pod 'YYCategories'
+  pod 'YYModel'
 
   pod 'SSZipArchive'
   pod 'FMDB'
