@@ -42,7 +42,6 @@ PODS:
   - SDWebImage (5.11.1):
     - SDWebImage/Core (= 5.11.1)
   - SDWebImage/Core (5.11.1)
-  - SMBClient (0.0.9)
   - SSZipArchive (2.2.3)
   - SVProgressHUD (2.2.5)
   - Toast (4.0.0)
@@ -62,7 +61,6 @@ DEPENDENCIES:
   - Masonry
   - MJRefresh
   - SDWebImage
-  - SMBClient
   - SSZipArchive
   - SVProgressHUD
   - Toast
@@ -81,7 +79,6 @@ SPEC REPOS:
     - Masonry
     - MJRefresh
     - SDWebImage
-    - SMBClient
     - SSZipArchive
     - SVProgressHUD
     - Toast
@@ -99,7 +96,6 @@ SPEC CHECKSUMS:
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJRefresh: d2c1970d1cf6e77fcfcdfe76c943dfab8dbfa5c1
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
-  SMBClient: fd08e91788566a211ae11d57240ae0cd43375a16
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
@@ -107,6 +103,6 @@ SPEC CHECKSUMS:
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
 
-PODFILE CHECKSUM: 3c7ba9ba4564dd6a0d7a213d31cf65f466b7f182
+PODFILE CHECKSUM: c8d3f8ad650d7895370113fb9f3cb549f3bd8adc
 
 COCOAPODS: 1.10.1
