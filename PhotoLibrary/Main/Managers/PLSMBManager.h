@@ -15,8 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PLSMBManager : NSObject
 
-@property (nonatomic, strong, nullable) SMBDevice *device;
-@property (nonatomic, strong, nullable) SMBFileServer *fileServer;
+@property (nonatomic, strong, nullable) SMBDevice *device; // 当前设备
+@property (nonatomic, strong, nullable) SMBFileServer *fileServer; // 当前设备登录后的文件服务器
+@property (nonatomic, strong, nullable) SMBShare *share; // 当前共享文件夹
 
 @property (nonatomic, strong) NSMutableArray<SMBDevice *> *devices;
 @property (nonatomic, strong) NSMutableArray<SMBShare *> *shares;
@@ -36,6 +37,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Share Folders
 - (void)listShareFoldersWithSuccess:(void (^)(void))success failure:(void (^)(void))failure;
+- (void)openShareFolderAtIndex:(NSInteger)index success:(void (^)(void))success failure:(void (^)(void))failure;
+- (void)closeShare;
 
 @end
 

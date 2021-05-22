@@ -60,8 +60,6 @@ static PLSMBManager *defaultManager = nil;
     self.device = self.devices[index];
     self.fileServer = [[SMBFileServer alloc] initWithHost:self.device.host netbiosName:self.device.netbiosName group:self.device.group];
     
-    NSLog(@"%@", self.device);
-    
     @weakify(self);
     [self.fileServer connectAsUser:@"examplelewis" password:@"Example@163.COM" completion:^(BOOL guest, NSError *error) {
         @strongify(self);
@@ -90,9 +88,10 @@ static PLSMBManager *defaultManager = nil;
     [self.fileServer disconnect:^{
         @strongify(self);
         
-        // 断开连接后，需要重置fileServer和device，并且清空已存储的共享文件夹列表
+        // 断开连接后，需要重置 device、fileServer、share，并且清空已存储的共享文件夹列表
         self.device = nil;
         self.fileServer = nil;
+        self.share = nil;
         [self.shares removeAllObjects];
     }];
 }
@@ -119,6 +118,40 @@ static PLSMBManager *defaultManager = nil;
                 success();
             }
         }
+    }];
+}
+- (void)openShareFolderAtIndex:(NSInteger)index success:(void (^)(void))success failure:(void (^)(void))failure {
+    [SVProgressHUD showWithStatus:@"加载中"];
+    
+    self.share = self.shares[index];
+    
+    @weakify(self);
+    [self.share open:^(NSError * _Nullable error) {
+        if (error) {
+            [SVProgressHUD showErrorWithStatus:[NSString stringWithFormat:@"打开共享文件夹遇到错误: %@", error.localizedDescription]];
+            
+            @strongify(self);
+            self.share = nil; // 重置 share
+            
+            if (failure) {
+                failure();
+            }
+        } else {
+            @strongify(self);
+            
+            
+            
+            if (success) {
+                success();
+            }
+        }
+    }];
+}
+- (void)closeShare {
+    @weakify(self);
+    [self.share close:^(NSError * _Nullable error) {
+        @strongify(self);
+        self.share = nil; // 重置 share
     }];
 }
 

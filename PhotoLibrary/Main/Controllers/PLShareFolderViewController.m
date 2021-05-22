@@ -24,6 +24,9 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
+    // 回到共享文件夹列表就关闭已打开的共享文件夹
+    [[PLSMBManager defaultManager] closeShare];
+    
     // 没有共享文件夹数据的时候，再加载共享文件夹
     if ([PLSMBManager defaultManager].shares.count == 0) {
         @weakify(self);
@@ -62,13 +65,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-//    @weakify(self);
-//    [[PLSMBManager defaultManager] loginWithDeviceAtIndex:indexPath.row completion:^{
-//        @strongify(self);
-//        
-//        PLShareFolderViewController *vc = [[PLShareFolderViewController alloc] initWithNibName:@"PLShareFolderViewController" bundle:nil];
-//        [self.navigationController pushViewController:vc animated:YES];
-//    }];
+    @weakify(self);
+    [[PLSMBManager defaultManager] openShareFolderAtIndex:indexPath.row success:^{
+        @strongify(self);
+        
+        // push 到PLContentViewController
+    } failure:nil];
 }
 
 @end
