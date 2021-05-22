@@ -16,6 +16,7 @@ target 'PhotoLibrary' do
   pod 'MJRefresh'
   pod 'YYCategories'
   pod 'YYModel'
+  pod 'SVProgressHUD'
 
   pod 'SSZipArchive'
   pod 'FMDB'

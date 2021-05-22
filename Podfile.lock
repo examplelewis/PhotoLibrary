@@ -44,6 +44,7 @@ PODS:
   - SDWebImage/Core (5.11.1)
   - SMBClient (0.0.9)
   - SSZipArchive (2.2.3)
+  - SVProgressHUD (2.2.5)
   - Toast (4.0.0)
   - YYCategories (1.0.4):
     - YYCategories/no-arc (= 1.0.4)
@@ -63,6 +64,7 @@ DEPENDENCIES:
   - SDWebImage
   - SMBClient
   - SSZipArchive
+  - SVProgressHUD
   - Toast
   - YYCategories
   - YYModel
@@ -81,6 +83,7 @@ SPEC REPOS:
     - SDWebImage
     - SMBClient
     - SSZipArchive
+    - SVProgressHUD
     - Toast
     - YYCategories
     - YYModel
@@ -98,11 +101,12 @@ SPEC CHECKSUMS:
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SMBClient: fd08e91788566a211ae11d57240ae0cd43375a16
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
+  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   YYCategories: 6bcd4314c6661a561410dce4a793379ebd306abd
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
 
-PODFILE CHECKSUM: 4054365489352c33e6cb03a702e422f5727d8e55
+PODFILE CHECKSUM: 3c7ba9ba4564dd6a0d7a213d31cf65f466b7f182
 
 COCOAPODS: 1.10.1
