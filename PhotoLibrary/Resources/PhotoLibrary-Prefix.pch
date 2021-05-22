@@ -23,7 +23,7 @@
 #import <YYCategories.h>
 #import <SVProgressHUD.h>
 
-#import "SMBClient.h"
+#import "PLSMBManager.h"
 
 #import "GYOCHeader.h"
 #import "GYConstHeader.h"

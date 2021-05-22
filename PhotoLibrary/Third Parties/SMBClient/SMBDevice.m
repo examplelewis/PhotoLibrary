@@ -38,7 +38,7 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"%@ %@(%@)/%@", [self _typeName], _netbiosName, _host, _group];
+    return [NSString stringWithFormat:@"%@ %@(%@)/%@ %lu", [self _typeName], _netbiosName, _host, _group, (unsigned long)_type];
 }
 
 - (BOOL)isEqual:(id)other {

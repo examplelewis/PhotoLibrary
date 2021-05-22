@@ -17,7 +17,6 @@
 		AC262505265812AA00939375 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AC262504265812AA00939375 /* main.m */; };
 		AC26250F265812AB00939375 /* PhotoLibraryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC26250E265812AB00939375 /* PhotoLibraryTests.m */; };
 		AC26251A265812AB00939375 /* PhotoLibraryUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC262519265812AB00939375 /* PhotoLibraryUITests.m */; };
-		ACE56CCA265939B20027A68A /* PLServerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56CC9265939B20027A68A /* PLServerModel.m */; };
 		ACE56D19265941F10027A68A /* SMBFileServer.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56CF5265941F10027A68A /* SMBFileServer.m */; };
 		ACE56D1A265941F10027A68A /* SMBDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56CF6265941F10027A68A /* SMBDevice.m */; };
 		ACE56D1B265941F10027A68A /* SMBFile.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56CF8265941F10027A68A /* SMBFile.m */; };
@@ -27,6 +26,11 @@
 		ACE56D21265941F20027A68A /* libtasn1-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ACE56D14265941F10027A68A /* libtasn1-iOS.a */; };
 		ACE56D23265941F20027A68A /* SMBDiscovery.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56D16265941F10027A68A /* SMBDiscovery.m */; };
 		ACE56D4026594CBA0027A68A /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACE56D3926594B2A0027A68A /* WebKit.framework */; };
+		ACE56D542659517F0027A68A /* PLWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56D522659517F0027A68A /* PLWebViewController.m */; };
+		ACE56D552659517F0027A68A /* PLWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACE56D532659517F0027A68A /* PLWebViewController.xib */; };
+		ACE56D5F265952290027A68A /* PLShareFolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56D5D265952290027A68A /* PLShareFolderViewController.m */; };
+		ACE56D60265952290027A68A /* PLShareFolderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACE56D5E265952290027A68A /* PLShareFolderViewController.xib */; };
+		ACE56D672659524E0027A68A /* PLSMBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56D662659524E0027A68A /* PLSMBManager.m */; };
 		ACEBB79A26588A07005778FB /* GYLogManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB77526588A07005778FB /* GYLogManager.m */; };
 		ACEBB79B26588A07005778FB /* GYUtilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB77626588A07005778FB /* GYUtilityManager.m */; };
 		ACEBB79C26588A07005778FB /* GYExceptionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB77726588A07005778FB /* GYExceptionManager.m */; };
@@ -80,8 +84,6 @@
 		AC262519265812AB00939375 /* PhotoLibraryUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoLibraryUITests.m; sourceTree = "<group>"; };
 		AC26251B265812AB00939375 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AC26270D26581CD900939375 /* PhotoLibrary-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PhotoLibrary-Prefix.pch"; sourceTree = "<group>"; };
-		ACE56CC8265939B20027A68A /* PLServerModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLServerModel.h; sourceTree = "<group>"; };
-		ACE56CC9265939B20027A68A /* PLServerModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLServerModel.m; sourceTree = "<group>"; };
 		ACE56CF3265941F10027A68A /* SMBShare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMBShare.h; sourceTree = "<group>"; };
 		ACE56CF4265941F10027A68A /* SMBFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMBFile.h; sourceTree = "<group>"; };
 		ACE56CF5265941F10027A68A /* SMBFileServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMBFileServer.m; sourceTree = "<group>"; };
@@ -112,6 +114,14 @@
 		ACE56D17265941F10027A68A /* SMBDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMBDevice.h; sourceTree = "<group>"; };
 		ACE56D18265941F10027A68A /* SMBFileServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMBFileServer.h; sourceTree = "<group>"; };
 		ACE56D3926594B2A0027A68A /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		ACE56D512659517F0027A68A /* PLWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLWebViewController.h; sourceTree = "<group>"; };
+		ACE56D522659517F0027A68A /* PLWebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLWebViewController.m; sourceTree = "<group>"; };
+		ACE56D532659517F0027A68A /* PLWebViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PLWebViewController.xib; sourceTree = "<group>"; };
+		ACE56D5C265952290027A68A /* PLShareFolderViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLShareFolderViewController.h; sourceTree = "<group>"; };
+		ACE56D5D265952290027A68A /* PLShareFolderViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLShareFolderViewController.m; sourceTree = "<group>"; };
+		ACE56D5E265952290027A68A /* PLShareFolderViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PLShareFolderViewController.xib; sourceTree = "<group>"; };
+		ACE56D652659524E0027A68A /* PLSMBManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLSMBManager.h; sourceTree = "<group>"; };
+		ACE56D662659524E0027A68A /* PLSMBManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLSMBManager.m; sourceTree = "<group>"; };
 		ACEBB77526588A07005778FB /* GYLogManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GYLogManager.m; sourceTree = "<group>"; };
 		ACEBB77626588A07005778FB /* GYUtilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GYUtilityManager.m; sourceTree = "<group>"; };
 		ACEBB77726588A07005778FB /* GYExceptionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GYExceptionManager.m; sourceTree = "<group>"; };
@@ -268,26 +278,10 @@
 		ACE56CB3265938C50027A68A /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				ACE56CB4265938D50027A68A /* Server */,
+				ACE56D50265951610027A68A /* Controllers */,
+				ACE56D64265952340027A68A /* Managers */,
 			);
 			path = Main;
-			sourceTree = "<group>";
-		};
-		ACE56CB4265938D50027A68A /* Server */ = {
-			isa = PBXGroup;
-			children = (
-				ACE56CB5265938E70027A68A /* Models */,
-			);
-			path = Server;
-			sourceTree = "<group>";
-		};
-		ACE56CB5265938E70027A68A /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				ACE56CC8265939B20027A68A /* PLServerModel.h */,
-				ACE56CC9265939B20027A68A /* PLServerModel.m */,
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		ACE56CF2265941F10027A68A /* SMBClient */ = {
@@ -372,6 +366,28 @@
 				ACE56D13265941F10027A68A /* libtasn1.h */,
 			);
 			path = include;
+			sourceTree = "<group>";
+		};
+		ACE56D50265951610027A68A /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				ACE56D512659517F0027A68A /* PLWebViewController.h */,
+				ACE56D522659517F0027A68A /* PLWebViewController.m */,
+				ACE56D532659517F0027A68A /* PLWebViewController.xib */,
+				ACE56D5C265952290027A68A /* PLShareFolderViewController.h */,
+				ACE56D5D265952290027A68A /* PLShareFolderViewController.m */,
+				ACE56D5E265952290027A68A /* PLShareFolderViewController.xib */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		ACE56D64265952340027A68A /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				ACE56D652659524E0027A68A /* PLSMBManager.h */,
+				ACE56D662659524E0027A68A /* PLSMBManager.m */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		ACEBB77226588A07005778FB /* Universal */ = {
@@ -582,6 +598,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				AC262502265812AA00939375 /* LaunchScreen.storyboard in Resources */,
+				ACE56D552659517F0027A68A /* PLWebViewController.xib in Resources */,
+				ACE56D60265952290027A68A /* PLShareFolderViewController.xib in Resources */,
 				AC2624FF265812AA00939375 /* Assets.xcassets in Resources */,
 				AC2624FD265812A900939375 /* Main.storyboard in Resources */,
 			);
@@ -659,17 +677,19 @@
 				ACE56D1A265941F10027A68A /* SMBDevice.m in Sources */,
 				ACE56D1D265941F10027A68A /* SMBError.m in Sources */,
 				ACEBB7A426588A07005778FB /* NSArray+GYAdd.m in Sources */,
+				ACE56D542659517F0027A68A /* PLWebViewController.m in Sources */,
 				ACEBB79F26588A07005778FB /* GYSettingManager.m in Sources */,
 				ACEBB7A226588A07005778FB /* UIColor+GYAdd.m in Sources */,
 				ACE56D19265941F10027A68A /* SMBFileServer.m in Sources */,
+				ACE56D5F265952290027A68A /* PLShareFolderViewController.m in Sources */,
 				ACEBB79B26588A07005778FB /* GYUtilityManager.m in Sources */,
 				ACEBB79A26588A07005778FB /* GYLogManager.m in Sources */,
 				ACEBB79C26588A07005778FB /* GYExceptionManager.m in Sources */,
 				ACEBB7A526588A07005778FB /* NSDictionary+GYAdd.m in Sources */,
 				ACEBB7A126588A07005778FB /* NSObject+GYAdd.m in Sources */,
 				ACEBB79E26588A07005778FB /* GYFileManager.m in Sources */,
+				ACE56D672659524E0027A68A /* PLSMBManager.m in Sources */,
 				ACEBB79D26588A07005778FB /* GYHTTPManager.m in Sources */,
-				ACE56CCA265939B20027A68A /* PLServerModel.m in Sources */,
 				AC262505265812AA00939375 /* main.m in Sources */,
 				ACE56D1B265941F10027A68A /* SMBFile.m in Sources */,
 				AC2624F7265812A900939375 /* SceneDelegate.m in Sources */,

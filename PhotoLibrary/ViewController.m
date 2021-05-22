@@ -6,14 +6,10 @@
 //
 
 #import "ViewController.h"
-#import "PLServerModel.h"
 
-#import <WebKit/WebKit.h>
+#import "PLShareFolderViewController.h"
 
 @interface ViewController () <UITableViewDataSource, UITableViewDelegate>
-
-@property (nonatomic, strong) NSMutableArray<SMBDevice *> *devices;
-@property (nonatomic, strong) SMBFileServer *fileServer;
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
@@ -29,42 +25,34 @@
     
     [self setupUIAndData];
 }
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     
-    // 回到服务器列表就断开连接
-    [self.fileServer disconnect:nil];
+    // 回到服务器列表就断开已有的连接
+    [[PLSMBManager defaultManager] disconnectFileServer];
     
     // Find
     @weakify(self);
-    [[SMBDiscovery sharedInstance] startDiscoveryOfType:SMBDeviceTypeAny added:^(SMBDevice *device) {
+    [[PLSMBManager defaultManager] startDiscoveryWithCompletion:^{
         @strongify(self);
-        
-        [self.devices addObject:device];
-        [self.tableView reloadData];
-    } removed:^(SMBDevice *device) {
-        [self.devices removeObject:device];
         [self.tableView reloadData];
     }];
 }
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
     
-    [[SMBDiscovery sharedInstance] stopDiscovery];
+    [[PLSMBManager defaultManager] stopDiscovery];
 }
 
 #pragma mark - Configure
 - (void)setupUIAndData {
-    // data
-    self.devices = [NSMutableArray array];
-    
     // UI
     self.tableView.tableFooterView = [UIView new];
 }
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.devices.count;
+    return [PLSMBManager defaultManager].devices.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
@@ -72,7 +60,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
     
-    cell.textLabel.text = self.devices[indexPath.row].netbiosName;
+    cell.textLabel.text = [PLSMBManager defaultManager].devices[indexPath.row].netbiosName;
     
     return cell;
 }
@@ -81,21 +69,16 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    [SVProgressHUD showWithStatus:@"连接中"];
-    
-    SMBDevice *device = self.devices[indexPath.row];
-    self.fileServer = [[SMBFileServer alloc] initWithHost:device.host netbiosName:device.netbiosName group:device.group];
-    [self.fileServer connectAsUser:@"examplelewis" password:@"Example@163.COM" completion:^(BOOL guest, NSError *error) {
-        if (error) {
-            [SVProgressHUD showErrorWithStatus:[NSString stringWithFormat:@"连接失败: %@", error.localizedDescription]];
-        } else if (guest) {
-            [SVProgressHUD showErrorWithStatus:@"连接成功，当前为游客，无法使用本App"];
-        } else {
-            [SVProgressHUD dismiss];
-        }
+    @weakify(self);
+    [[PLSMBManager defaultManager] loginWithDeviceAtIndex:indexPath.row completion:^{
+        @strongify(self);
+        
+        PLShareFolderViewController *vc = [[PLShareFolderViewController alloc] initWithNibName:@"PLShareFolderViewController" bundle:nil];
+        [self.navigationController pushViewController:vc animated:YES];
     }];
 }
 
+#pragma mark - Action
 // 通过打开一个网页，请求无线网络访问权限
 - (void)askWirelessAuthorization {
     

@@ -1,0 +1,42 @@
+//
+//  PLSMBManager.h
+//  PhotoLibrary
+//
+//  Created by 龚宇 on 21/05/22.
+//
+
+#import <Foundation/Foundation.h>
+
+#import "SMBClient.h"
+
+// SMBClient 只支持 SMB1 协议，需要在群晖中文件服务→SMB→高级设置→最小SMB协议，设置为SMB1
+
+NS_ASSUME_NONNULL_BEGIN
+
+@interface PLSMBManager : NSObject
+
+@property (nonatomic, strong, nullable) SMBDevice *device;
+@property (nonatomic, strong, nullable) SMBFileServer *fileServer;
+
+@property (nonatomic, strong) NSMutableArray<SMBDevice *> *devices;
+@property (nonatomic, strong) NSMutableArray<SMBShare *> *shares;
+
+#pragma mark - Lifecycle
++ (instancetype)defaultManager;
+
+#pragma mark - Discovery
+- (void)startDiscoveryWithCompletion:(void (^)(void))completion;
+- (void)stopDiscovery;
+
+#pragma mark - Login
+- (void)loginWithDeviceAtIndex:(NSInteger)index completion:(void (^)(void))completion;
+
+#pragma mark - File Server
+- (void)disconnectFileServer;
+
+#pragma mark - Share Folders
+- (void)listShareFoldersWithSuccess:(void (^)(void))success failure:(void (^)(void))failure;
+
+@end
+
+NS_ASSUME_NONNULL_END

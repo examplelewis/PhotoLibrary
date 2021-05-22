@@ -20,7 +20,7 @@
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    [[SMBDiscovery sharedInstance] stopDiscovery];
+    [[PLSMBManager defaultManager] stopDiscovery];
 }
 
 #pragma mark - UISceneSession lifecycle
