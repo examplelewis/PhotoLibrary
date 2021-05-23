@@ -8,6 +8,8 @@
 #import "ViewController.h"
 
 #import "PLShareFolderViewController.h"
+#import "PLWebViewController.h"
+#import "PLContentViewController.h"
 
 @interface ViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -47,6 +49,14 @@
 #pragma mark - Configure
 - (void)setupUIAndData {
     // UI
+    [self setupNavigationBar];
+    [self setupTableView];
+}
+- (void)setupNavigationBar {
+    UIBarButtonItem *rightBBI = [[UIBarButtonItem alloc] initWithTitle:@"测试" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemDidPress:)];
+    self.navigationItem.rightBarButtonItems = @[rightBBI];
+}
+- (void)setupTableView {
     self.tableView.tableFooterView = [UIView new];
 }
 
@@ -79,9 +89,13 @@
 }
 
 #pragma mark - Action
-// 通过打开一个网页，请求无线网络访问权限
-- (void)askWirelessAuthorization {
+- (void)barButtonItemDidPress:(UIBarButtonItem *)sender {
+    PLContentViewController *vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
+    [self.navigationController pushViewController:vc animated:YES];
     
+//    // 通过打开一个网页，请求无线网络访问权限
+//    PLWebViewController *vc = [[PLWebViewController alloc] initWithNibName:@"PLWebViewController" bundle:nil];
+//    [self presentViewController:vc animated:YES completion:nil];
 }
 
 

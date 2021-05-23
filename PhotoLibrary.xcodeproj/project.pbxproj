@@ -17,6 +17,9 @@
 		AC262505265812AA00939375 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AC262504265812AA00939375 /* main.m */; };
 		AC26250F265812AB00939375 /* PhotoLibraryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC26250E265812AB00939375 /* PhotoLibraryTests.m */; };
 		AC26251A265812AB00939375 /* PhotoLibraryUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC262519265812AB00939375 /* PhotoLibraryUITests.m */; };
+		ACE211CC2659F3E800FF52EC /* PLContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE211CA2659F3E800FF52EC /* PLContentViewController.m */; };
+		ACE211CD2659F3E800FF52EC /* PLContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACE211CB2659F3E800FF52EC /* PLContentViewController.xib */; };
+		ACE211D42659F6AF00FF52EC /* PLContentLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE211D32659F6AF00FF52EC /* PLContentLayout.m */; };
 		ACE56D19265941F10027A68A /* SMBFileServer.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56CF5265941F10027A68A /* SMBFileServer.m */; };
 		ACE56D1A265941F10027A68A /* SMBDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56CF6265941F10027A68A /* SMBDevice.m */; };
 		ACE56D1B265941F10027A68A /* SMBFile.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56CF8265941F10027A68A /* SMBFile.m */; };
@@ -84,6 +87,13 @@
 		AC262519265812AB00939375 /* PhotoLibraryUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoLibraryUITests.m; sourceTree = "<group>"; };
 		AC26251B265812AB00939375 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AC26270D26581CD900939375 /* PhotoLibrary-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PhotoLibrary-Prefix.pch"; sourceTree = "<group>"; };
+		ACE211C92659F3E800FF52EC /* PLContentViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLContentViewController.h; sourceTree = "<group>"; };
+		ACE211CA2659F3E800FF52EC /* PLContentViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLContentViewController.m; sourceTree = "<group>"; };
+		ACE211CB2659F3E800FF52EC /* PLContentViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PLContentViewController.xib; sourceTree = "<group>"; };
+		ACE211D22659F6AF00FF52EC /* PLContentLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLContentLayout.h; sourceTree = "<group>"; };
+		ACE211D32659F6AF00FF52EC /* PLContentLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLContentLayout.m; sourceTree = "<group>"; };
+		ACE211EC265A085A00FF52EC /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		ACE211ED265A085A00FF52EC /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		ACE56CF3265941F10027A68A /* SMBShare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMBShare.h; sourceTree = "<group>"; };
 		ACE56CF4265941F10027A68A /* SMBFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMBFile.h; sourceTree = "<group>"; };
 		ACE56CF5265941F10027A68A /* SMBFileServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMBFileServer.m; sourceTree = "<group>"; };
@@ -275,11 +285,21 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		ACE211D12659F67400FF52EC /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				ACE211D22659F6AF00FF52EC /* PLContentLayout.h */,
+				ACE211D32659F6AF00FF52EC /* PLContentLayout.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		ACE56CB3265938C50027A68A /* Main */ = {
 			isa = PBXGroup;
 			children = (
 				ACE56D50265951610027A68A /* Controllers */,
 				ACE56D64265952340027A68A /* Managers */,
+				ACE211D12659F67400FF52EC /* Views */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -377,6 +397,9 @@
 				ACE56D5C265952290027A68A /* PLShareFolderViewController.h */,
 				ACE56D5D265952290027A68A /* PLShareFolderViewController.m */,
 				ACE56D5E265952290027A68A /* PLShareFolderViewController.xib */,
+				ACE211C92659F3E800FF52EC /* PLContentViewController.h */,
+				ACE211CA2659F3E800FF52EC /* PLContentViewController.m */,
+				ACE211CB2659F3E800FF52EC /* PLContentViewController.xib */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -579,6 +602,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = AC2624E6265812A900939375;
 			productRefGroup = AC2624F0265812A900939375 /* Products */;
@@ -601,6 +625,7 @@
 				ACE56D552659517F0027A68A /* PLWebViewController.xib in Resources */,
 				ACE56D60265952290027A68A /* PLShareFolderViewController.xib in Resources */,
 				AC2624FF265812AA00939375 /* Assets.xcassets in Resources */,
+				ACE211CD2659F3E800FF52EC /* PLContentViewController.xib in Resources */,
 				AC2624FD265812A900939375 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -689,7 +714,9 @@
 				ACEBB7A126588A07005778FB /* NSObject+GYAdd.m in Sources */,
 				ACEBB79E26588A07005778FB /* GYFileManager.m in Sources */,
 				ACE56D672659524E0027A68A /* PLSMBManager.m in Sources */,
+				ACE211D42659F6AF00FF52EC /* PLContentLayout.m in Sources */,
 				ACEBB79D26588A07005778FB /* GYHTTPManager.m in Sources */,
+				ACE211CC2659F3E800FF52EC /* PLContentViewController.m in Sources */,
 				AC262505265812AA00939375 /* main.m in Sources */,
 				ACE56D1B265941F10027A68A /* SMBFile.m in Sources */,
 				AC2624F7265812A900939375 /* SceneDelegate.m in Sources */,
@@ -733,6 +760,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				AC2624FC265812A900939375 /* Base */,
+				ACE211EC265A085A00FF52EC /* zh-Hans */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -741,6 +769,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				AC262501265812AA00939375 /* Base */,
+				ACE211ED265A085A00FF52EC /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -752,6 +781,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -811,6 +841,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

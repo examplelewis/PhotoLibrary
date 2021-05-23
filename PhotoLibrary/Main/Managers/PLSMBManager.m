@@ -137,9 +137,7 @@ static PLSMBManager *defaultManager = nil;
                 failure();
             }
         } else {
-            @strongify(self);
-            
-            
+            [SVProgressHUD dismiss];
             
             if (success) {
                 success();

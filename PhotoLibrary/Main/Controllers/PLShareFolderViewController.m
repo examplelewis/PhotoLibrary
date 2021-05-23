@@ -6,6 +6,7 @@
 //
 
 #import "PLShareFolderViewController.h"
+#import "PLContentViewController.h"
 
 @interface PLShareFolderViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -20,6 +21,8 @@
     [super viewDidLoad];
     
     self.title = [NSString stringWithFormat:@"%@ 的共享文件夹", [PLSMBManager defaultManager].device.netbiosName];
+    
+    [self setupUIAndData];
 }
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -69,8 +72,10 @@
     [[PLSMBManager defaultManager] openShareFolderAtIndex:indexPath.row success:^{
         @strongify(self);
         
-        // push 到PLContentViewController
-    } failure:nil];
+        PLContentViewController *vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
+        vc.file = [SMBFile rootOfShare:[PLSMBManager defaultManager].share];
+        [self.navigationController pushViewController:vc animated:YES];
+    } failure:^{}];
 }
 
 @end
