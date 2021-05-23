@@ -8,14 +8,20 @@
 #import "PLContentViewController.h"
 
 static CGFloat const kSpacing = 10.0f;
+static NSInteger const kColumnsPerRow = 7;
 
 @interface PLContentViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (nonatomic, strong) UIBarButtonItem *editBBI;
 @property (nonatomic, strong) UIBarButtonItem *trashBBI;
 
+@property(nonatomic, assign) CGFloat spacing;
+@property(nonatomic, assign) NSInteger columnsPerRow;
+
 @property (nonatomic, strong) UICollectionViewFlowLayout *flowLayout;
 @property (nonatomic, strong) UICollectionView *collectionView;
+
+@property (nonatomic, strong) NSMutableArray<SMBFile *> *files;
 
 @end
 
@@ -33,6 +39,12 @@ static CGFloat const kSpacing = 10.0f;
 
 #pragma mark - Configure
 - (void)setupUIAndData {
+    // Data
+    self.spacing = kSpacing;
+    self.columnsPerRow = kColumnsPerRow;
+    self.files = [NSMutableArray array];
+    
+    // UI
     [self setupNavigationBar];
     [self setupCollectionViewFlowLayout];
     [self setupCollectionView];
@@ -48,15 +60,15 @@ static CGFloat const kSpacing = 10.0f;
 }
 - (void)setupCollectionViewFlowLayout {
     self.flowLayout = [UICollectionViewFlowLayout new];
-    self.flowLayout.minimumInteritemSpacing = kSpacing;
-    self.flowLayout.minimumLineSpacing = kSpacing;
+    self.flowLayout.minimumInteritemSpacing = self.spacing;
+    self.flowLayout.minimumLineSpacing = self.spacing;
     
-    NSInteger columnsPerRow = 7;
-    CGFloat itemWidth = (kScreenWidth - (columnsPerRow + 1) * 10) / 7;
+    CGFloat screenWidth = MAX(kScreenWidth, kScreenHeight);
+    CGFloat itemWidth = (screenWidth - (self.columnsPerRow + 1) * self.spacing) / self.columnsPerRow;
     self.flowLayout.itemSize = CGSizeMake(floorf(itemWidth), floorf(itemWidth));
     
     self.flowLayout.headerReferenceSize = CGSizeMake(kScreenWidth, 65); // section Header 大小
-    self.flowLayout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5); // 设置每个分区的 上左下右 的内边距
+    self.flowLayout.sectionInset = UIEdgeInsetsMake(self.spacing, self.spacing, self.spacing, self.spacing); // 设置每个分区的 上左下右 的内边距
     self.flowLayout.sectionFootersPinToVisibleBounds = YES; // 设置分区的头视图和尾视图 是否始终固定在屏幕上边和下边
     
     self.flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
