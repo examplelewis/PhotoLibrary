@@ -25,11 +25,8 @@
 		ACE211CD2659F3E800FF52EC /* PLContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACE211CB2659F3E800FF52EC /* PLContentViewController.xib */; };
 		ACE211D42659F6AF00FF52EC /* PLContentLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE211D32659F6AF00FF52EC /* PLContentLayout.m */; };
 		ACE56D4026594CBA0027A68A /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACE56D3926594B2A0027A68A /* WebKit.framework */; };
-		ACE56D542659517F0027A68A /* PLWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56D522659517F0027A68A /* PLWebViewController.m */; };
-		ACE56D552659517F0027A68A /* PLWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACE56D532659517F0027A68A /* PLWebViewController.xib */; };
-		ACE56D5F265952290027A68A /* PLShareFolderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56D5D265952290027A68A /* PLShareFolderViewController.m */; };
-		ACE56D60265952290027A68A /* PLShareFolderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACE56D5E265952290027A68A /* PLShareFolderViewController.xib */; };
-		ACE56D672659524E0027A68A /* PLSMBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56D662659524E0027A68A /* PLSMBManager.m */; };
+		ACEA4AEB265BE99D00D141D4 /* UIImage+PLAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEA4AEA265BE99D00D141D4 /* UIImage+PLAdd.m */; };
+		ACEA4B04265BF2FD00D141D4 /* PLUniversalManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEA4B03265BF2FD00D141D4 /* PLUniversalManager.m */; };
 		ACEBB79A26588A07005778FB /* GYLogManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB77526588A07005778FB /* GYLogManager.m */; };
 		ACEBB79B26588A07005778FB /* GYUtilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB77626588A07005778FB /* GYUtilityManager.m */; };
 		ACEBB79C26588A07005778FB /* GYExceptionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB77726588A07005778FB /* GYExceptionManager.m */; };
@@ -96,14 +93,12 @@
 		ACE211EC265A085A00FF52EC /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		ACE211ED265A085A00FF52EC /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		ACE56D3926594B2A0027A68A /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
-		ACE56D512659517F0027A68A /* PLWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLWebViewController.h; sourceTree = "<group>"; };
-		ACE56D522659517F0027A68A /* PLWebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLWebViewController.m; sourceTree = "<group>"; };
-		ACE56D532659517F0027A68A /* PLWebViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PLWebViewController.xib; sourceTree = "<group>"; };
-		ACE56D5C265952290027A68A /* PLShareFolderViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLShareFolderViewController.h; sourceTree = "<group>"; };
-		ACE56D5D265952290027A68A /* PLShareFolderViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLShareFolderViewController.m; sourceTree = "<group>"; };
-		ACE56D5E265952290027A68A /* PLShareFolderViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PLShareFolderViewController.xib; sourceTree = "<group>"; };
-		ACE56D652659524E0027A68A /* PLSMBManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLSMBManager.h; sourceTree = "<group>"; };
-		ACE56D662659524E0027A68A /* PLSMBManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLSMBManager.m; sourceTree = "<group>"; };
+		ACEA4AE9265BE99D00D141D4 /* UIImage+PLAdd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+PLAdd.h"; sourceTree = "<group>"; };
+		ACEA4AEA265BE99D00D141D4 /* UIImage+PLAdd.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+PLAdd.m"; sourceTree = "<group>"; };
+		ACEA4B02265BF2FD00D141D4 /* PLUniversalManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLUniversalManager.h; sourceTree = "<group>"; };
+		ACEA4B03265BF2FD00D141D4 /* PLUniversalManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLUniversalManager.m; sourceTree = "<group>"; };
+		ACEA4B1D265BF68D00D141D4 /* PLUniversalHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLUniversalHeader.h; sourceTree = "<group>"; };
+		ACEA4B1E265BF6A400D141D4 /* PLNotificationsHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLNotificationsHeader.h; sourceTree = "<group>"; };
 		ACEBB77526588A07005778FB /* GYLogManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GYLogManager.m; sourceTree = "<group>"; };
 		ACEBB77626588A07005778FB /* GYUtilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GYUtilityManager.m; sourceTree = "<group>"; };
 		ACEBB77726588A07005778FB /* GYExceptionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GYExceptionManager.m; sourceTree = "<group>"; };
@@ -270,6 +265,8 @@
 		ACE56CB3265938C50027A68A /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				ACEA4B1C265BF67300D141D4 /* Headers */,
+				ACEA4AE8265BE98A00D141D4 /* Categories */,
 				ACE56D50265951610027A68A /* Controllers */,
 				ACE56D64265952340027A68A /* Managers */,
 				ACE211D12659F67400FF52EC /* Views */,
@@ -277,26 +274,9 @@
 			path = Main;
 			sourceTree = "<group>";
 		};
-			isa = PBXGroup;
-			children = (
-			);
-			sourceTree = "<group>";
-		};
-			isa = PBXGroup;
-			children = (
-			);
-			path = include;
-			sourceTree = "<group>";
-		};
 		ACE56D50265951610027A68A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				ACE56D512659517F0027A68A /* PLWebViewController.h */,
-				ACE56D522659517F0027A68A /* PLWebViewController.m */,
-				ACE56D532659517F0027A68A /* PLWebViewController.xib */,
-				ACE56D5C265952290027A68A /* PLShareFolderViewController.h */,
-				ACE56D5D265952290027A68A /* PLShareFolderViewController.m */,
-				ACE56D5E265952290027A68A /* PLShareFolderViewController.xib */,
 				ACE211C92659F3E800FF52EC /* PLContentViewController.h */,
 				ACE211CA2659F3E800FF52EC /* PLContentViewController.m */,
 				ACE211CB2659F3E800FF52EC /* PLContentViewController.xib */,
@@ -307,10 +287,28 @@
 		ACE56D64265952340027A68A /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				ACE56D652659524E0027A68A /* PLSMBManager.h */,
-				ACE56D662659524E0027A68A /* PLSMBManager.m */,
+				ACEA4B02265BF2FD00D141D4 /* PLUniversalManager.h */,
+				ACEA4B03265BF2FD00D141D4 /* PLUniversalManager.m */,
 			);
 			path = Managers;
+			sourceTree = "<group>";
+		};
+		ACEA4AE8265BE98A00D141D4 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				ACEA4AE9265BE99D00D141D4 /* UIImage+PLAdd.h */,
+				ACEA4AEA265BE99D00D141D4 /* UIImage+PLAdd.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		ACEA4B1C265BF67300D141D4 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				ACEA4B1D265BF68D00D141D4 /* PLUniversalHeader.h */,
+				ACEA4B1E265BF6A400D141D4 /* PLNotificationsHeader.h */,
+			);
+			path = Headers;
 			sourceTree = "<group>";
 		};
 		ACEBB77226588A07005778FB /* Universal */ = {
@@ -510,8 +508,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AC262502265812AA00939375 /* LaunchScreen.storyboard in Resources */,
-				ACE56D552659517F0027A68A /* PLWebViewController.xib in Resources */,
-				ACE56D60265952290027A68A /* PLShareFolderViewController.xib in Resources */,
 				AC2624FF265812AA00939375 /* Assets.xcassets in Resources */,
 				ACE03ACB265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.xib in Resources */,
 				ACE211CD2659F3E800FF52EC /* PLContentViewController.xib in Resources */,
@@ -584,22 +580,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				ACE03ACA265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.m in Sources */,
+				ACEA4B04265BF2FD00D141D4 /* PLUniversalManager.m in Sources */,
 				ACE03AC2265A95C900BDC5AA /* PLContentCollectionViewCell.m in Sources */,
 				AC2624FA265812A900939375 /* ViewController.m in Sources */,
 				ACEBB7A326588A07005778FB /* NSError+GYAdd.m in Sources */,
 				AC2624F4265812A900939375 /* AppDelegate.m in Sources */,
 				ACEBB7A426588A07005778FB /* NSArray+GYAdd.m in Sources */,
-				ACE56D542659517F0027A68A /* PLWebViewController.m in Sources */,
+				ACEA4AEB265BE99D00D141D4 /* UIImage+PLAdd.m in Sources */,
 				ACEBB79F26588A07005778FB /* GYSettingManager.m in Sources */,
 				ACEBB7A226588A07005778FB /* UIColor+GYAdd.m in Sources */,
-				ACE56D5F265952290027A68A /* PLShareFolderViewController.m in Sources */,
 				ACEBB79B26588A07005778FB /* GYUtilityManager.m in Sources */,
 				ACEBB79A26588A07005778FB /* GYLogManager.m in Sources */,
 				ACEBB79C26588A07005778FB /* GYExceptionManager.m in Sources */,
 				ACEBB7A526588A07005778FB /* NSDictionary+GYAdd.m in Sources */,
 				ACEBB7A126588A07005778FB /* NSObject+GYAdd.m in Sources */,
 				ACEBB79E26588A07005778FB /* GYFileManager.m in Sources */,
-				ACE56D672659524E0027A68A /* PLSMBManager.m in Sources */,
 				ACE211D42659F6AF00FF52EC /* PLContentLayout.m in Sources */,
 				ACEBB79D26588A07005778FB /* GYHTTPManager.m in Sources */,
 				ACE211CC2659F3E800FF52EC /* PLContentViewController.m in Sources */,

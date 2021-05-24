@@ -19,10 +19,6 @@
     return YES;
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application {
-    [[PLSMBManager defaultManager] stopDiscovery];
-}
-
 #pragma mark - UISceneSession lifecycle
 - (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options {
     // Called when a new scene session is being created.

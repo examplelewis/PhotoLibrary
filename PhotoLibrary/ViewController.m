@@ -6,13 +6,12 @@
 //
 
 #import "ViewController.h"
-
-#import "PLShareFolderViewController.h"
-#import "PLWebViewController.h"
+#import <MJRefresh.h>
 #import "PLContentViewController.h"
 
 @interface ViewController () <UITableViewDataSource, UITableViewDelegate>
 
+@property (nonatomic, strong) NSArray<NSString *> *folders;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 @end
@@ -23,31 +22,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = @"SMB服务器列表";
+    self.title = @"文件列表";
     
     [self setupUIAndData];
 }
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    // 回到服务器列表就断开已有的连接
-    [[PLSMBManager defaultManager] disconnectFileServer];
-    
-    // Find
-    @weakify(self);
-    [[PLSMBManager defaultManager] startDiscoveryWithCompletion:^{
-        @strongify(self);
-        [self.tableView reloadData];
-    }];
-}
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    
-    [[PLSMBManager defaultManager] stopDiscovery];
+    if (self.folders.count == 0) {
+        [self.tableView.mj_header beginRefreshing];
+    }
 }
 
 #pragma mark - Configure
 - (void)setupUIAndData {
+    // Data
+    self.folders = @[];
+    
     // UI
     [self setupNavigationBar];
     [self setupTableView];
@@ -58,11 +49,25 @@
 }
 - (void)setupTableView {
     self.tableView.tableFooterView = [UIView new];
+    
+    @weakify(self);
+    self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        @strongify(self);
+        [self refreshRootRolders];
+    }];
+}
+
+#pragma mark - Data
+- (void)refreshRootRolders {
+    [self.tableView.mj_header endRefreshing];
+    
+    self.folders = [GYFileManager folderPathsInFolder:[GYSettingManager defaultManager].documentPath];
+    [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [PLSMBManager defaultManager].devices.count;
+    return self.folders.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
@@ -70,7 +75,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
     
-    cell.textLabel.text = [PLSMBManager defaultManager].devices[indexPath.row].netbiosName;
+    cell.textLabel.text = self.folders[indexPath.row].lastPathComponent;
     
     return cell;
 }
@@ -79,20 +84,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    @weakify(self);
-    [[PLSMBManager defaultManager] loginWithDeviceAtIndex:indexPath.row completion:^{
-        @strongify(self);
-        
-        PLShareFolderViewController *vc = [[PLShareFolderViewController alloc] initWithNibName:@"PLShareFolderViewController" bundle:nil];
-        [self.navigationController pushViewController:vc animated:YES];
-    }];
+    PLContentViewController *vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
+    vc.folderPath = self.folders[indexPath.row];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - Action
 - (void)barButtonItemDidPress:(UIBarButtonItem *)sender {
-    // 通过打开一个网页，请求无线网络访问权限
-    PLWebViewController *vc = [[PLWebViewController alloc] initWithNibName:@"PLWebViewController" bundle:nil];
-    [self presentViewController:vc animated:YES completion:nil];
+    
 }
 
 

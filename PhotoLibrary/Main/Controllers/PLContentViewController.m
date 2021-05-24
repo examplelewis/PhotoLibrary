@@ -8,27 +8,22 @@
 #import "PLContentViewController.h"
 
 #import <MJRefresh.h>
+#import <StepSlider.h>
 
 #import "PLContentCollectionViewCell.h"
 #import "PLContentCollectionHeaderReusableView.h"
 
-static CGFloat const kSpacing = 10.0f;
-static NSInteger const kColumnsPerRow = 7;
-
-@interface PLContentViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
+@interface PLContentViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) UIBarButtonItem *editBBI;
 @property (nonatomic, strong) UIBarButtonItem *trashBBI;
-
-@property (nonatomic, assign) CGFloat spacing;
-@property (nonatomic, assign) NSInteger columnsPerRow;
+@property (nonatomic, strong) UIBarButtonItem *sliderBBI;
 
 @property (nonatomic, strong) UICollectionViewFlowLayout *flowLayout;
 @property (nonatomic, strong) UICollectionView *collectionView;
 
-@property (nonatomic, strong) NSMutableArray<SMBFile *> *contents;
-@property (nonatomic, strong) NSMutableArray<SMBFile *> *folders;
-@property (nonatomic, strong) NSMutableArray<SMBFile *> *files;
+@property (nonatomic, strong) NSArray<NSString *> *folders;
+@property (nonatomic, strong) NSArray<NSString *> *files;
 
 @property (nonatomic, assign) BOOL bothFoldersAndFiles;
 
@@ -40,27 +35,27 @@ static NSInteger const kColumnsPerRow = 7;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = self.file.name;
+    self.title = self.folderPath.lastPathComponent;
     
+    [self setupNotifications];
     [self setupUIAndData];
 }
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    if (self.contents.count == 0) {
+    if (self.folders.count == 0 && self.files.count == 0) {
         [self.collectionView.mj_header beginRefreshing];
     }
 }
 
-
 #pragma mark - Configure
+- (void)setupNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(columnPerRowSliderValueChanged:) name:PLColumnPerRowSliderValueChanged object:nil];
+}
 - (void)setupUIAndData {
     // Data
-    self.spacing = kSpacing;
-    self.columnsPerRow = kColumnsPerRow;
-    self.contents = [NSMutableArray array];
-    self.folders = [NSMutableArray array];
-    self.files = [NSMutableArray array];
+    self.folders = @[];
+    self.files = @[];
     self.bothFoldersAndFiles = NO;
     
     // UI
@@ -75,19 +70,28 @@ static NSInteger const kColumnsPerRow = 7;
     self.trashBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(trashBarButtonItemDidPress:)];
     self.trashBBI.enabled = NO;
     
-    self.navigationItem.rightBarButtonItems = @[self.editBBI, self.trashBBI];
+    UIView *sliderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 44)];
+    StepSlider *slider = [[StepSlider alloc] initWithFrame:CGRectMake(0, 9, 300, 26)];
+    slider.tag = 100;
+    slider.maxCount = 6;
+    slider.index = [PLUniversalManager defaultManager].columnsPerRow - 4;
+    [slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+    [sliderView addSubview:slider];
+    self.sliderBBI = [[UIBarButtonItem alloc] initWithCustomView:sliderView];
+    
+    self.navigationItem.rightBarButtonItems = @[self.editBBI, self.trashBBI, self.sliderBBI];
 }
 - (void)setupCollectionViewFlowLayout {
     self.flowLayout = [UICollectionViewFlowLayout new];
-    self.flowLayout.minimumInteritemSpacing = self.spacing;
-    self.flowLayout.minimumLineSpacing = self.spacing;
+    self.flowLayout.minimumInteritemSpacing = [PLUniversalManager defaultManager].rowColumnSpacing;
+    self.flowLayout.minimumLineSpacing = [PLUniversalManager defaultManager].rowColumnSpacing;
     
     CGFloat screenWidth = MAX(kScreenWidth, kScreenHeight);
-    CGFloat itemWidth = (screenWidth - (self.columnsPerRow + 1) * self.spacing) / self.columnsPerRow;
+    CGFloat itemWidth = (screenWidth - ([PLUniversalManager defaultManager].columnsPerRow + 1) * [PLUniversalManager defaultManager].rowColumnSpacing) / [PLUniversalManager defaultManager].columnsPerRow;
     self.flowLayout.itemSize = CGSizeMake(floorf(itemWidth), floorf(itemWidth));
     
     self.flowLayout.headerReferenceSize = CGSizeMake(kScreenWidth, 44);
-    self.flowLayout.sectionInset = UIEdgeInsetsMake(self.spacing, self.spacing, self.spacing, self.spacing); // 设置每个分区的 上左下右 的内边距
+    self.flowLayout.sectionInset = [PLUniversalManager defaultManager].flowLayoutSectionInset; // 设置每个分区的 上左下右 的内边距
     self.flowLayout.sectionFootersPinToVisibleBounds = YES; // 设置分区的头视图和尾视图 是否始终固定在屏幕上边和下边
     
     self.flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
@@ -116,43 +120,15 @@ static NSInteger const kColumnsPerRow = 7;
 
 #pragma mark - Refresh
 - (void)refreshFiles {
-    @weakify(self);
-    [self.file listFilesUsingFilter:^BOOL(SMBFile * _Nonnull file) {
-        BOOL isHiddenFile = [file.name hasPrefix:@"."];
-        BOOL isImageFile = [[GYSettingManager defaultManager].mimeImageTypes indexOfObject:file.name.pathExtension.lowercaseString] != NSNotFound;
-        BOOL isFolder = file.isDirectory;
-        
-        return !isHiddenFile && (isFolder || isImageFile);
-    } completion:^(NSArray<SMBFile *> * _Nullable files, NSError * _Nullable error) {
-        @strongify(self);
-        [self.collectionView.mj_header endRefreshing];
-        
-        if (error) {
-            [SVProgressHUD showErrorWithStatus:[NSString stringWithFormat:@"刷新文件列表出现错误: %@", error.localizedDescription]];
-        } else {
-            if (files && files.count > 0) {
-                [self.contents removeAllObjects];
-                [self.folders removeAllObjects];
-                [self.files removeAllObjects];
-                
-                [self.contents addObjectsFromArray:files];
-                [self.folders addObjectsFromArray:[files bk_select:^BOOL(SMBFile *obj) {
-                    return obj.isDirectory;
-                }]];
-                [self.files addObjectsFromArray:[files bk_select:^BOOL(SMBFile *obj) {
-                    return !obj.isDirectory;
-                }]];
-//                [self.files removeFirstObject];
-//                [self.files removeFirstObject];
-                
-                self.bothFoldersAndFiles = (self.folders.count > 0 && self.files.count > 0);
-                
-                [self.collectionView reloadData];
-            } else {
-                [SVProgressHUD showErrorWithStatus:@"没有获取到新文件"];
-            }
-        }
-    }];
+    [self.collectionView.mj_header endRefreshing];
+    
+    self.folders = [GYFileManager folderPathsInFolder:self.folderPath];
+    self.folders = [self.folders sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES]]];
+    self.files = [GYFileManager filePathsInFolder:self.folderPath extensions:[GYSettingManager defaultManager].mimeImageTypes];
+    self.files = [self.files sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES]]];
+    self.bothFoldersAndFiles = (self.folders.count > 0 && self.files.count > 0);
+    
+    [self.collectionView reloadData];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -181,15 +157,15 @@ static NSInteger const kColumnsPerRow = 7;
     
     if (self.bothFoldersAndFiles) {
         if (indexPath.section == 0) {
-            cell.file = self.folders[indexPath.row];
+            cell.contentPath = self.folders[indexPath.row];
         } else {
-            cell.file = self.files[indexPath.row];
+            cell.contentPath = self.files[indexPath.row];
         }
     } else {
         if (self.folders.count > 0) {
-            cell.file = self.folders[indexPath.row];
+            cell.contentPath = self.folders[indexPath.row];
         } else if (self.files.count > 0) {
-            cell.file = self.files[indexPath.row];
+            cell.contentPath = self.files[indexPath.row];
         } else {
             return [UICollectionViewCell new];
         }
@@ -225,9 +201,33 @@ static NSInteger const kColumnsPerRow = 7;
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+    
+    PLContentCollectionViewCell *cell = (PLContentCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    if (cell.isFolder) {
+        PLContentViewController *vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
+        vc.folderPath = self.folders[indexPath.row];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
-#pragma mark - Action
+#pragma mark - UICollectionViewDelegateFlowLayout
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return self.flowLayout.itemSize;
+}
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    return self.flowLayout.sectionInset;
+}
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    return self.flowLayout.minimumLineSpacing;
+}
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    return self.flowLayout.minimumInteritemSpacing;
+}
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    return self.flowLayout.headerReferenceSize;
+}
+
+#pragma mark - Actions
 - (void)editBarButtonItemDidPress:(UIBarButtonItem *)sender {
     if (sender.tag == 101) {
         self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(editBarButtonItemDidPress:)];
@@ -245,6 +245,24 @@ static NSInteger const kColumnsPerRow = 7;
 }
 - (void)trashBarButtonItemDidPress:(UIBarButtonItem *)sender {
     
+}
+- (void)sliderValueChanged:(StepSlider *)sender {
+    [PLUniversalManager defaultManager].columnsPerRow = sender.index + 4;
+    
+    // 更新flowLayout后刷新collectionView
+    [self setupCollectionViewFlowLayout];
+    [self.collectionView reloadData];
+}
+
+#pragma mark - Notifications
+- (void)columnPerRowSliderValueChanged:(NSNotification *)sender {
+    UIView *sliderView = self.sliderBBI.customView;
+    StepSlider *slider = (StepSlider *)[sliderView viewWithTag:100];
+    slider.index = [PLUniversalManager defaultManager].columnsPerRow - 4;
+    
+    // 更新flowLayout后刷新collectionView
+    [self setupCollectionViewFlowLayout];
+    [self.collectionView reloadData];
 }
 
 @end

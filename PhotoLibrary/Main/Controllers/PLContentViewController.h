@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PLContentViewController : UIViewController
 
-@property (nonatomic, strong) SMBFile *file;
+@property (nonatomic, copy) NSString *folderPath;
 
 @end
 
