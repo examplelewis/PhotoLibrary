@@ -17,7 +17,8 @@ target 'PhotoLibrary' do
   pod 'YYCategories'
   pod 'YYModel'
   pod 'SVProgressHUD'
-
+  
+  pod 'StepSlider'
   pod 'SSZipArchive'
   pod 'FMDB'
   pod 'YYText'

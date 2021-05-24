@@ -24,14 +24,6 @@
 		ACE211CC2659F3E800FF52EC /* PLContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE211CA2659F3E800FF52EC /* PLContentViewController.m */; };
 		ACE211CD2659F3E800FF52EC /* PLContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACE211CB2659F3E800FF52EC /* PLContentViewController.xib */; };
 		ACE211D42659F6AF00FF52EC /* PLContentLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE211D32659F6AF00FF52EC /* PLContentLayout.m */; };
-		ACE56D19265941F10027A68A /* SMBFileServer.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56CF5265941F10027A68A /* SMBFileServer.m */; };
-		ACE56D1A265941F10027A68A /* SMBDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56CF6265941F10027A68A /* SMBDevice.m */; };
-		ACE56D1B265941F10027A68A /* SMBFile.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56CF8265941F10027A68A /* SMBFile.m */; };
-		ACE56D1C265941F10027A68A /* SMBShare.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56CF9265941F10027A68A /* SMBShare.m */; };
-		ACE56D1D265941F10027A68A /* SMBError.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56CFC265941F10027A68A /* SMBError.m */; };
-		ACE56D1F265941F10027A68A /* libdsm-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ACE56D0F265941F10027A68A /* libdsm-iOS.a */; };
-		ACE56D21265941F20027A68A /* libtasn1-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ACE56D14265941F10027A68A /* libtasn1-iOS.a */; };
-		ACE56D23265941F20027A68A /* SMBDiscovery.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56D16265941F10027A68A /* SMBDiscovery.m */; };
 		ACE56D4026594CBA0027A68A /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACE56D3926594B2A0027A68A /* WebKit.framework */; };
 		ACE56D542659517F0027A68A /* PLWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE56D522659517F0027A68A /* PLWebViewController.m */; };
 		ACE56D552659517F0027A68A /* PLWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACE56D532659517F0027A68A /* PLWebViewController.xib */; };
@@ -103,35 +95,6 @@
 		ACE211D32659F6AF00FF52EC /* PLContentLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLContentLayout.m; sourceTree = "<group>"; };
 		ACE211EC265A085A00FF52EC /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		ACE211ED265A085A00FF52EC /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
-		ACE56CF3265941F10027A68A /* SMBShare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMBShare.h; sourceTree = "<group>"; };
-		ACE56CF4265941F10027A68A /* SMBFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMBFile.h; sourceTree = "<group>"; };
-		ACE56CF5265941F10027A68A /* SMBFileServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMBFileServer.m; sourceTree = "<group>"; };
-		ACE56CF6265941F10027A68A /* SMBDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMBDevice.m; sourceTree = "<group>"; };
-		ACE56CF7265941F10027A68A /* SMBDiscovery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMBDiscovery.h; sourceTree = "<group>"; };
-		ACE56CF8265941F10027A68A /* SMBFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMBFile.m; sourceTree = "<group>"; };
-		ACE56CF9265941F10027A68A /* SMBShare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMBShare.m; sourceTree = "<group>"; };
-		ACE56CFA265941F10027A68A /* SMBClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMBClient.h; sourceTree = "<group>"; };
-		ACE56CFC265941F10027A68A /* SMBError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMBError.m; sourceTree = "<group>"; };
-		ACE56CFD265941F10027A68A /* SMBFile_Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMBFile_Protected.h; sourceTree = "<group>"; };
-		ACE56CFE265941F10027A68A /* SMBShare_Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMBShare_Protected.h; sourceTree = "<group>"; };
-		ACE56CFF265941F10027A68A /* SMBError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMBError.h; sourceTree = "<group>"; };
-		ACE56D00265941F10027A68A /* SMBFileServer_Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMBFileServer_Protected.h; sourceTree = "<group>"; };
-		ACE56D05265941F10027A68A /* smb_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smb_types.h; sourceTree = "<group>"; };
-		ACE56D06265941F10027A68A /* smb_file.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smb_file.h; sourceTree = "<group>"; };
-		ACE56D07265941F10027A68A /* smb_stat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smb_stat.h; sourceTree = "<group>"; };
-		ACE56D08265941F10027A68A /* netbios_defs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = netbios_defs.h; sourceTree = "<group>"; };
-		ACE56D09265941F10027A68A /* bdsm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bdsm.h; sourceTree = "<group>"; };
-		ACE56D0A265941F10027A68A /* smb_session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smb_session.h; sourceTree = "<group>"; };
-		ACE56D0B265941F10027A68A /* netbios_ns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = netbios_ns.h; sourceTree = "<group>"; };
-		ACE56D0C265941F10027A68A /* smb_defs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smb_defs.h; sourceTree = "<group>"; };
-		ACE56D0D265941F10027A68A /* smb_share.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smb_share.h; sourceTree = "<group>"; };
-		ACE56D0E265941F10027A68A /* smb_dir.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smb_dir.h; sourceTree = "<group>"; };
-		ACE56D0F265941F10027A68A /* libdsm-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libdsm-iOS.a"; sourceTree = "<group>"; };
-		ACE56D13265941F10027A68A /* libtasn1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libtasn1.h; sourceTree = "<group>"; };
-		ACE56D14265941F10027A68A /* libtasn1-iOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libtasn1-iOS.a"; sourceTree = "<group>"; };
-		ACE56D16265941F10027A68A /* SMBDiscovery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SMBDiscovery.m; sourceTree = "<group>"; };
-		ACE56D17265941F10027A68A /* SMBDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMBDevice.h; sourceTree = "<group>"; };
-		ACE56D18265941F10027A68A /* SMBFileServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMBFileServer.h; sourceTree = "<group>"; };
 		ACE56D3926594B2A0027A68A /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		ACE56D512659517F0027A68A /* PLWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLWebViewController.h; sourceTree = "<group>"; };
 		ACE56D522659517F0027A68A /* PLWebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLWebViewController.m; sourceTree = "<group>"; };
@@ -180,9 +143,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7BE022AC31DF9F9A14597AB4 /* Pods_PhotoLibrary.framework in Frameworks */,
-				ACE56D21265941F20027A68A /* libtasn1-iOS.a in Frameworks */,
 				ACE56D4026594CBA0027A68A /* WebKit.framework in Frameworks */,
-				ACE56D1F265941F10027A68A /* libdsm-iOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,86 +277,13 @@
 			path = Main;
 			sourceTree = "<group>";
 		};
-		ACE56CF2265941F10027A68A /* SMBClient */ = {
 			isa = PBXGroup;
 			children = (
-				ACE56CFB265941F10027A68A /* Protected */,
-				ACE56CFA265941F10027A68A /* SMBClient.h */,
-				ACE56D17265941F10027A68A /* SMBDevice.h */,
-				ACE56CF6265941F10027A68A /* SMBDevice.m */,
-				ACE56CF7265941F10027A68A /* SMBDiscovery.h */,
-				ACE56D16265941F10027A68A /* SMBDiscovery.m */,
-				ACE56CF4265941F10027A68A /* SMBFile.h */,
-				ACE56CF8265941F10027A68A /* SMBFile.m */,
-				ACE56D18265941F10027A68A /* SMBFileServer.h */,
-				ACE56CF5265941F10027A68A /* SMBFileServer.m */,
-				ACE56CF3265941F10027A68A /* SMBShare.h */,
-				ACE56CF9265941F10027A68A /* SMBShare.m */,
-				ACE56D01265941F10027A68A /* ThirdParty */,
 			);
-			path = SMBClient;
 			sourceTree = "<group>";
 		};
-		ACE56CFB265941F10027A68A /* Protected */ = {
 			isa = PBXGroup;
 			children = (
-				ACE56CFF265941F10027A68A /* SMBError.h */,
-				ACE56CFC265941F10027A68A /* SMBError.m */,
-				ACE56CFD265941F10027A68A /* SMBFile_Protected.h */,
-				ACE56D00265941F10027A68A /* SMBFileServer_Protected.h */,
-				ACE56CFE265941F10027A68A /* SMBShare_Protected.h */,
-			);
-			path = Protected;
-			sourceTree = "<group>";
-		};
-		ACE56D01265941F10027A68A /* ThirdParty */ = {
-			isa = PBXGroup;
-			children = (
-				ACE56D02265941F10027A68A /* libdsm */,
-				ACE56D10265941F10027A68A /* libtasn1 */,
-			);
-			path = ThirdParty;
-			sourceTree = "<group>";
-		};
-		ACE56D02265941F10027A68A /* libdsm */ = {
-			isa = PBXGroup;
-			children = (
-				ACE56D04265941F10027A68A /* include */,
-				ACE56D0F265941F10027A68A /* libdsm-iOS.a */,
-			);
-			path = libdsm;
-			sourceTree = "<group>";
-		};
-		ACE56D04265941F10027A68A /* include */ = {
-			isa = PBXGroup;
-			children = (
-				ACE56D05265941F10027A68A /* smb_types.h */,
-				ACE56D06265941F10027A68A /* smb_file.h */,
-				ACE56D07265941F10027A68A /* smb_stat.h */,
-				ACE56D08265941F10027A68A /* netbios_defs.h */,
-				ACE56D09265941F10027A68A /* bdsm.h */,
-				ACE56D0A265941F10027A68A /* smb_session.h */,
-				ACE56D0B265941F10027A68A /* netbios_ns.h */,
-				ACE56D0C265941F10027A68A /* smb_defs.h */,
-				ACE56D0D265941F10027A68A /* smb_share.h */,
-				ACE56D0E265941F10027A68A /* smb_dir.h */,
-			);
-			path = include;
-			sourceTree = "<group>";
-		};
-		ACE56D10265941F10027A68A /* libtasn1 */ = {
-			isa = PBXGroup;
-			children = (
-				ACE56D12265941F10027A68A /* include */,
-				ACE56D14265941F10027A68A /* libtasn1-iOS.a */,
-			);
-			path = libtasn1;
-			sourceTree = "<group>";
-		};
-		ACE56D12265941F10027A68A /* include */ = {
-			isa = PBXGroup;
-			children = (
-				ACE56D13265941F10027A68A /* libtasn1.h */,
 			);
 			path = include;
 			sourceTree = "<group>";
@@ -512,7 +400,6 @@
 		ACEBB7A926588A0D005778FB /* Third Parties */ = {
 			isa = PBXGroup;
 			children = (
-				ACE56CF2265941F10027A68A /* SMBClient */,
 			);
 			path = "Third Parties";
 			sourceTree = "<group>";
@@ -700,16 +587,11 @@
 				ACE03AC2265A95C900BDC5AA /* PLContentCollectionViewCell.m in Sources */,
 				AC2624FA265812A900939375 /* ViewController.m in Sources */,
 				ACEBB7A326588A07005778FB /* NSError+GYAdd.m in Sources */,
-				ACE56D1C265941F10027A68A /* SMBShare.m in Sources */,
-				ACE56D23265941F20027A68A /* SMBDiscovery.m in Sources */,
 				AC2624F4265812A900939375 /* AppDelegate.m in Sources */,
-				ACE56D1A265941F10027A68A /* SMBDevice.m in Sources */,
-				ACE56D1D265941F10027A68A /* SMBError.m in Sources */,
 				ACEBB7A426588A07005778FB /* NSArray+GYAdd.m in Sources */,
 				ACE56D542659517F0027A68A /* PLWebViewController.m in Sources */,
 				ACEBB79F26588A07005778FB /* GYSettingManager.m in Sources */,
 				ACEBB7A226588A07005778FB /* UIColor+GYAdd.m in Sources */,
-				ACE56D19265941F10027A68A /* SMBFileServer.m in Sources */,
 				ACE56D5F265952290027A68A /* PLShareFolderViewController.m in Sources */,
 				ACEBB79B26588A07005778FB /* GYUtilityManager.m in Sources */,
 				ACEBB79A26588A07005778FB /* GYLogManager.m in Sources */,
@@ -722,7 +604,6 @@
 				ACEBB79D26588A07005778FB /* GYHTTPManager.m in Sources */,
 				ACE211CC2659F3E800FF52EC /* PLContentViewController.m in Sources */,
 				AC262505265812AA00939375 /* main.m in Sources */,
-				ACE56D1B265941F10027A68A /* SMBFile.m in Sources */,
 				AC2624F7265812A900939375 /* SceneDelegate.m in Sources */,
 				ACEBB7A626588A07005778FB /* NSString+GYAdd.m in Sources */,
 			);
