@@ -22,10 +22,14 @@
 @property (nonatomic, strong) UICollectionViewFlowLayout *flowLayout;
 @property (nonatomic, strong) UICollectionView *collectionView;
 
-@property (nonatomic, strong) NSArray<NSString *> *folders;
-@property (nonatomic, strong) NSArray<NSString *> *files;
+@property (nonatomic, copy) NSArray<NSString *> *folders;
+@property (nonatomic, copy) NSArray<NSString *> *files;
 
 @property (nonatomic, assign) BOOL bothFoldersAndFiles;
+
+@property (nonatomic, assign) PLContentCollectionViewCellType cellType;
+
+@property (nonatomic, strong) NSMutableArray<NSString *> *selects;
 
 @end
 
@@ -57,6 +61,10 @@
     self.folders = @[];
     self.files = @[];
     self.bothFoldersAndFiles = NO;
+    
+    self.cellType = PLContentCollectionViewCellTypeNormal;
+    
+    self.selects = [NSMutableArray array];
     
     // UI
     [self setupNavigationBar];
@@ -170,6 +178,13 @@
             return [UICollectionViewCell new];
         }
     }
+    
+    if (self.cellType == PLContentCollectionViewCellTypeNormal) {
+        cell.cellType = PLContentCollectionViewCellTypeNormal;
+    } else {
+        BOOL selected = [self.selects indexOfObject:cell.contentPath] != NSNotFound;
+        cell.cellType = selected ? PLContentCollectionViewCellTypeEditSelect : PLContentCollectionViewCellTypeEdit;
+    }
 
     return cell;
 }
@@ -207,6 +222,21 @@
         PLContentViewController *vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
         vc.folderPath = self.folders[indexPath.row];
         [self.navigationController pushViewController:vc animated:YES];
+        
+        return;
+    }
+    
+    if (self.cellType == PLContentCollectionViewCellTypeNormal) {
+        
+    } else {
+        BOOL selected = [self.selects indexOfObject:cell.contentPath] != NSNotFound;
+        if (selected) {
+            [self.selects removeObject:cell.contentPath];
+        } else {
+            [self.selects addObject:cell.contentPath];
+        }
+        
+        [self.collectionView reloadData];
     }
 }
 
@@ -235,12 +265,16 @@
         self.trashBBI.enabled = YES;
         self.navigationItem.rightBarButtonItems = @[self.editBBI, self.trashBBI];
         
+        self.cellType = PLContentCollectionViewCellTypeEdit;
+        [self.selects removeAllObjects];
     } else {
         self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editBarButtonItemDidPress:)];
         self.editBBI.tag = 101;
         self.trashBBI.enabled = NO;
         self.navigationItem.rightBarButtonItems = @[self.editBBI, self.trashBBI];
         
+        self.cellType = PLContentCollectionViewCellTypeNormal;
+        [self.selects removeAllObjects];
     }
 }
 - (void)trashBarButtonItemDidPress:(UIBarButtonItem *)sender {

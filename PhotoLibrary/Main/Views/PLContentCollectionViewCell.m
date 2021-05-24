@@ -61,6 +61,10 @@
     }
 }
 - (void)setCellType:(PLContentCollectionViewCellType)cellType {
+    if (_cellType == cellType) {
+        return;
+    }
+    
     _cellType = cellType;
     
     switch (cellType) {
