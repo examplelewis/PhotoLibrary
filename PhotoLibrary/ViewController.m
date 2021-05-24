@@ -90,12 +90,9 @@
 
 #pragma mark - Action
 - (void)barButtonItemDidPress:(UIBarButtonItem *)sender {
-    PLContentViewController *vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
-    [self.navigationController pushViewController:vc animated:YES];
-    
-//    // 通过打开一个网页，请求无线网络访问权限
-//    PLWebViewController *vc = [[PLWebViewController alloc] initWithNibName:@"PLWebViewController" bundle:nil];
-//    [self presentViewController:vc animated:YES completion:nil];
+    // 通过打开一个网页，请求无线网络访问权限
+    PLWebViewController *vc = [[PLWebViewController alloc] initWithNibName:@"PLWebViewController" bundle:nil];
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 

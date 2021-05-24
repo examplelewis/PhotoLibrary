@@ -23,17 +23,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _homePath = NSHomeDirectory();
-        _documentPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-        _libraryPath = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES).firstObject;
-        _cachesPath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).firstObject;
-        _applicationSupportPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
-        _preferencePath = NSSearchPathForDirectoriesInDomains(NSPreferencePanesDirectory, NSUserDomainMask, YES).firstObject;
-        _temPath = NSTemporaryDirectory();
-        
-        _mainDatabasesFolderPath = [_documentPath stringByAppendingPathComponent:@"Databases"];
-        _preferenceFilePath = [self pathOfContentInDocumentFolder:@"GYPreference.plist"];
-        
+        [self updatePaths];
         [self updatePreferences];
     }
     
@@ -50,11 +40,18 @@
 - (void)updateNavigationController:(UINavigationController *)navigationController {
     _navigationController = navigationController;
 }
+- (void)updatePaths {
+    _homePath = NSHomeDirectory();
+    _documentPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+    _libraryPath = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES).firstObject;
+    _cachesPath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).firstObject;
+    _applicationSupportPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
+    _preferencePath = NSSearchPathForDirectoriesInDomains(NSPreferencePanesDirectory, NSUserDomainMask, YES).firstObject;
+    _temPath = NSTemporaryDirectory();
+}
 - (void)updatePreferences {
-    NSDictionary *prefs = [NSDictionary dictionaryWithContentsOfFile:[self pathOfContentInDocumentFolder:@"GYPreference.plist"]];
-    
-    _mimeImageTypes = [[prefs valueForKeyPath:@"MIMEType.ImageTypes"] copy];
-    _mimeVideoTypes = [[prefs valueForKeyPath:@"MIMEType.VideoTypes"] copy];
+    _mimeImageTypes = @[@"jpg", @"jpeg", @"png", @"gif"];
+    _mimeVideoTypes = @[];
     _mimeImageAndVideoTypes = [self.mimeImageTypes arrayByAddingObjectsFromArray:self.mimeVideoTypes];
 }
 
@@ -85,9 +82,6 @@
 #pragma mark - Paths
 - (NSString *)pathOfContentInDocumentFolder:(NSString *)component {
     return [self.documentPath stringByAppendingPathComponent:component];
-}
-- (NSString *)pathOfContentInMainDatabasesFolder:(NSString *)component {
-    return [self.mainDatabasesFolderPath stringByAppendingPathComponent:component];
 }
 
 @end

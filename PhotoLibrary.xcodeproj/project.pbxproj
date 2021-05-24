@@ -17,6 +17,10 @@
 		AC262505265812AA00939375 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AC262504265812AA00939375 /* main.m */; };
 		AC26250F265812AB00939375 /* PhotoLibraryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC26250E265812AB00939375 /* PhotoLibraryTests.m */; };
 		AC26251A265812AB00939375 /* PhotoLibraryUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC262519265812AB00939375 /* PhotoLibraryUITests.m */; };
+		ACE03AC2265A95C900BDC5AA /* PLContentCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE03AC0265A95C900BDC5AA /* PLContentCollectionViewCell.m */; };
+		ACE03AC3265A95C900BDC5AA /* PLContentCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACE03AC1265A95C900BDC5AA /* PLContentCollectionViewCell.xib */; };
+		ACE03ACA265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE03AC8265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.m */; };
+		ACE03ACB265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACE03AC9265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.xib */; };
 		ACE211CC2659F3E800FF52EC /* PLContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE211CA2659F3E800FF52EC /* PLContentViewController.m */; };
 		ACE211CD2659F3E800FF52EC /* PLContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACE211CB2659F3E800FF52EC /* PLContentViewController.xib */; };
 		ACE211D42659F6AF00FF52EC /* PLContentLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE211D32659F6AF00FF52EC /* PLContentLayout.m */; };
@@ -40,7 +44,6 @@
 		ACEBB79D26588A07005778FB /* GYHTTPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB77D26588A07005778FB /* GYHTTPManager.m */; };
 		ACEBB79E26588A07005778FB /* GYFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB77F26588A07005778FB /* GYFileManager.m */; };
 		ACEBB79F26588A07005778FB /* GYSettingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB78326588A07005778FB /* GYSettingManager.m */; };
-		ACEBB7A026588A07005778FB /* GYSQLiteSettingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB78726588A07005778FB /* GYSQLiteSettingManager.m */; };
 		ACEBB7A126588A07005778FB /* NSObject+GYAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB79026588A07005778FB /* NSObject+GYAdd.m */; };
 		ACEBB7A226588A07005778FB /* UIColor+GYAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB79126588A07005778FB /* UIColor+GYAdd.m */; };
 		ACEBB7A326588A07005778FB /* NSError+GYAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB79226588A07005778FB /* NSError+GYAdd.m */; };
@@ -87,6 +90,12 @@
 		AC262519265812AB00939375 /* PhotoLibraryUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoLibraryUITests.m; sourceTree = "<group>"; };
 		AC26251B265812AB00939375 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AC26270D26581CD900939375 /* PhotoLibrary-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PhotoLibrary-Prefix.pch"; sourceTree = "<group>"; };
+		ACE03ABF265A95C900BDC5AA /* PLContentCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLContentCollectionViewCell.h; sourceTree = "<group>"; };
+		ACE03AC0265A95C900BDC5AA /* PLContentCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLContentCollectionViewCell.m; sourceTree = "<group>"; };
+		ACE03AC1265A95C900BDC5AA /* PLContentCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PLContentCollectionViewCell.xib; sourceTree = "<group>"; };
+		ACE03AC7265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLContentCollectionHeaderReusableView.h; sourceTree = "<group>"; };
+		ACE03AC8265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLContentCollectionHeaderReusableView.m; sourceTree = "<group>"; };
+		ACE03AC9265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PLContentCollectionHeaderReusableView.xib; sourceTree = "<group>"; };
 		ACE211C92659F3E800FF52EC /* PLContentViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLContentViewController.h; sourceTree = "<group>"; };
 		ACE211CA2659F3E800FF52EC /* PLContentViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLContentViewController.m; sourceTree = "<group>"; };
 		ACE211CB2659F3E800FF52EC /* PLContentViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PLContentViewController.xib; sourceTree = "<group>"; };
@@ -145,9 +154,6 @@
 		ACEBB78026588A07005778FB /* GYExceptionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GYExceptionManager.h; sourceTree = "<group>"; };
 		ACEBB78226588A07005778FB /* GYSettingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GYSettingManager.h; sourceTree = "<group>"; };
 		ACEBB78326588A07005778FB /* GYSettingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GYSettingManager.m; sourceTree = "<group>"; };
-		ACEBB78526588A07005778FB /* GYSQLiteSettingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GYSQLiteSettingManager.h; sourceTree = "<group>"; };
-		ACEBB78626588A07005778FB /* GYSQLiteHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GYSQLiteHeader.h; sourceTree = "<group>"; };
-		ACEBB78726588A07005778FB /* GYSQLiteSettingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GYSQLiteSettingManager.m; sourceTree = "<group>"; };
 		ACEBB78926588A07005778FB /* GYConstHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GYConstHeader.h; sourceTree = "<group>"; };
 		ACEBB78A26588A07005778FB /* GYCategoriesHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GYCategoriesHeader.h; sourceTree = "<group>"; };
 		ACEBB78B26588A07005778FB /* GYOCHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GYOCHeader.h; sourceTree = "<group>"; };
@@ -290,6 +296,12 @@
 			children = (
 				ACE211D22659F6AF00FF52EC /* PLContentLayout.h */,
 				ACE211D32659F6AF00FF52EC /* PLContentLayout.m */,
+				ACE03ABF265A95C900BDC5AA /* PLContentCollectionViewCell.h */,
+				ACE03AC0265A95C900BDC5AA /* PLContentCollectionViewCell.m */,
+				ACE03AC1265A95C900BDC5AA /* PLContentCollectionViewCell.xib */,
+				ACE03AC7265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.h */,
+				ACE03AC8265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.m */,
+				ACE03AC9265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -444,7 +456,6 @@
 				ACEBB77626588A07005778FB /* GYUtilityManager.m */,
 				ACEBB77A26588A07005778FB /* HTTP */,
 				ACEBB78126588A07005778FB /* Setting */,
-				ACEBB78426588A07005778FB /* SQL */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -466,16 +477,6 @@
 				ACEBB78326588A07005778FB /* GYSettingManager.m */,
 			);
 			path = Setting;
-			sourceTree = "<group>";
-		};
-		ACEBB78426588A07005778FB /* SQL */ = {
-			isa = PBXGroup;
-			children = (
-				ACEBB78626588A07005778FB /* GYSQLiteHeader.h */,
-				ACEBB78526588A07005778FB /* GYSQLiteSettingManager.h */,
-				ACEBB78726588A07005778FB /* GYSQLiteSettingManager.m */,
-			);
-			path = SQL;
 			sourceTree = "<group>";
 		};
 		ACEBB78826588A07005778FB /* Headers */ = {
@@ -625,8 +626,10 @@
 				ACE56D552659517F0027A68A /* PLWebViewController.xib in Resources */,
 				ACE56D60265952290027A68A /* PLShareFolderViewController.xib in Resources */,
 				AC2624FF265812AA00939375 /* Assets.xcassets in Resources */,
+				ACE03ACB265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.xib in Resources */,
 				ACE211CD2659F3E800FF52EC /* PLContentViewController.xib in Resources */,
 				AC2624FD265812A900939375 /* Main.storyboard in Resources */,
+				ACE03AC3265A95C900BDC5AA /* PLContentCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -693,12 +696,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ACE03ACA265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.m in Sources */,
+				ACE03AC2265A95C900BDC5AA /* PLContentCollectionViewCell.m in Sources */,
 				AC2624FA265812A900939375 /* ViewController.m in Sources */,
 				ACEBB7A326588A07005778FB /* NSError+GYAdd.m in Sources */,
 				ACE56D1C265941F10027A68A /* SMBShare.m in Sources */,
 				ACE56D23265941F20027A68A /* SMBDiscovery.m in Sources */,
 				AC2624F4265812A900939375 /* AppDelegate.m in Sources */,
-				ACEBB7A026588A07005778FB /* GYSQLiteSettingManager.m in Sources */,
 				ACE56D1A265941F10027A68A /* SMBDevice.m in Sources */,
 				ACE56D1D265941F10027A68A /* SMBError.m in Sources */,
 				ACEBB7A426588A07005778FB /* NSArray+GYAdd.m in Sources */,

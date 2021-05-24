@@ -20,11 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) UINavigationController *navigationController;
 @property (nonatomic, strong, readonly) ViewController *viewController;
 
-@property (nonatomic, strong, readonly) NSArray *mimeImageTypes;
-@property (nonatomic, strong, readonly) NSArray *mimeVideoTypes;
-@property (nonatomic, strong, readonly) NSArray *mimeImageAndVideoTypes;
-
-
 @property (nonatomic, strong, readonly) NSString *homePath;
 @property (nonatomic, strong, readonly) NSString *documentPath;
 @property (nonatomic, strong, readonly) NSString *libraryPath;
@@ -33,8 +28,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSString *preferencePath;
 @property (nonatomic, strong, readonly) NSString *temPath;
 
-@property (nonatomic, strong, readonly) NSString *mainDatabasesFolderPath;
-@property (nonatomic, strong, readonly) NSString *preferenceFilePath;
+@property (nonatomic, strong, readonly) NSArray *mimeImageTypes;
+@property (nonatomic, strong, readonly) NSArray *mimeVideoTypes;
+@property (nonatomic, strong, readonly) NSArray *mimeImageAndVideoTypes;
 
 #pragma mark - Lifecycle
 + (instancetype)defaultManager;
@@ -50,7 +46,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Paths
 - (NSString *)pathOfContentInDocumentFolder:(NSString *)component;
-- (NSString *)pathOfContentInMainDatabasesFolder:(NSString *)component;
 
 @end
 
