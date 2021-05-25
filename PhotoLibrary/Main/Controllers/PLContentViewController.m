@@ -22,6 +22,7 @@
 @property (nonatomic, strong) UIBarButtonItem *deleteBBI;
 
 @property (nonatomic, strong) UICollectionViewFlowLayout *flowLayout;
+@property (nonatomic, assign) CGSize folderItemSize;
 @property (nonatomic, strong) UICollectionView *collectionView;
 
 @property (nonatomic, copy) NSArray<NSString *> *folders;
@@ -125,6 +126,10 @@
     self.flowLayout.sectionFootersPinToVisibleBounds = YES; // 设置分区的头视图和尾视图 是否始终固定在屏幕上边和下边
     
     self.flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
+    
+    // Folder Item Size
+    CGFloat folderItemWidth = (screenWidth - (PLFolderColumnsPerRow + 1) * [PLUniversalManager defaultManager].rowColumnSpacing) / PLFolderColumnsPerRow;
+    self.folderItemSize = CGSizeMake(floorf(folderItemWidth), floorf(folderItemWidth));
 }
 - (void)setupCollectionView {
     self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:self.flowLayout];
@@ -287,6 +292,13 @@
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.bothFoldersAndFiles && indexPath.section == 0) {
+        return self.folderItemSize;
+    }
+    if (!self.bothFoldersAndFiles && self.files.count == 0) {
+        return self.folderItemSize;
+    }
+    
     return self.flowLayout.itemSize;
 }
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
