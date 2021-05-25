@@ -8,7 +8,7 @@
 #import <Foundation/Foundation.h>
 
 static CGFloat const PLRowColumnSpacing = 12.0f;
-static NSInteger const PLColumnsPerRow = 7;
+static NSInteger const PLColumnsPerRow = 5;
 
 NS_ASSUME_NONNULL_BEGIN
 
