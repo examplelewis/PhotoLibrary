@@ -33,6 +33,11 @@
         [self.tableView.mj_header beginRefreshing];
     }
 }
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    
+    [[SDImageCache sharedImageCache] clearMemory];
+}
 
 #pragma mark - Configure
 - (void)setupUIAndData {
@@ -66,8 +71,15 @@
 }
 
 #pragma mark - UITableViewDataSource
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 2;
+}
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.folders.count;
+    if (section == 0) {
+        return self.folders.count;
+    } else {
+        return 1;
+    }
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
@@ -75,7 +87,11 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
     
-    cell.textLabel.text = self.folders[indexPath.row].lastPathComponent;
+    if (indexPath.section == 0) {
+        cell.textLabel.text = self.folders[indexPath.row].lastPathComponent;
+    } else {
+        cell.textLabel.text = @"废纸篓";
+    }
     
     return cell;
 }
@@ -84,9 +100,19 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    PLContentViewController *vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
-    vc.folderPath = self.folders[indexPath.row];
-    [self.navigationController pushViewController:vc animated:YES];
+    if (indexPath.section == 0) {
+        PLContentViewController *vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
+        vc.folderPath = self.folders[indexPath.row];
+        vc.folderType = PLContentFolderTypeNormal;
+        [self.navigationController pushViewController:vc animated:YES];
+    } else {
+        if (indexPath.row == 0) {
+            PLContentViewController *vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
+            vc.folderPath = [GYSettingManager defaultManager].trashFolderPath;
+            vc.folderType = PLContentFolderTypeTrash;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+    }
 }
 
 #pragma mark - Action

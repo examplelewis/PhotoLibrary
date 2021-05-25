@@ -26,7 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSString *cachesPath;
 @property (nonatomic, strong, readonly) NSString *applicationSupportPath;
 @property (nonatomic, strong, readonly) NSString *preferencePath;
-@property (nonatomic, strong, readonly) NSString *temPath;
+@property (nonatomic, strong, readonly) NSString *tempPath;
+@property (nonatomic, strong, readonly) NSString *trashFolderPath;
 
 @property (nonatomic, strong, readonly) NSArray *mimeImageTypes;
 @property (nonatomic, strong, readonly) NSArray *mimeVideoTypes;
@@ -46,6 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Paths
 - (NSString *)pathOfContentInDocumentFolder:(NSString *)component;
+- (NSString *)pathOfContentInCachesFolder:(NSString *)component;
 
 @end
 

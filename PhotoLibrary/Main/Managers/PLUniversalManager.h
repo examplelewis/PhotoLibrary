@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
-static CGFloat const PLRowColumnSpacing = 8.0f;
+static CGFloat const PLRowColumnSpacing = 12.0f;
 static NSInteger const PLColumnsPerRow = 7;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -20,6 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Lifecycle
 + (instancetype)defaultManager;
+
+#pragma mark - File Ops
+- (void)trashContentsAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion;
 
 @end
 

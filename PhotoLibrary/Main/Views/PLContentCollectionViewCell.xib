@@ -25,10 +25,18 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="CAe-Rp-XSx">
+                        <rect key="frame" x="106" y="106" width="44" height="44"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="44" id="iBA-20-ZtL"/>
+                            <constraint firstAttribute="width" constant="44" id="tfe-t4-o4j"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="SEy-5g-ep8"/>
             <constraints>
+                <constraint firstItem="CAe-Rp-XSx" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="4Gp-sB-7u2"/>
                 <constraint firstAttribute="bottom" secondItem="mhu-Up-rvT" secondAttribute="bottom" id="4fz-W2-A9D"/>
                 <constraint firstAttribute="bottom" secondItem="p8c-0f-fgt" secondAttribute="bottom" constant="20" id="RRR-8x-0dX"/>
                 <constraint firstItem="mhu-Up-rvT" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="ggB-St-Q1H"/>
@@ -36,13 +44,15 @@
                 <constraint firstAttribute="trailing" secondItem="p8c-0f-fgt" secondAttribute="trailing" constant="20" id="oOx-0M-q7b"/>
                 <constraint firstItem="mhu-Up-rvT" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="pt5-Qk-e95"/>
                 <constraint firstAttribute="trailing" secondItem="mhu-Up-rvT" secondAttribute="trailing" id="waL-ye-aSB"/>
+                <constraint firstItem="CAe-Rp-XSx" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="yxe-UP-18T"/>
             </constraints>
             <size key="customSize" width="256" height="256"/>
             <connections>
                 <outlet property="imageView" destination="mhu-Up-rvT" id="1aK-nh-JEv"/>
                 <outlet property="nameLabel" destination="p8c-0f-fgt" id="JXi-8a-RcN"/>
+                <outlet property="selectImageView" destination="CAe-Rp-XSx" id="oq5-zY-fP9"/>
             </connections>
-            <point key="canvasLocation" x="311.59420289855075" y="51.5625"/>
+            <point key="canvasLocation" x="78" y="130"/>
         </collectionViewCell>
     </objects>
 </document>

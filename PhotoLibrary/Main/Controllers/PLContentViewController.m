@@ -30,6 +30,7 @@
 @property (nonatomic, assign) PLContentCollectionViewCellType cellType;
 
 @property (nonatomic, strong) NSMutableArray<NSString *> *selects;
+@property (nonatomic, assign) BOOL isTrashing;
 
 @end
 
@@ -107,7 +108,6 @@
 - (void)setupCollectionView {
     self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:self.flowLayout];
     self.collectionView.backgroundColor = [UIColor whiteColor];
-    self.collectionView.showsVerticalScrollIndicator = NO;
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
     
@@ -218,16 +218,15 @@
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     
     PLContentCollectionViewCell *cell = (PLContentCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    if (cell.isFolder) {
-        PLContentViewController *vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
-        vc.folderPath = self.folders[indexPath.row];
-        [self.navigationController pushViewController:vc animated:YES];
-        
-        return;
-    }
-    
-    if (self.cellType == PLContentCollectionViewCellTypeNormal) {
-        
+    if (cell.cellType == PLContentCollectionViewCellTypeNormal) {
+        if (cell.isFolder) {
+            PLContentViewController *vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
+            vc.folderPath = self.folders[indexPath.row];
+            vc.folderType = self.folderType;
+            [self.navigationController pushViewController:vc animated:YES];
+        } else {
+            
+        }
     } else {
         BOOL selected = [self.selects indexOfObject:cell.contentPath] != NSNotFound;
         if (selected) {
@@ -236,7 +235,7 @@
             [self.selects addObject:cell.contentPath];
         }
         
-        [self.collectionView reloadData];
+        [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
     }
 }
 
@@ -254,7 +253,11 @@
     return self.flowLayout.minimumInteritemSpacing;
 }
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    return self.flowLayout.headerReferenceSize;
+    if (self.files.count == 0 && self.folders.count == 0) {
+        return CGSizeMake(kScreenWidth, 0);
+    } else {
+        return self.flowLayout.headerReferenceSize;
+    }
 }
 
 #pragma mark - Actions
@@ -263,22 +266,54 @@
         self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(editBarButtonItemDidPress:)];
         self.editBBI.tag = 102;
         self.trashBBI.enabled = YES;
-        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.trashBBI];
+        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.trashBBI, self.sliderBBI];
         
         self.cellType = PLContentCollectionViewCellTypeEdit;
-        [self.selects removeAllObjects];
     } else {
         self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editBarButtonItemDidPress:)];
         self.editBBI.tag = 101;
         self.trashBBI.enabled = NO;
-        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.trashBBI];
+        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.trashBBI, self.sliderBBI];
         
         self.cellType = PLContentCollectionViewCellTypeNormal;
-        [self.selects removeAllObjects];
     }
+    
+    [self.selects removeAllObjects];
+    [self.collectionView reloadData];
 }
 - (void)trashBarButtonItemDidPress:(UIBarButtonItem *)sender {
+    if (self.isTrashing) {
+        return;
+    }
+    if (self.selects.count == 0) {
+        return;
+    }
     
+    [SVProgressHUD show];
+    self.isTrashing = YES;
+    @weakify(self);
+    [[PLUniversalManager defaultManager] trashContentsAtPaths:self.selects completion:^{
+        @strongify(self);
+        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"已将%ld个项目移动到废纸篓", self.selects.count]];
+        
+        NSMutableArray *folders = [self.folders mutableCopy];
+        [folders removeObjectsInArray:self.selects];
+        self.folders = folders.copy;
+        
+        NSMutableArray *files = [self.files mutableCopy];
+        [files removeObjectsInArray:self.selects];
+        self.files = files.copy;
+        
+        dispatch_main_async_safe(^{
+            [self.collectionView reloadData];
+        });
+        
+        self.isTrashing = NO;
+        [self.selects removeAllObjects];
+        
+        self.trashBBI.enabled = NO;
+        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.trashBBI, self.sliderBBI];
+    }];
 }
 - (void)sliderValueChanged:(StepSlider *)sender {
     [PLUniversalManager defaultManager].columnsPerRow = sender.index + 4;

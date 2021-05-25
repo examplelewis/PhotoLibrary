@@ -15,7 +15,11 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    // 每次App启动，清空所有SDImageCache的缓存
+    [[SDImageCache sharedImageCache] clearWithCacheType:SDImageCacheTypeDisk completion:nil];
+    // 创建废纸篓文件夹
+    [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].trashFolderPath];
+    
     return YES;
 }
 

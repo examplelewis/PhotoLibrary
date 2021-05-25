@@ -11,7 +11,7 @@
 
 - (UIImage *)resizeScaleImage:(CGFloat)scale {
     CGSize imgSize = self.size;
-    CGSize targetSize = CGSizeMake(imgSize.width * scale, imgSize.height * scale);
+    CGSize targetSize = CGSizeMake(floorf(imgSize.width * scale), floorf(imgSize.height * scale));
     NSData *imageData = UIImageJPEGRepresentation(self, 1.0);
     CFDataRef data = (__bridge CFDataRef)imageData;
     

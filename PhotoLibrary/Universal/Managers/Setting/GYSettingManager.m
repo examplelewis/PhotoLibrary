@@ -47,7 +47,9 @@
     _cachesPath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).firstObject;
     _applicationSupportPath = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES).firstObject;
     _preferencePath = NSSearchPathForDirectoriesInDomains(NSPreferencePanesDirectory, NSUserDomainMask, YES).firstObject;
-    _temPath = NSTemporaryDirectory();
+    _tempPath = NSTemporaryDirectory();
+    
+    _trashFolderPath = [self pathOfContentInCachesFolder:@"废纸篓"];
 }
 - (void)updatePreferences {
     _mimeImageTypes = @[@"jpg", @"jpeg", @"png", @"gif"];
@@ -82,6 +84,9 @@
 #pragma mark - Paths
 - (NSString *)pathOfContentInDocumentFolder:(NSString *)component {
     return [self.documentPath stringByAppendingPathComponent:component];
+}
+- (NSString *)pathOfContentInCachesFolder:(NSString *)component {
+    return [self.cachesPath stringByAppendingPathComponent:component];
 }
 
 @end

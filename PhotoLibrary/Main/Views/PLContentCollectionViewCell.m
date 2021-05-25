@@ -11,6 +11,7 @@
 
 @property (strong, nonatomic) IBOutlet UIImageView *imageView;
 @property (strong, nonatomic) IBOutlet UILabel *nameLabel;
+@property (strong, nonatomic) IBOutlet UIImageView *selectImageView;
 
 @end
 
@@ -44,19 +45,34 @@
         self.imageView.image = nil;
         @weakify(self);
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSData *data = [[NSData alloc] initWithContentsOfFile:contentPath];
-            UIImage *image = nil;
-            if ([contentPath.pathExtension.lowercaseString isEqualToString:@"gif"]) {
-                image = [UIImage sd_imageWithGIFData:data];
-            } else {
-                image = [UIImage imageWithData:data];
-                image = [image resizeScaleImage:0.6f]; // 压缩图片
-            }
+            @strongify(self);
             
-            dispatch_main_async_safe(^{
-                @strongify(self);
-                self.imageView.image = image;
-            });
+            if ([[SDImageCache sharedImageCache] diskImageDataExistsWithKey:contentPath]) {
+                dispatch_main_async_safe(^{
+                    self.imageView.image = [[SDImageCache sharedImageCache] imageFromCacheForKey:contentPath];
+                });
+            } else {
+                NSData *data = [[NSData alloc] initWithContentsOfFile:contentPath];
+                UIImage *image = nil;
+                if ([contentPath.pathExtension.lowercaseString isEqualToString:@"gif"]) {
+                    image = [UIImage sd_imageWithGIFData:data];
+                } else {
+                    image = [UIImage imageWithData:data];
+                    if (image.size.width < 1000 && image.size.height < 1000) {
+                        image = [image resizeScaleImage:0.7f]; // 压缩图片
+                    } else if (image.size.width < 2000 && image.size.height < 2000) {
+                        image = [image resizeScaleImage:0.55f]; // 压缩图片
+                    } else {
+                        image = [image resizeScaleImage:0.35f]; // 压缩图片
+                    }
+                }
+                [[SDImageCache sharedImageCache] storeImage:image forKey:contentPath completion:nil];
+                
+                dispatch_main_async_safe(^{
+                    @strongify(self);
+                    self.imageView.image = image;
+                });
+            }
         });
     }
 }
@@ -64,25 +80,10 @@
     if (_cellType == cellType) {
         return;
     }
-    
     _cellType = cellType;
     
-    switch (cellType) {
-        case PLContentCollectionViewCellTypeNormal: {
-            
-        }
-            break;
-        case PLContentCollectionViewCellTypeEdit: {
-            
-        }
-            break;
-        case PLContentCollectionViewCellTypeEditSelect: {
-            
-        }
-            break;
-        default:
-            break;
-    }
+    self.selectImageView.hidden = cellType == PLContentCollectionViewCellTypeNormal;
+    self.selectImageView.image = cellType == PLContentCollectionViewCellTypeEdit ? [UIImage imageNamed:@"SelectedOff"] : [UIImage imageNamed:@"SelectedOn"];
 }
 
 @end
