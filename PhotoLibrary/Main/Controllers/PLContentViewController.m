@@ -17,7 +17,9 @@
 
 @property (nonatomic, strong) UIBarButtonItem *editBBI;
 @property (nonatomic, strong) UIBarButtonItem *trashBBI;
+@property (nonatomic, strong) UIBarButtonItem *restoreBBI;
 @property (nonatomic, strong) UIBarButtonItem *sliderBBI;
+@property (nonatomic, strong) UIBarButtonItem *deleteBBI;
 
 @property (nonatomic, strong) UICollectionViewFlowLayout *flowLayout;
 @property (nonatomic, strong) UICollectionView *collectionView;
@@ -30,7 +32,7 @@
 @property (nonatomic, assign) PLContentCollectionViewCellType cellType;
 
 @property (nonatomic, strong) NSMutableArray<NSString *> *selects;
-@property (nonatomic, assign) BOOL isTrashing;
+@property (nonatomic, assign) BOOL opreatingFiles;
 
 @end
 
@@ -40,8 +42,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = self.folderPath.lastPathComponent;
-    
+    [self setupTitle];
     [self setupNotifications];
     [self setupUIAndData];
 }
@@ -54,6 +55,13 @@
 }
 
 #pragma mark - Configure
+- (void)setupTitle {
+    if (self.folders.count + self.files.count == 0) {
+        self.title = self.folderPath.lastPathComponent;
+    } else {
+        self.title = [NSString stringWithFormat:@"%@(%ld)", self.folderPath.lastPathComponent, self.folders.count + self.files.count];
+    }
+}
 - (void)setupNotifications {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(columnPerRowSliderValueChanged:) name:PLColumnPerRowSliderValueChanged object:nil];
 }
@@ -79,6 +87,12 @@
     self.trashBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(trashBarButtonItemDidPress:)];
     self.trashBBI.enabled = NO;
     
+    self.restoreBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemUndo target:self action:@selector(restoreBarButtonItemDidPress:)];
+    self.restoreBBI.enabled = NO;
+    
+    self.deleteBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteBarButtonItemDidPress:)];
+    self.deleteBBI.enabled = NO;
+    
     UIView *sliderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 44)];
     StepSlider *slider = [[StepSlider alloc] initWithFrame:CGRectMake(0, 9, 300, 26)];
     slider.tag = 100;
@@ -88,7 +102,14 @@
     [sliderView addSubview:slider];
     self.sliderBBI = [[UIBarButtonItem alloc] initWithCustomView:sliderView];
     
-    self.navigationItem.rightBarButtonItems = @[self.editBBI, self.trashBBI, self.sliderBBI];
+    [self setupNavigationBarItems];
+}
+- (void)setupNavigationBarItems {
+    if (self.folderType == PLContentFolderTypeNormal) {
+        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.trashBBI, self.sliderBBI];
+    } else {
+        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.restoreBBI, self.sliderBBI, self.deleteBBI];
+    }
 }
 - (void)setupCollectionViewFlowLayout {
     self.flowLayout = [UICollectionViewFlowLayout new];
@@ -128,15 +149,40 @@
 
 #pragma mark - Refresh
 - (void)refreshFiles {
-    [self.collectionView.mj_header endRefreshing];
-    
     self.folders = [GYFileManager folderPathsInFolder:self.folderPath];
     self.folders = [self.folders sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES]]];
     self.files = [GYFileManager filePathsInFolder:self.folderPath extensions:[GYSettingManager defaultManager].mimeImageTypes];
     self.files = [self.files sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES]]];
     self.bothFoldersAndFiles = (self.folders.count > 0 && self.files.count > 0);
     
+    [self setupTitle];
+    
+    [self.collectionView.mj_header endRefreshing];
+    
     [self.collectionView reloadData];
+}
+- (void)refreshAfterOperatingFiles {
+    @weakify(self);
+    
+    NSMutableArray *folders = [self.folders mutableCopy];
+    [folders removeObjectsInArray:self.selects];
+    self.folders = folders.copy;
+    
+    NSMutableArray *files = [self.files mutableCopy];
+    [files removeObjectsInArray:self.selects];
+    self.files = files.copy;
+    
+    dispatch_main_async_safe(^{
+        @strongify(self);
+        [self.collectionView reloadData];
+        
+        self.trashBBI.enabled = NO;
+        [self setupTitle];
+        [self setupNavigationBarItems];
+    });
+    
+    self.opreatingFiles = NO;
+    [self.selects removeAllObjects];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -266,14 +312,18 @@
         self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(editBarButtonItemDidPress:)];
         self.editBBI.tag = 102;
         self.trashBBI.enabled = YES;
-        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.trashBBI, self.sliderBBI];
+        self.restoreBBI.enabled = YES;
+        self.deleteBBI.enabled = YES;
+        [self setupNavigationBarItems];
         
         self.cellType = PLContentCollectionViewCellTypeEdit;
     } else {
         self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editBarButtonItemDidPress:)];
         self.editBBI.tag = 101;
         self.trashBBI.enabled = NO;
-        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.trashBBI, self.sliderBBI];
+        self.restoreBBI.enabled = NO;
+        self.deleteBBI.enabled = NO;
+        [self setupNavigationBarItems];
         
         self.cellType = PLContentCollectionViewCellTypeNormal;
     }
@@ -282,7 +332,7 @@
     [self.collectionView reloadData];
 }
 - (void)trashBarButtonItemDidPress:(UIBarButtonItem *)sender {
-    if (self.isTrashing) {
+    if (self.opreatingFiles) {
         return;
     }
     if (self.selects.count == 0) {
@@ -290,29 +340,49 @@
     }
     
     [SVProgressHUD show];
-    self.isTrashing = YES;
+    self.opreatingFiles = YES;
     @weakify(self);
     [[PLUniversalManager defaultManager] trashContentsAtPaths:self.selects completion:^{
         @strongify(self);
+        
         [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"已将%ld个项目移动到废纸篓", self.selects.count]];
+        [self refreshAfterOperatingFiles];
+    }];
+}
+- (void)restoreBarButtonItemDidPress:(UIBarButtonItem *)sender {
+    if (self.opreatingFiles) {
+        return;
+    }
+    if (self.selects.count == 0) {
+        return;
+    }
+    
+    [SVProgressHUD show];
+    self.opreatingFiles = YES;
+    @weakify(self);
+    [[PLUniversalManager defaultManager] restoreContentsAtPaths:self.selects completion:^{
+        @strongify(self);
         
-        NSMutableArray *folders = [self.folders mutableCopy];
-        [folders removeObjectsInArray:self.selects];
-        self.folders = folders.copy;
+        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"已将%ld个项目还原", self.selects.count]];
+        [self refreshAfterOperatingFiles];
+    }];
+}
+- (void)deleteBarButtonItemDidPress:(UIBarButtonItem *)sender {
+    if (self.opreatingFiles) {
+        return;
+    }
+    if (self.selects.count == 0) {
+        return;
+    }
+    
+    [SVProgressHUD show];
+    self.opreatingFiles = YES;
+    @weakify(self);
+    [[PLUniversalManager defaultManager] deleteContentsAtPaths:self.selects completion:^{
+        @strongify(self);
         
-        NSMutableArray *files = [self.files mutableCopy];
-        [files removeObjectsInArray:self.selects];
-        self.files = files.copy;
-        
-        dispatch_main_async_safe(^{
-            [self.collectionView reloadData];
-        });
-        
-        self.isTrashing = NO;
-        [self.selects removeAllObjects];
-        
-        self.trashBBI.enabled = NO;
-        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.trashBBI, self.sliderBBI];
+        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"已删除%ld个项目", self.selects.count]];
+        [self refreshAfterOperatingFiles];
     }];
 }
 - (void)sliderValueChanged:(StepSlider *)sender {
