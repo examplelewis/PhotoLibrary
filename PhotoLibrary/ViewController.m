@@ -45,7 +45,7 @@
     self.folders = @[];
     
     // UI
-    [self setupNavigationBar];
+//    [self setupNavigationBar];
     [self setupTableView];
 }
 - (void)setupNavigationBar {

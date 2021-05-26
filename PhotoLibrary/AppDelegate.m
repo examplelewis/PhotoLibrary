@@ -20,6 +20,9 @@
     // 创建废纸篓文件夹
     [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].trashFolderPath];
     
+    [SVProgressHUD setMinimumDismissTimeInterval:1.0f];
+    [SVProgressHUD setMaximumDismissTimeInterval:1.0f];
+    
     return YES;
 }
 

@@ -60,7 +60,11 @@
     if (self.folders.count + self.files.count == 0) {
         self.title = self.folderPath.lastPathComponent;
     } else {
-        self.title = [NSString stringWithFormat:@"%@(%ld)", self.folderPath.lastPathComponent, self.folders.count + self.files.count];
+        if (self.cellType == PLContentCollectionViewCellTypeNormal) {
+            self.title = [NSString stringWithFormat:@"%@(%ld)", self.folderPath.lastPathComponent, self.folders.count + self.files.count];
+        } else {
+            self.title = [NSString stringWithFormat:@"%@(%ld)(%ld)", self.folderPath.lastPathComponent, self.folders.count + self.files.count, self.selects.count];
+        }
     }
 }
 - (void)setupNotifications {
@@ -83,7 +87,6 @@
 }
 - (void)setupNavigationBar {
     self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editBarButtonItemDidPress:)];
-    self.editBBI.tag = 101;
     
     self.trashBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(trashBarButtonItemDidPress:)];
     self.trashBBI.enabled = NO;
@@ -181,7 +184,6 @@
         @strongify(self);
         [self.collectionView reloadData];
         
-        self.trashBBI.enabled = NO;
         [self setupTitle];
         [self setupNavigationBarItems];
     });
@@ -286,6 +288,7 @@
             [self.selects addObject:cell.contentPath];
         }
         
+        [self setupTitle];
         [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
     }
 }
@@ -320,28 +323,27 @@
 
 #pragma mark - Actions
 - (void)editBarButtonItemDidPress:(UIBarButtonItem *)sender {
-    if (sender.tag == 101) {
+    if (self.cellType == PLContentCollectionViewCellTypeNormal) {
         self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(editBarButtonItemDidPress:)];
-        self.editBBI.tag = 102;
         self.trashBBI.enabled = YES;
         self.restoreBBI.enabled = YES;
         self.deleteBBI.enabled = YES;
-        [self setupNavigationBarItems];
         
         self.cellType = PLContentCollectionViewCellTypeEdit;
     } else {
         self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editBarButtonItemDidPress:)];
-        self.editBBI.tag = 101;
         self.trashBBI.enabled = NO;
         self.restoreBBI.enabled = NO;
         self.deleteBBI.enabled = NO;
-        [self setupNavigationBarItems];
         
         self.cellType = PLContentCollectionViewCellTypeNormal;
     }
     
     [self.selects removeAllObjects];
     [self.collectionView reloadData];
+    
+    [self setupTitle];
+    [self setupNavigationBarItems];
 }
 - (void)trashBarButtonItemDidPress:(UIBarButtonItem *)sender {
     if (self.opreatingFiles) {

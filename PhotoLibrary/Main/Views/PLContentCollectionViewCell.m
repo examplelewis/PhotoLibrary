@@ -12,6 +12,7 @@
 @property (strong, nonatomic) IBOutlet UIImageView *imageView;
 @property (strong, nonatomic) IBOutlet UILabel *nameLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *selectImageView;
+@property (strong, nonatomic) IBOutlet UIImageView *folderImageView;
 
 @end
 
@@ -28,17 +29,13 @@
     self.cellType = PLContentCollectionViewCellTypeNormal;
     
     if (self.isFolder) {
-        self.backgroundColor = [UIColor cyanColor];
-        self.contentView.backgroundColor = [UIColor cyanColor];
-        
+        self.folderImageView.hidden = NO;
         self.nameLabel.hidden = NO;
         self.nameLabel.text = contentPath.lastPathComponent;
         
         self.imageView.hidden = YES;
     } else {
-        self.backgroundColor = [UIColor clearColor];
-        self.contentView.backgroundColor = [UIColor clearColor];
-        
+        self.folderImageView.hidden = YES;
         self.nameLabel.hidden = YES;
         
         self.imageView.hidden = NO;
