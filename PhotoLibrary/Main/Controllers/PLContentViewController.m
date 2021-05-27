@@ -20,6 +20,7 @@
 @property (nonatomic, strong) UIBarButtonItem *restoreBBI;
 @property (nonatomic, strong) UIBarButtonItem *sliderBBI;
 @property (nonatomic, strong) UIBarButtonItem *deleteBBI;
+@property (nonatomic, strong) UIBarButtonItem *allBBI;
 
 @property (nonatomic, strong) UICollectionViewFlowLayout *flowLayout;
 @property (nonatomic, assign) CGSize folderItemSize;
@@ -97,6 +98,9 @@
     self.deleteBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteBarButtonItemDidPress:)];
     self.deleteBBI.enabled = NO;
     
+    self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
+    self.allBBI.enabled = NO;
+    
     UIView *sliderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 44)];
     StepSlider *slider = [[StepSlider alloc] initWithFrame:CGRectMake(0, 9, 300, 26)];
     slider.tag = 100;
@@ -110,10 +114,14 @@
 }
 - (void)setupNavigationBarItems {
     if (self.folderType == PLContentFolderTypeNormal) {
-        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.trashBBI, self.sliderBBI];
+        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.trashBBI, self.sliderBBI, self.allBBI];
     } else {
-        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.restoreBBI, self.sliderBBI, self.deleteBBI];
+        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.restoreBBI, self.sliderBBI, self.allBBI, self.deleteBBI];
     }
+}
+- (void)setupAllBBI {
+    BOOL selectAll = (self.selects.count == (self.folders.count + self.files.count)) && self.selects.count != 0; // 如果没有文件(夹)，就不算全选
+    self.allBBI = [[UIBarButtonItem alloc] initWithTitle:selectAll ? @"取消全选" : @"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
 }
 - (void)setupCollectionViewFlowLayout {
     self.flowLayout = [UICollectionViewFlowLayout new];
@@ -190,6 +198,12 @@
     
     self.opreatingFiles = NO;
     [self.selects removeAllObjects];
+    
+    dispatch_main_async_safe(^{
+        @strongify(self);
+        [self setupAllBBI];
+        [self setupNavigationBarItems];
+    });
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -290,6 +304,9 @@
         
         [self setupTitle];
         [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
+        
+        [self setupAllBBI];
+        [self setupNavigationBarItems];
     }
 }
 
@@ -327,6 +344,8 @@
         self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(editBarButtonItemDidPress:)];
         self.trashBBI.enabled = YES;
         self.restoreBBI.enabled = YES;
+        self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
+        self.allBBI.enabled = YES;
         self.deleteBBI.enabled = YES;
         
         self.cellType = PLContentCollectionViewCellTypeEdit;
@@ -334,6 +353,8 @@
         self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editBarButtonItemDidPress:)];
         self.trashBBI.enabled = NO;
         self.restoreBBI.enabled = NO;
+        self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
+        self.allBBI.enabled = NO;
         self.deleteBBI.enabled = NO;
         
         self.cellType = PLContentCollectionViewCellTypeNormal;
@@ -398,6 +419,23 @@
         [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"已删除%ld个项目", self.selects.count]];
         [self refreshAfterOperatingFiles];
     }];
+}
+- (void)allBarButtonItemDidPress:(UIBarButtonItem *)sender {
+    [self.selects removeAllObjects];
+    if ([self.allBBI.title isEqualToString:@"全选"]) {
+        [self.selects addObjectsFromArray:self.folders];
+        [self.selects addObjectsFromArray:self.files];
+    }
+    [self.collectionView reloadData];
+    
+    if ([self.allBBI.title isEqualToString:@"全选"]) {
+        self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"取消全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
+    } else {
+        self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
+    }
+    
+    [self setupTitle];
+    [self setupNavigationBarItems];
 }
 - (void)sliderValueChanged:(StepSlider *)sender {
     [PLUniversalManager defaultManager].columnsPerRow = sender.index + 4;
