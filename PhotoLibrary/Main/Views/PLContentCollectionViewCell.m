@@ -39,38 +39,45 @@
         self.nameLabel.hidden = YES;
         
         self.imageView.hidden = NO;
-        self.imageView.image = nil;
-        @weakify(self);
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            @strongify(self);
-            
-            if ([[SDImageCache sharedImageCache] diskImageDataExistsWithKey:contentPath]) {
-                dispatch_main_async_safe(^{
-                    self.imageView.image = [[SDImageCache sharedImageCache] imageFromCacheForKey:contentPath];
-                });
-            } else {
-                NSData *data = [[NSData alloc] initWithContentsOfFile:contentPath];
-                UIImage *image = nil;
-                if ([contentPath.pathExtension.lowercaseString isEqualToString:@"gif"]) {
-                    image = [UIImage sd_imageWithGIFData:data];
-                } else {
-                    image = [UIImage imageWithData:data];
-                    if (image.size.width < 1000 && image.size.height < 1000) {
-                        image = [image resizeScaleImage:0.7f]; // 压缩图片
-                    } else if (image.size.width < 2000 && image.size.height < 2000) {
-                        image = [image resizeScaleImage:0.55f]; // 压缩图片
-                    } else {
-                        image = [image resizeScaleImage:0.35f]; // 压缩图片
-                    }
-                }
-                [[SDImageCache sharedImageCache] storeImage:image forKey:contentPath completion:nil];
+        
+        UIImage *memoryImage = [[SDImageCache sharedImageCache] imageFromMemoryCacheForKey:contentPath];
+        if (memoryImage) {
+            self.imageView.image = memoryImage;
+        } else {
+            self.imageView.image = nil;
+            @weakify(self);
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                @strongify(self);
                 
-                dispatch_main_async_safe(^{
-                    @strongify(self);
-                    self.imageView.image = image;
-                });
-            }
-        });
+                if ([[SDImageCache sharedImageCache] diskImageDataExistsWithKey:contentPath]) {
+                    dispatch_main_async_safe(^{
+                        self.imageView.image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:contentPath];
+                    });
+                } else {
+                    NSData *data = [[NSData alloc] initWithContentsOfFile:contentPath];
+                    UIImage *image = nil;
+                    if ([contentPath.pathExtension.lowercaseString isEqualToString:@"gif"]) {
+                        image = [UIImage sd_imageWithGIFData:data];
+                    } else {
+                        image = [UIImage imageWithData:data];
+                        // 压缩图片，防止爆内存
+                        if (image.size.width < 1000 && image.size.height < 1000) {
+                            image = [image resizeScaleImage:1.0f];
+                        } else if (image.size.width < 2000 && image.size.height < 2000) {
+                            image = [image resizeScaleImage:0.8f];
+                        } else {
+                            image = [image resizeScaleImage:0.7f];
+                        }
+                    }
+                    [[SDImageCache sharedImageCache] storeImage:image forKey:contentPath completion:nil];
+                    
+                    dispatch_main_async_safe(^{
+                        @strongify(self);
+                        self.imageView.image = image;
+                    });
+                }
+            });
+        }
     }
 }
 - (void)setCellType:(PLContentCollectionViewCellType)cellType {
