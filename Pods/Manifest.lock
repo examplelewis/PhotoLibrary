@@ -37,6 +37,7 @@ PODS:
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
   - IQKeyboardManager (6.5.6)
+  - KMNavigationBarTransition (1.1.8)
   - Masonry (1.1.0)
   - MJRefresh (3.6.1)
   - SDWebImage (5.11.1):
@@ -59,6 +60,7 @@ DEPENDENCIES:
   - DateTools
   - FMDB
   - IQKeyboardManager
+  - KMNavigationBarTransition
   - Masonry
   - MJRefresh
   - SDWebImage
@@ -78,6 +80,7 @@ SPEC REPOS:
     - DateTools
     - FMDB
     - IQKeyboardManager
+    - KMNavigationBarTransition
     - Masonry
     - MJRefresh
     - SDWebImage
@@ -96,6 +99,7 @@ SPEC CHECKSUMS:
   DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   IQKeyboardManager: 2a6e97afdafc7becf0cb17a9a8d795e3a980717f
+  KMNavigationBarTransition: 7ee1a05ff758bce9258845a803f7a8b00585bd58
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJRefresh: d2c1970d1cf6e77fcfcdfe76c943dfab8dbfa5c1
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
@@ -107,6 +111,6 @@ SPEC CHECKSUMS:
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
 
-PODFILE CHECKSUM: eab399aff5285c7818794065c8da9282503cadb7
+PODFILE CHECKSUM: 70fbb3b30c3aca02ade88290b17a291ade79d11a
 
 COCOAPODS: 1.10.1

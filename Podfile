@@ -22,5 +22,6 @@ target 'PhotoLibrary' do
   pod 'SSZipArchive'
   pod 'FMDB'
   pod 'YYText'
+  pod 'KMNavigationBarTransition'
 
 end
