@@ -8,6 +8,7 @@
 #import "ViewController.h"
 #import <MJRefresh.h>
 #import "PLContentViewController.h"
+#import "PLPhotoViewController.h"
 
 @interface ViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -25,6 +26,11 @@
     self.title = @"文件列表";
     
     [self setupUIAndData];
+}
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -45,7 +51,7 @@
     self.folders = @[];
     
     // UI
-//    [self setupNavigationBar];
+    [self setupNavigationBar];
     [self setupTableView];
 }
 - (void)setupNavigationBar {
@@ -117,7 +123,11 @@
 
 #pragma mark - Action
 - (void)barButtonItemDidPress:(UIBarButtonItem *)sender {
+    PLPhotoViewController *vc = [[PLPhotoViewController alloc] initWithNibName:@"PLPhotoViewController" bundle:nil];
+    vc.folderPath = [[GYSettingManager defaultManager] pathOfContentInDocumentFolder:@"~Game/arknights"];
+    vc.currentIndex = 0;
     
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 

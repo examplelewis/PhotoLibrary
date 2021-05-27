@@ -17,6 +17,10 @@
 		AC262505265812AA00939375 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AC262504265812AA00939375 /* main.m */; };
 		AC26250F265812AB00939375 /* PhotoLibraryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC26250E265812AB00939375 /* PhotoLibraryTests.m */; };
 		AC26251A265812AB00939375 /* PhotoLibraryUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC262519265812AB00939375 /* PhotoLibraryUITests.m */; };
+		ACDF2273265FE00000608CD0 /* PLPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACDF2271265FE00000608CD0 /* PLPhotoViewController.m */; };
+		ACDF2274265FE00000608CD0 /* PLPhotoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACDF2272265FE00000608CD0 /* PLPhotoViewController.xib */; };
+		ACDF2278265FE76700608CD0 /* PLPhotoMainCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ACDF2276265FE76700608CD0 /* PLPhotoMainCollectionViewCell.m */; };
+		ACDF2279265FE76700608CD0 /* PLPhotoMainCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACDF2277265FE76700608CD0 /* PLPhotoMainCollectionViewCell.xib */; };
 		ACE03AC2265A95C900BDC5AA /* PLContentCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE03AC0265A95C900BDC5AA /* PLContentCollectionViewCell.m */; };
 		ACE03AC3265A95C900BDC5AA /* PLContentCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACE03AC1265A95C900BDC5AA /* PLContentCollectionViewCell.xib */; };
 		ACE03ACA265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE03AC8265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.m */; };
@@ -79,6 +83,12 @@
 		AC262519265812AB00939375 /* PhotoLibraryUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoLibraryUITests.m; sourceTree = "<group>"; };
 		AC26251B265812AB00939375 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AC26270D26581CD900939375 /* PhotoLibrary-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PhotoLibrary-Prefix.pch"; sourceTree = "<group>"; };
+		ACDF2270265FE00000608CD0 /* PLPhotoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLPhotoViewController.h; sourceTree = "<group>"; };
+		ACDF2271265FE00000608CD0 /* PLPhotoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLPhotoViewController.m; sourceTree = "<group>"; };
+		ACDF2272265FE00000608CD0 /* PLPhotoViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PLPhotoViewController.xib; sourceTree = "<group>"; };
+		ACDF2275265FE76700608CD0 /* PLPhotoMainCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLPhotoMainCollectionViewCell.h; sourceTree = "<group>"; };
+		ACDF2276265FE76700608CD0 /* PLPhotoMainCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLPhotoMainCollectionViewCell.m; sourceTree = "<group>"; };
+		ACDF2277265FE76700608CD0 /* PLPhotoMainCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PLPhotoMainCollectionViewCell.xib; sourceTree = "<group>"; };
 		ACE03ABF265A95C900BDC5AA /* PLContentCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLContentCollectionViewCell.h; sourceTree = "<group>"; };
 		ACE03AC0265A95C900BDC5AA /* PLContentCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLContentCollectionViewCell.m; sourceTree = "<group>"; };
 		ACE03AC1265A95C900BDC5AA /* PLContentCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PLContentCollectionViewCell.xib; sourceTree = "<group>"; };
@@ -258,6 +268,9 @@
 				ACE03AC7265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.h */,
 				ACE03AC8265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.m */,
 				ACE03AC9265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.xib */,
+				ACDF2275265FE76700608CD0 /* PLPhotoMainCollectionViewCell.h */,
+				ACDF2276265FE76700608CD0 /* PLPhotoMainCollectionViewCell.m */,
+				ACDF2277265FE76700608CD0 /* PLPhotoMainCollectionViewCell.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -280,6 +293,9 @@
 				ACE211C92659F3E800FF52EC /* PLContentViewController.h */,
 				ACE211CA2659F3E800FF52EC /* PLContentViewController.m */,
 				ACE211CB2659F3E800FF52EC /* PLContentViewController.xib */,
+				ACDF2270265FE00000608CD0 /* PLPhotoViewController.h */,
+				ACDF2271265FE00000608CD0 /* PLPhotoViewController.m */,
+				ACDF2272265FE00000608CD0 /* PLPhotoViewController.xib */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -510,6 +526,8 @@
 				AC262502265812AA00939375 /* LaunchScreen.storyboard in Resources */,
 				AC2624FF265812AA00939375 /* Assets.xcassets in Resources */,
 				ACE03ACB265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.xib in Resources */,
+				ACDF2274265FE00000608CD0 /* PLPhotoViewController.xib in Resources */,
+				ACDF2279265FE76700608CD0 /* PLPhotoMainCollectionViewCell.xib in Resources */,
 				ACE211CD2659F3E800FF52EC /* PLContentViewController.xib in Resources */,
 				AC2624FD265812A900939375 /* Main.storyboard in Resources */,
 				ACE03AC3265A95C900BDC5AA /* PLContentCollectionViewCell.xib in Resources */,
@@ -591,6 +609,8 @@
 				ACEBB7A226588A07005778FB /* UIColor+GYAdd.m in Sources */,
 				ACEBB79B26588A07005778FB /* GYUtilityManager.m in Sources */,
 				ACEBB79A26588A07005778FB /* GYLogManager.m in Sources */,
+				ACDF2278265FE76700608CD0 /* PLPhotoMainCollectionViewCell.m in Sources */,
+				ACDF2273265FE00000608CD0 /* PLPhotoViewController.m in Sources */,
 				ACEBB79C26588A07005778FB /* GYExceptionManager.m in Sources */,
 				ACEBB7A526588A07005778FB /* NSDictionary+GYAdd.m in Sources */,
 				ACEBB7A126588A07005778FB /* NSObject+GYAdd.m in Sources */,
