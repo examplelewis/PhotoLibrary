@@ -17,6 +17,7 @@
 		AC262505265812AA00939375 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AC262504265812AA00939375 /* main.m */; };
 		AC26250F265812AB00939375 /* PhotoLibraryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC26250E265812AB00939375 /* PhotoLibraryTests.m */; };
 		AC26251A265812AB00939375 /* PhotoLibraryUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC262519265812AB00939375 /* PhotoLibraryUITests.m */; };
+		ACC29E7926612D96001E7B78 /* PLPhotoMainCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = ACC29E7826612D96001E7B78 /* PLPhotoMainCellView.m */; };
 		ACDF2273265FE00000608CD0 /* PLPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACDF2271265FE00000608CD0 /* PLPhotoViewController.m */; };
 		ACDF2274265FE00000608CD0 /* PLPhotoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACDF2272265FE00000608CD0 /* PLPhotoViewController.xib */; };
 		ACDF2278265FE76700608CD0 /* PLPhotoMainCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ACDF2276265FE76700608CD0 /* PLPhotoMainCollectionViewCell.m */; };
@@ -83,6 +84,8 @@
 		AC262519265812AB00939375 /* PhotoLibraryUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoLibraryUITests.m; sourceTree = "<group>"; };
 		AC26251B265812AB00939375 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AC26270D26581CD900939375 /* PhotoLibrary-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PhotoLibrary-Prefix.pch"; sourceTree = "<group>"; };
+		ACC29E7726612D96001E7B78 /* PLPhotoMainCellView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLPhotoMainCellView.h; sourceTree = "<group>"; };
+		ACC29E7826612D96001E7B78 /* PLPhotoMainCellView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLPhotoMainCellView.m; sourceTree = "<group>"; };
 		ACDF2270265FE00000608CD0 /* PLPhotoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLPhotoViewController.h; sourceTree = "<group>"; };
 		ACDF2271265FE00000608CD0 /* PLPhotoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLPhotoViewController.m; sourceTree = "<group>"; };
 		ACDF2272265FE00000608CD0 /* PLPhotoViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PLPhotoViewController.xib; sourceTree = "<group>"; };
@@ -271,6 +274,8 @@
 				ACDF2275265FE76700608CD0 /* PLPhotoMainCollectionViewCell.h */,
 				ACDF2276265FE76700608CD0 /* PLPhotoMainCollectionViewCell.m */,
 				ACDF2277265FE76700608CD0 /* PLPhotoMainCollectionViewCell.xib */,
+				ACC29E7726612D96001E7B78 /* PLPhotoMainCellView.h */,
+				ACC29E7826612D96001E7B78 /* PLPhotoMainCellView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -598,6 +603,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ACE03ACA265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.m in Sources */,
+				ACC29E7926612D96001E7B78 /* PLPhotoMainCellView.m in Sources */,
 				ACEA4B04265BF2FD00D141D4 /* PLUniversalManager.m in Sources */,
 				ACE03AC2265A95C900BDC5AA /* PLContentCollectionViewCell.m in Sources */,
 				AC2624FA265812A900939375 /* ViewController.m in Sources */,

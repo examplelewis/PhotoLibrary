@@ -6,19 +6,24 @@
 //
 
 #import "PLPhotoViewController.h"
+#import "PLPhotoMainCellView.h"
 
-#import "PLPhotoMainCollectionViewCell.h"
+static CGFloat const kMarginH = 50.f;
+static CGFloat const kMarginBottom = 20.0f;
+static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
 
-static NSInteger const kMainCollectionViewTag = 101;
-static NSInteger const kBottomCollectionViewTag = 102;
-
-@interface PLPhotoViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
-
-@property (strong, nonatomic) IBOutlet UICollectionView *mainCollectionView;
-@property (strong, nonatomic) IBOutlet UICollectionView *bottomCollectionView;
-@property (nonatomic, strong) UICollectionViewFlowLayout *mainFlowLayout;
+@interface PLPhotoViewController () <UIScrollViewDelegate> {
+    CGFloat screenWidth;
+    CGFloat screenHeight;
+    CGFloat scrollViewWidth;
+    CGFloat scrollViewHeight;
+}
 
 @property (nonatomic, copy) NSArray<NSString *> *files;
+
+@property (nonatomic, strong) IBOutlet UIScrollView *mainScrollView;
+
+@property (strong, nonatomic) IBOutlet UICollectionView *bottomCollectionView;
 
 @end
 
@@ -41,6 +46,7 @@ static NSInteger const kBottomCollectionViewTag = 102;
     
     if (self.files.count == 0) {
         [self refreshFiles];
+        [self refreshScrollView];
     }
 }
 
@@ -50,35 +56,69 @@ static NSInteger const kBottomCollectionViewTag = 102;
 }
 - (void)setupUIAndData {
     // Data
+    screenWidth = MAX(kScreenWidth, kScreenHeight);
+    screenHeight = MIN(kScreenWidth, kScreenHeight);
+    scrollViewWidth = screenWidth - kMarginH * 2;
+    scrollViewHeight = screenHeight - kMarginBottom;
+    
     self.files = @[];
     
     // UI
-    [self setupNavigationBar];
-    [self setupMainCollectionViewFlowLayout];
-    [self setupMainCollectionView];
+    [self setupScrollView];
 }
-- (void)setupNavigationBar {
+- (void)setupScrollView {
+    self.mainScrollView.frame = CGRectMake(kMarginH, 0, scrollViewWidth, scrollViewHeight);
+    self.mainScrollView.showsHorizontalScrollIndicator = NO;
+    self.mainScrollView.showsVerticalScrollIndicator = NO;
+    self.mainScrollView.pagingEnabled = YES;
+    self.mainScrollView.bounces = NO;
+    self.mainScrollView.scrollEnabled = NO;
+    self.mainScrollView.delegate = self;
     
-}
-- (void)setupMainCollectionViewFlowLayout {
-    self.mainFlowLayout = [UICollectionViewFlowLayout new];
-    self.mainFlowLayout.minimumInteritemSpacing = 0;
-    self.mainFlowLayout.minimumLineSpacing = 0;
-    
-    CGFloat screenWidth = MAX(kScreenWidth, kScreenHeight);
-    CGFloat screenHeight = MIN(kScreenWidth, kScreenHeight);
-    self.mainFlowLayout.itemSize = CGSizeMake(screenWidth - 50 * 2, screenHeight - 20 - 24); // 20: StatusBar; 24: Safe Area Bottom
-}
-- (void)setupMainCollectionView {
-    [self.mainCollectionView registerNib:[UINib nibWithNibName:@"PLPhotoMainCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"PLPhotoMainCell"];
+    // 单击切换
+    UITapGestureRecognizer *oneTapGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneTapGRPressed:)];
+    [self.mainScrollView addGestureRecognizer:oneTapGR];
 }
 
 #pragma mark - Refresh
 - (void)refreshFiles {
     self.files = [GYFileManager filePathsInFolder:self.folderPath extensions:[GYSettingManager defaultManager].mimeImageTypes];
     self.files = [self.files sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES]]];
+}
+- (void)refreshScrollView {
+    for (NSInteger i = 0; i < self.files.count; i++) {
+        PLPhotoMainCellView *cellView = [[PLPhotoMainCellView alloc] initWithFrame:CGRectMake(i * scrollViewWidth, 0, scrollViewWidth, scrollViewHeight)];
+        cellView.tag = i + 1000;
+        
+        [self.mainScrollView addSubview:cellView];
+    }
     
-    [self.mainCollectionView reloadData];
+    self.mainScrollView.contentSize = CGSizeMake(self.files.count * scrollViewWidth, scrollViewHeight);
+    
+    NSInteger index = self.currentIndex;
+    if (index >= self.files.count) {
+        index = self.files.count - 1;
+    }
+    [self mainScrollViewScrollToIndex:index];
+}
+
+#pragma mark - ScrollView
+- (void)mainScrollViewScrollToIndex:(NSInteger)index {
+    NSInteger refreshStart = index - kPreloadCountPerSide;
+    NSInteger refreshEnd = index + kPreloadCountPerSide;
+    if (refreshStart < 0) {
+        refreshStart = 0;
+    }
+    if (refreshEnd >= self.files.count) {
+        refreshEnd = self.files.count - 1;
+    }
+    
+    for (NSInteger i = refreshStart; i <= refreshEnd; i++) {
+        PLPhotoMainCellView *cellView = (PLPhotoMainCellView *)[self.mainScrollView viewWithTag:1000 + i];
+        cellView.filePath = self.files[i];
+    }
+    
+    [self.mainScrollView setContentOffset:CGPointMake(index * self.mainScrollView.width, 0) animated:NO];
 }
 
 #pragma mark - Actions
@@ -94,37 +134,22 @@ static NSInteger const kBottomCollectionViewTag = 102;
 - (IBAction)bottomButtonPressed:(UIButton *)sender {
     
 }
-
-#pragma mark - UICollectionViewDataSource
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.files.count;
-}
-- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (collectionView.tag == kMainCollectionViewTag) {
-        PLPhotoMainCollectionViewCell *cell = (PLPhotoMainCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"PLPhotoMainCell" forIndexPath:indexPath];
-        cell.filePath = self.files[indexPath.row];
-        
-        return cell;
+- (void)oneTapGRPressed:(UIGestureRecognizer *)sender {
+    NSInteger index = roundf(self.mainScrollView.contentOffset.x / scrollViewWidth);
+    CGPoint point = [sender locationInView:self.mainScrollView];
+    CGFloat currentOffsetX = point.x - index * scrollViewWidth;
+    if (currentOffsetX <= scrollViewWidth / 2.0f) {
+        index -= 1;
+        if (index < 0) {
+            return;
+        }
+    } else {
+        index += 1;
+        if (index >= self.files.count) {
+            return;
+        }
     }
-    
-    return nil;
+    [self mainScrollViewScrollToIndex:index];
 }
-
-#pragma mark - UICollectionViewDelegate
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-}
-
-#pragma mark - UICollectionViewDelegateFlowLayout
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return self.mainFlowLayout.itemSize;
-}
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return self.mainFlowLayout.minimumLineSpacing;
-}
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    return self.mainFlowLayout.minimumInteritemSpacing;
-}
-
 
 @end

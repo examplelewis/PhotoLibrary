@@ -11,7 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PLPhotoViewController">
             <connections>
                 <outlet property="bottomCollectionView" destination="KF3-SO-svW" id="kA6-c8-QZA"/>
-                <outlet property="mainCollectionView" destination="Tox-AM-o7O" id="erf-67-0Ci"/>
+                <outlet property="mainScrollView" destination="hlw-BT-tEx" id="F5X-3L-jVh"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -20,6 +20,13 @@
             <rect key="frame" x="0.0" y="0.0" width="1366" height="1024"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hlw-BT-tEx">
+                    <rect key="frame" x="50" y="0.0" width="1266" height="1004"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <viewLayoutGuide key="contentLayoutGuide" id="bM0-FP-ejc"/>
+                    <viewLayoutGuide key="frameLayoutGuide" id="ibK-Dj-Kzt"/>
+                </scrollView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EEv-N7-qgk">
                     <rect key="frame" x="1316" y="0.0" width="50" height="1004"/>
                     <subviews>
@@ -150,35 +157,17 @@
                         <action selector="restoreButtonPressed:" destination="-1" eventType="touchUpInside" id="tyO-ka-ncU"/>
                     </connections>
                 </button>
-                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" tag="101" contentMode="scaleToFill" bounces="NO" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Tox-AM-o7O">
-                    <rect key="frame" x="50" y="0.0" width="1266" height="1004"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="yzE-m9-C4j">
-                        <size key="itemSize" width="128" height="128"/>
-                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                    </collectionViewFlowLayout>
-                    <connections>
-                        <outlet property="dataSource" destination="-1" id="JrA-h5-87i"/>
-                        <outlet property="delegate" destination="-1" id="vEc-Ir-KkB"/>
-                    </connections>
-                </collectionView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="Mki-cH-sIO" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="-10" id="1U1-bR-xBa"/>
-                <constraint firstItem="Tox-AM-o7O" firstAttribute="leading" secondItem="9Nf-MS-STl" secondAttribute="trailing" id="2CN-ON-0Ep"/>
                 <constraint firstItem="Q5M-cg-NOt" firstAttribute="bottom" secondItem="EEv-N7-qgk" secondAttribute="bottom" id="Awa-Q4-qOy"/>
                 <constraint firstItem="KF3-SO-svW" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="BVd-1h-ILQ"/>
                 <constraint firstItem="9Nf-MS-STl" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="D6K-cu-ujF"/>
-                <constraint firstItem="Tox-AM-o7O" firstAttribute="top" secondItem="Q5M-cg-NOt" secondAttribute="top" id="F3f-WE-BOJ"/>
-                <constraint firstItem="Q5M-cg-NOt" firstAttribute="bottom" secondItem="Tox-AM-o7O" secondAttribute="bottom" id="FH0-Ye-9Bb"/>
                 <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="KF3-SO-svW" secondAttribute="trailing" id="FWJ-4I-28K"/>
                 <constraint firstItem="0RB-7B-OjQ" firstAttribute="top" secondItem="Mki-cH-sIO" secondAttribute="bottom" constant="5" id="Qg0-AJ-qfX"/>
                 <constraint firstItem="EEv-N7-qgk" firstAttribute="top" secondItem="Q5M-cg-NOt" secondAttribute="top" id="SmB-zV-OMN"/>
-                <constraint firstItem="EEv-N7-qgk" firstAttribute="leading" secondItem="Tox-AM-o7O" secondAttribute="trailing" id="Whl-E2-yB8"/>
                 <constraint firstItem="Mki-cH-sIO" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Yxz-Zq-Jxt"/>
                 <constraint firstItem="9Nf-MS-STl" firstAttribute="top" secondItem="Q5M-cg-NOt" secondAttribute="top" id="fHb-nJ-Pb6"/>
                 <constraint firstItem="Q5M-cg-NOt" firstAttribute="bottom" secondItem="9Nf-MS-STl" secondAttribute="bottom" id="faB-yq-vk4"/>
