@@ -63,14 +63,14 @@
 }
 
 #pragma mark - Setter
-- (void)setFilePath:(NSString *)filePath {
-    if ([_filePath isEqualToString:filePath]) {
+- (void)setFileModel:(PLPhotoFileModel *)fileModel {
+    if ([_fileModel.filePath isEqualToString:fileModel.filePath]) {
         return;
     }
     
-    _filePath = [filePath copy];
+    _fileModel = fileModel;
     
-    UIImage *memoryImage = [[SDImageCache sharedImageCache] imageFromMemoryCacheForKey:filePath];
+    UIImage *memoryImage = [[SDImageCache sharedImageCache] imageFromMemoryCacheForKey:fileModel.filePath];
     if (memoryImage) {
         self.imageView.image = memoryImage;
     } else {
@@ -79,14 +79,14 @@
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             @strongify(self);
             
-            if ([[SDImageCache sharedImageCache] diskImageDataExistsWithKey:filePath]) {
+            if ([[SDImageCache sharedImageCache] diskImageDataExistsWithKey:fileModel.filePath]) {
                 dispatch_main_async_safe(^{
-                    self.imageView.image = [[SDImageCache sharedImageCache] imageFromCacheForKey:filePath];
+                    self.imageView.image = [[SDImageCache sharedImageCache] imageFromCacheForKey:fileModel.filePath];
                 });
             } else {
-                NSData *data = [[NSData alloc] initWithContentsOfFile:filePath];
+                NSData *data = [[NSData alloc] initWithContentsOfFile:fileModel.filePath];
                 UIImage *image = nil;
-                if ([filePath.pathExtension.lowercaseString isEqualToString:@"gif"]) {
+                if ([fileModel.filePath.pathExtension.lowercaseString isEqualToString:@"gif"]) {
                     image = [UIImage sd_imageWithGIFData:data];
                 } else {
                     image = [UIImage imageWithData:data];
@@ -100,7 +100,7 @@
                         image = [image resizeScaleImage:0.7f];
                     }
                 }
-                [[SDImageCache sharedImageCache] storeImage:image forKey:filePath completion:nil];
+                [[SDImageCache sharedImageCache] storeImage:image forKey:fileModel.filePath completion:nil];
                 
                 dispatch_main_async_safe(^{
                     @strongify(self);

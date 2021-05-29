@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="ipad12_9rounded" orientation="landscape" layout="fullscreen" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -39,6 +39,9 @@
                             <state key="normal" title="还原">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </state>
+                            <connections>
+                                <action selector="restoreButtonPressed:" destination="-1" eventType="touchUpInside" id="iCt-1h-DTg"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NFN-hH-zY3">
                             <rect key="frame" x="0.0" y="557" width="50" height="100"/>
@@ -49,6 +52,9 @@
                             <state key="normal" title="删除">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </state>
+                            <connections>
+                                <action selector="deleteButtonPressed:" destination="-1" eventType="touchUpInside" id="FPQ-93-t4Q"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V9l-Ye-dKz">
                             <rect key="frame" x="0.0" y="732" width="50" height="100"/>
@@ -59,6 +65,9 @@
                             <state key="normal" title="底部">
                                 <color key="titleColor" systemColor="systemBackgroundColor"/>
                             </state>
+                            <connections>
+                                <action selector="bottomButtonPressed:" destination="-1" eventType="touchUpInside" id="HHd-Hq-bWP"/>
+                            </connections>
                         </button>
                     </subviews>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -175,7 +184,7 @@
                 <constraint firstItem="EEv-N7-qgk" firstAttribute="trailing" secondItem="Q5M-cg-NOt" secondAttribute="trailing" id="mSC-MU-Ehe"/>
                 <constraint firstAttribute="trailing" secondItem="Mki-cH-sIO" secondAttribute="trailing" constant="1316" id="pAC-Ce-DGO"/>
             </constraints>
-            <point key="canvasLocation" x="138.79941434846265" y="153.515625"/>
+            <point key="canvasLocation" x="27" y="149"/>
         </view>
     </objects>
     <resources>

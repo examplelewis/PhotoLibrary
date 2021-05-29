@@ -6,12 +6,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PLPhotoFileModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PLPhotoMainCellView : UIView
 
-@property (nonatomic, copy) NSString *filePath;
+@property (nonatomic, strong) PLPhotoFileModel *fileModel;
 
 - (void)resetScale;
 
