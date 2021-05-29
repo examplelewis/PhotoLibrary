@@ -7,11 +7,12 @@
 
 #import "PLPhotoViewController.h"
 #import "PLPhotoMainCellView.h"
-#import "PLPhotoFileModel.h"
+#import "PLPhotoBottomCellView.h"
 
 static CGFloat const kMarginH = 50.f;
 static CGFloat const kMarginBottom = 20.0f;
-static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
+static NSInteger const kMainScrollViewPreloadCountPerSide = 5; // mainScrollView前后预加载的数量
+static NSInteger const kBottomScrollViewPreloadCountPerSide = 20; // bottomScrollView前后预加载的数量
 
 @interface PLPhotoViewController () <UIScrollViewDelegate> {
     CGFloat screenWidth;
@@ -22,11 +23,12 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
 
 @property (nonatomic, strong) NSMutableArray<PLPhotoFileModel *> *fileModels;
 @property (nonatomic, strong) NSMutableArray<PLPhotoFileModel *> *deleteModels;
-@property (nonatomic, strong) NSMutableArray<PLPhotoMainCellView *> *mainCellViews;
 
+@property (nonatomic, strong) NSMutableArray<PLPhotoMainCellView *> *mainCellViews;
 @property (nonatomic, strong) IBOutlet UIScrollView *mainScrollView;
 
-@property (strong, nonatomic) IBOutlet UICollectionView *bottomCollectionView;
+@property (nonatomic, strong) NSMutableArray<PLPhotoBottomCellView *> *bottomCellViews;
+@property (nonatomic, strong) IBOutlet UIScrollView *bottomScrollView;
 
 @end
 
@@ -50,6 +52,7 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
     if (self.fileModels.count == 0) {
         [self readFiles];
         [self createMainCellViews];
+        [self createBottomCellViews];
     }
 }
 
@@ -66,10 +69,13 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
     
     self.fileModels = [NSMutableArray array];
     self.deleteModels = [NSMutableArray array];
+    
     self.mainCellViews = [NSMutableArray array];
+    self.bottomCellViews = [NSMutableArray array];
     
     // UI
     [self setupMainScrollView];
+    [self setupBottomScrollView];
 }
 - (void)setupMainScrollView {
     self.mainScrollView.frame = CGRectMake(kMarginH, 0, scrollViewWidth, scrollViewHeight);
@@ -83,6 +89,12 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
     // 单击切换
     UITapGestureRecognizer *oneTapGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(mainScrollViewOneTapGRPressed:)];
     [self.mainScrollView addGestureRecognizer:oneTapGR];
+}
+- (void)setupBottomScrollView {
+    self.bottomScrollView.frame = CGRectMake(0, screenHeight - 20 - 96, screenWidth, 96);
+    self.bottomScrollView.showsHorizontalScrollIndicator = YES;
+    self.bottomScrollView.showsVerticalScrollIndicator = NO;
+//    self.mainScrollView.delegate = self;
 }
 
 #pragma mark - Read
@@ -111,6 +123,29 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
         index = self.fileModels.count - 1;
     }
     [self mainScrollViewScrollToIndex:index];
+}
+- (void)createBottomCellViews {
+    [self createBottomCellViewWithViewType:PLPhotoBottomCellViewTypePlaceholderLeading index:-1];
+    for (NSInteger i = 0; i < self.fileModels.count; i++) {
+        [self createBottomCellViewWithViewType:PLPhotoBottomCellViewTypeImage index:i];
+    }
+    [self createBottomCellViewWithViewType:PLPhotoBottomCellViewTypePlaceholderTrailing index:-1];
+    
+    self.mainScrollView.contentSize = CGSizeMake(screenWidth, 96);
+    
+    NSInteger index = self.currentIndex;
+    if (index >= self.fileModels.count) {
+        index = self.fileModels.count - 1;
+    }
+    [self bottomScrollViewScrollToIndex:index];
+}
+- (void)createBottomCellViewWithViewType:(PLPhotoBottomCellViewType)viewType index:(NSInteger)index {
+    PLPhotoBottomCellView *cellView = [[PLPhotoBottomCellView alloc] initWithFrame:CGRectZero];
+    cellView.tag = viewType == PLPhotoBottomCellViewTypePlaceholderLeading ? -1 : viewType == PLPhotoBottomCellViewTypePlaceholderTrailing ? -2 : index + 1000;
+    cellView.type = viewType;
+    
+    [self.bottomCellViews addObject:cellView];
+    [self.bottomScrollView addSubview:cellView];
 }
 
 #pragma mark - Refresh
@@ -142,8 +177,8 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
 
 #pragma mark - MainScrollView
 - (void)mainScrollViewScrollToIndex:(NSInteger)index {
-    NSInteger refreshStart = index - kPreloadCountPerSide;
-    NSInteger refreshEnd = index + kPreloadCountPerSide;
+    NSInteger refreshStart = index - kMainScrollViewPreloadCountPerSide;
+    NSInteger refreshEnd = index + kMainScrollViewPreloadCountPerSide;
     if (refreshStart < 0) {
         refreshStart = 0;
     }
@@ -157,6 +192,9 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
     }
     
     [self.mainScrollView setContentOffset:CGPointMake(index * self.mainScrollView.width, 0) animated:NO];
+}
+- (void)bottomScrollViewScrollToIndex:(NSInteger)index {
+    
 }
 
 #pragma mark - Actions
