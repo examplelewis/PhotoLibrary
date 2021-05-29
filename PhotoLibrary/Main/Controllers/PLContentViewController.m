@@ -309,7 +309,7 @@
             // 废纸篓目录下的文件，暂时不展示图片
             if (self.folderType != PLContentFolderTypeTrash) {
                 PLPhotoViewController *vc = [[PLPhotoViewController alloc] initWithNibName:@"PLPhotoViewController" bundle:nil];
-                vc.folderPath = [[GYSettingManager defaultManager] pathOfContentInDocumentFolder:@"123"];
+                vc.folderPath = self.folderPath;
                 vc.currentIndex = indexPath.row;
                 
                 [self.navigationController pushViewController:vc animated:YES];
