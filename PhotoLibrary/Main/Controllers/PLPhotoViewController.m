@@ -9,16 +9,16 @@
 #import "PLPhotoMainCellView.h"
 #import "PLPhotoBottomCellView.h"
 
-static CGFloat const kMarginH = 50.f;
-static CGFloat const kMarginBottom = 20.0f;
+static CGFloat const kMainScrollViewMarginH = 50.f;
+static CGFloat const kMainScrollViewMarginBottom = 20.0f;
 static NSInteger const kMainScrollViewPreloadCountPerSide = 5; // mainScrollView前后预加载的数量
 static NSInteger const kBottomScrollViewPreloadCountPerSide = 20; // bottomScrollView前后预加载的数量
 
 @interface PLPhotoViewController () <UIScrollViewDelegate> {
     CGFloat screenWidth;
     CGFloat screenHeight;
-    CGFloat scrollViewWidth;
-    CGFloat scrollViewHeight;
+    CGFloat mainScrollViewWidth;
+    CGFloat mainScrollViewHeight;
 }
 
 @property (nonatomic, strong) NSMutableArray<PLPhotoFileModel *> *fileModels;
@@ -64,8 +64,8 @@ static NSInteger const kBottomScrollViewPreloadCountPerSide = 20; // bottomScrol
     // Data
     screenWidth = MAX(kScreenWidth, kScreenHeight);
     screenHeight = MIN(kScreenWidth, kScreenHeight);
-    scrollViewWidth = screenWidth - kMarginH * 2;
-    scrollViewHeight = screenHeight - kMarginBottom;
+    mainScrollViewWidth = screenWidth - kMainScrollViewMarginH * 2;
+    mainScrollViewHeight = screenHeight - kMainScrollViewMarginBottom;
     
     self.fileModels = [NSMutableArray array];
     self.deleteModels = [NSMutableArray array];
@@ -78,7 +78,7 @@ static NSInteger const kBottomScrollViewPreloadCountPerSide = 20; // bottomScrol
     [self setupBottomScrollView];
 }
 - (void)setupMainScrollView {
-    self.mainScrollView.frame = CGRectMake(kMarginH, 0, scrollViewWidth, scrollViewHeight);
+    self.mainScrollView.frame = CGRectMake(kMainScrollViewMarginH, 0, mainScrollViewWidth, mainScrollViewHeight);
     self.mainScrollView.showsHorizontalScrollIndicator = NO;
     self.mainScrollView.showsVerticalScrollIndicator = NO;
     self.mainScrollView.pagingEnabled = YES;
@@ -109,14 +109,14 @@ static NSInteger const kBottomScrollViewPreloadCountPerSide = 20; // bottomScrol
 }
 - (void)createMainCellViews {
     for (NSInteger i = 0; i < self.fileModels.count; i++) {
-        PLPhotoMainCellView *cellView = [[PLPhotoMainCellView alloc] initWithFrame:CGRectMake(i * scrollViewWidth, 0, scrollViewWidth, scrollViewHeight)];
+        PLPhotoMainCellView *cellView = [[PLPhotoMainCellView alloc] initWithFrame:CGRectMake(i * mainScrollViewWidth, 0, mainScrollViewWidth, mainScrollViewHeight)];
         cellView.tag = i + 1000;
         
         [self.mainCellViews addObject:cellView];
         [self.mainScrollView addSubview:cellView];
     }
     
-    self.mainScrollView.contentSize = CGSizeMake(self.fileModels.count * scrollViewWidth, scrollViewHeight);
+    self.mainScrollView.contentSize = CGSizeMake(self.fileModels.count * mainScrollViewWidth, mainScrollViewHeight);
     
     NSInteger index = self.currentIndex;
     if (index >= self.fileModels.count) {
@@ -166,7 +166,7 @@ static NSInteger const kBottomScrollViewPreloadCountPerSide = 20; // bottomScrol
         }]];
         if (cellViews.count > 0) {
             PLPhotoMainCellView *cellView = cellViews.firstObject;
-            cellView.frame = CGRectMake(i * scrollViewWidth, 0, scrollViewWidth, scrollViewHeight);
+            cellView.frame = CGRectMake(i * mainScrollViewWidth, 0, mainScrollViewWidth, mainScrollViewHeight);
 
             if (!cellView.superview) {
                 [self.mainScrollView addSubview:cellView];
@@ -206,7 +206,7 @@ static NSInteger const kBottomScrollViewPreloadCountPerSide = 20; // bottomScrol
         return;
     }
     
-    NSInteger index = roundf(self.mainScrollView.contentOffset.x / scrollViewWidth); // 还原操作前，正在看的index
+    NSInteger index = roundf(self.mainScrollView.contentOffset.x / mainScrollViewWidth); // 还原操作前，正在看的index
     NSInteger plIndex = -1; // 如果plIndex == -1，说明还原之前所有文件都删光了
     if (self.fileModels.count > 0) {
         plIndex = self.fileModels[index].plIndex; // 还原操作前，正在看的图片对应的plIndex
@@ -232,7 +232,7 @@ static NSInteger const kBottomScrollViewPreloadCountPerSide = 20; // bottomScrol
         return;
     }
     
-    NSInteger index = roundf(self.mainScrollView.contentOffset.x / scrollViewWidth); // 需要删除的index
+    NSInteger index = roundf(self.mainScrollView.contentOffset.x / mainScrollViewWidth); // 需要删除的index
     [self.deleteModels addObject:self.fileModels[index]];
     [self.deleteModels.lastObject trashFile]; // 文件操作
     [self.fileModels removeObjectAtIndex:index];
@@ -248,10 +248,10 @@ static NSInteger const kBottomScrollViewPreloadCountPerSide = 20; // bottomScrol
     
 }
 - (void)mainScrollViewOneTapGRPressed:(UIGestureRecognizer *)sender {
-    NSInteger index = roundf(self.mainScrollView.contentOffset.x / scrollViewWidth);
+    NSInteger index = roundf(self.mainScrollView.contentOffset.x / mainScrollViewWidth);
     CGPoint point = [sender locationInView:self.mainScrollView];
-    CGFloat currentOffsetX = point.x - index * scrollViewWidth;
-    if (currentOffsetX <= scrollViewWidth / 2.0f) {
+    CGFloat currentOffsetX = point.x - index * mainScrollViewWidth;
+    if (currentOffsetX <= mainScrollViewWidth / 2.0f) {
         index -= 1;
         if (index < 0) {
             return;
