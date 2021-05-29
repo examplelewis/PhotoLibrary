@@ -19,7 +19,9 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
     CGFloat scrollViewHeight;
 }
 
-@property (nonatomic, copy) NSArray<NSString *> *files;
+@property (nonatomic, strong) NSMutableArray<NSString *> *files;
+@property (nonatomic, strong) NSMutableArray<NSString *> *deletes;
+@property (nonatomic, strong) NSMutableArray<PLPhotoMainCellView *> *cellViews;
 
 @property (nonatomic, strong) IBOutlet UIScrollView *mainScrollView;
 
@@ -45,8 +47,8 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
     [super viewDidAppear:animated];
     
     if (self.files.count == 0) {
-        [self refreshFiles];
-        [self refreshScrollView];
+        [self readFiles];
+        [self createCellViews];
     }
 }
 
@@ -61,7 +63,9 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
     scrollViewWidth = screenWidth - kMarginH * 2;
     scrollViewHeight = screenHeight - kMarginBottom;
     
-    self.files = @[];
+    self.files = [NSMutableArray array];
+    self.deletes = [NSMutableArray array];
+    self.cellViews = [NSMutableArray array];
     
     // UI
     [self setupScrollView];
@@ -80,16 +84,17 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
     [self.mainScrollView addGestureRecognizer:oneTapGR];
 }
 
-#pragma mark - Refresh
-- (void)refreshFiles {
-    self.files = [GYFileManager filePathsInFolder:self.folderPath extensions:[GYSettingManager defaultManager].mimeImageTypes];
-    self.files = [self.files sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES]]];
+#pragma mark - Read
+- (void)readFiles {
+    self.files = [GYFileManager filePathsInFolder:self.folderPath extensions:[GYSettingManager defaultManager].mimeImageTypes].mutableCopy;
+    [self.files sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES]]];
 }
-- (void)refreshScrollView {
+- (void)createCellViews {
     for (NSInteger i = 0; i < self.files.count; i++) {
         PLPhotoMainCellView *cellView = [[PLPhotoMainCellView alloc] initWithFrame:CGRectMake(i * scrollViewWidth, 0, scrollViewWidth, scrollViewHeight)];
         cellView.tag = i + 1000;
         
+        [self.cellViews addObject:cellView];
         [self.mainScrollView addSubview:cellView];
     }
     
@@ -100,6 +105,43 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
         index = self.files.count - 1;
     }
     [self mainScrollViewScrollToIndex:index];
+}
+
+#pragma mark - Refresh
+- (void)refreshCellViews {
+    for (NSInteger i = 0; i < self.files.count; i++) {
+        NSString *filePath = self.files[i];
+        NSArray<PLPhotoMainCellView *> *cellViews = [self.cellViews filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PLPhotoMainCellView * _Nullable view, NSDictionary<NSString *,id> * _Nullable bindings) {
+            return [view.filePath isEqualToString:filePath];
+        }]];
+        if (cellViews.count == 0) {
+            continue;
+        }
+        
+        PLPhotoMainCellView *cellView = cellViews.firstObject;
+        cellView.frame = CGRectMake(i * scrollViewWidth, 0, scrollViewWidth, scrollViewHeight);
+        
+        if (!cellView.superview) {
+            [self.mainScrollView addSubview:cellView];
+        }
+    }
+    
+    for (NSInteger i = 0; i < self.deletes.count; i++) {
+        NSString *filePath = self.deletes[i];
+        NSArray<PLPhotoMainCellView *> *cellViews = [self.cellViews filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PLPhotoMainCellView * _Nullable view, NSDictionary<NSString *,id> * _Nullable bindings) {
+            return [view.filePath isEqualToString:filePath];
+        }]];
+        if (cellViews.count == 0) {
+            continue;
+        }
+        
+        PLPhotoMainCellView *cellView = cellViews.firstObject;
+        [cellView removeFromSuperview];
+    }
+    
+    self.mainScrollView.contentSize = CGSizeMake(self.files.count * scrollViewWidth, scrollViewHeight);
+    
+//    [self mainScrollViewScrollToIndex:index];
 }
 
 #pragma mark - ScrollView
