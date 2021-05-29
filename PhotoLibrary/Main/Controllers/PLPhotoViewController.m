@@ -9,14 +9,7 @@
 #import "PLPhotoMainCellView.h"
 #import "PLPhotoBottomCellView.h"
 
-static CGFloat const kMainScrollViewMarginH = 50.f;
-static CGFloat const kMainScrollViewMarginBottom = 20.0f;
-static NSInteger const kMainScrollViewPreloadCountPerSide = 5; // mainScrollView前后预加载的数量
-static NSInteger const kBottomScrollViewPreloadCountPerSide = 20; // bottomScrollView前后预加载的数量
-
 @interface PLPhotoViewController () <UIScrollViewDelegate> {
-    CGFloat screenWidth;
-    CGFloat screenHeight;
     CGFloat mainScrollViewWidth;
     CGFloat mainScrollViewHeight;
 }
@@ -62,10 +55,8 @@ static NSInteger const kBottomScrollViewPreloadCountPerSide = 20; // bottomScrol
 }
 - (void)setupUIAndData {
     // Data
-    screenWidth = MAX(kScreenWidth, kScreenHeight);
-    screenHeight = MIN(kScreenWidth, kScreenHeight);
-    mainScrollViewWidth = screenWidth - kMainScrollViewMarginH * 2;
-    mainScrollViewHeight = screenHeight - kMainScrollViewMarginBottom;
+    mainScrollViewWidth = screenWidth - PLPhotoMainScrollViewMarginH * 2;
+    mainScrollViewHeight = screenHeight - PLSafeAreaBottom;
     
     self.fileModels = [NSMutableArray array];
     self.deleteModels = [NSMutableArray array];
@@ -78,20 +69,20 @@ static NSInteger const kBottomScrollViewPreloadCountPerSide = 20; // bottomScrol
     [self setupBottomScrollView];
 }
 - (void)setupMainScrollView {
-    self.mainScrollView.frame = CGRectMake(kMainScrollViewMarginH, 0, mainScrollViewWidth, mainScrollViewHeight);
+    self.mainScrollView.frame = CGRectMake(PLPhotoMainScrollViewMarginH, 0, mainScrollViewWidth, mainScrollViewHeight);
     self.mainScrollView.showsHorizontalScrollIndicator = NO;
     self.mainScrollView.showsVerticalScrollIndicator = NO;
     self.mainScrollView.pagingEnabled = YES;
     self.mainScrollView.bounces = NO;
     self.mainScrollView.scrollEnabled = NO;
-    self.mainScrollView.delegate = self;
     
     // 单击切换
     UITapGestureRecognizer *oneTapGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(mainScrollViewOneTapGRPressed:)];
     [self.mainScrollView addGestureRecognizer:oneTapGR];
 }
 - (void)setupBottomScrollView {
-    self.bottomScrollView.frame = CGRectMake(0, screenHeight - 20 - 96, screenWidth, 96);
+    self.bottomScrollView.frame = CGRectMake(0, screenHeight - PLSafeAreaBottom - PLPhotoBottomScrollViewHeight, screenWidth, PLPhotoBottomScrollViewHeight);
+    self.bottomScrollView.backgroundColor = [UIColor whiteColor];
     self.bottomScrollView.showsHorizontalScrollIndicator = YES;
     self.bottomScrollView.showsVerticalScrollIndicator = NO;
 //    self.mainScrollView.delegate = self;
@@ -125,27 +116,30 @@ static NSInteger const kBottomScrollViewPreloadCountPerSide = 20; // bottomScrol
     [self mainScrollViewScrollToIndex:index];
 }
 - (void)createBottomCellViews {
-    [self createBottomCellViewWithViewType:PLPhotoBottomCellViewTypePlaceholderLeading index:-1];
+    CGFloat offsetX = 0;
     for (NSInteger i = 0; i < self.fileModels.count; i++) {
-        [self createBottomCellViewWithViewType:PLPhotoBottomCellViewTypeImage index:i];
+        CGSize imageSize = [PLUniversalManager imageSizeOfFilePath:self.fileModels[i].filePath];
+        CGFloat cellViewWidth = floorf((PLPhotoBottomScrollViewHeight - PLScrollViewIndicatorMargin) / imageSize.height * imageSize.width);
+        
+        offsetX += PLPhotoBottomScrollViewCellViewSpacingH;
+        
+        PLPhotoBottomCellView *cellView = [[PLPhotoBottomCellView alloc] initWithFrame:CGRectMake(offsetX, 0, cellViewWidth, PLPhotoBottomScrollViewHeight)];
+        cellView.tag = i + 1000;
+        
+        offsetX += cellViewWidth;
+        
+        [self.bottomCellViews addObject:cellView];
+        [self.bottomScrollView addSubview:cellView];
     }
-    [self createBottomCellViewWithViewType:PLPhotoBottomCellViewTypePlaceholderTrailing index:-1];
     
-    self.mainScrollView.contentSize = CGSizeMake(screenWidth, 96);
+    offsetX += PLPhotoBottomScrollViewCellViewSpacingH;
+    self.bottomScrollView.contentSize = CGSizeMake(offsetX, PLPhotoBottomScrollViewHeight);
     
     NSInteger index = self.currentIndex;
     if (index >= self.fileModels.count) {
         index = self.fileModels.count - 1;
     }
     [self bottomScrollViewScrollToIndex:index];
-}
-- (void)createBottomCellViewWithViewType:(PLPhotoBottomCellViewType)viewType index:(NSInteger)index {
-    PLPhotoBottomCellView *cellView = [[PLPhotoBottomCellView alloc] initWithFrame:CGRectZero];
-    cellView.tag = viewType == PLPhotoBottomCellViewTypePlaceholderLeading ? -1 : viewType == PLPhotoBottomCellViewTypePlaceholderTrailing ? -2 : index + 1000;
-    cellView.type = viewType;
-    
-    [self.bottomCellViews addObject:cellView];
-    [self.bottomScrollView addSubview:cellView];
 }
 
 #pragma mark - Refresh
@@ -173,12 +167,48 @@ static NSInteger const kBottomScrollViewPreloadCountPerSide = 20; // bottomScrol
             }
         }
     }
+    
+    self.mainScrollView.contentSize = CGSizeMake(self.fileModels.count * mainScrollViewWidth, mainScrollViewHeight);
+}
+- (void)refreshBottomCellViews {
+    for (NSInteger i = 0; i < self.deleteModels.count; i++) {
+        NSArray<PLPhotoBottomCellView *> *cellViews = [self.bottomCellViews filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PLPhotoBottomCellView * _Nullable cellView, NSDictionary<NSString *,id> * _Nullable bindings) {
+            return cellView.fileModel.plIndex == self.deleteModels[i].plIndex;
+        }]];
+        if (cellViews.count > 0) {
+            PLPhotoBottomCellView *cellView = cellViews.firstObject;
+            [cellView removeFromSuperview];
+        }
+    }
+    
+    CGFloat offsetX = 0;
+    for (NSInteger i = 0; i < self.fileModels.count; i++) {
+        NSArray<PLPhotoBottomCellView *> *cellViews = [self.bottomCellViews filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PLPhotoBottomCellView * _Nullable cellView, NSDictionary<NSString *,id> * _Nullable bindings) {
+            return cellView.fileModel.plIndex == self.fileModels[i].plIndex;
+        }]];
+        
+        if (cellViews.count > 0) {
+            offsetX += PLPhotoBottomScrollViewCellViewSpacingH;
+            
+            PLPhotoBottomCellView *cellView = cellViews.firstObject;
+            cellView.frame = CGRectMake(offsetX, 0, cellView.width, cellView.height);
+            
+            offsetX += cellView.width;
+            
+            if (!cellView.superview) {
+                [self.mainScrollView addSubview:cellView];
+            }
+        }
+    }
+    
+    offsetX += PLPhotoBottomScrollViewCellViewSpacingH;
+    self.bottomScrollView.contentSize = CGSizeMake(offsetX, PLPhotoBottomScrollViewHeight);
 }
 
 #pragma mark - MainScrollView
 - (void)mainScrollViewScrollToIndex:(NSInteger)index {
-    NSInteger refreshStart = index - kMainScrollViewPreloadCountPerSide;
-    NSInteger refreshEnd = index + kMainScrollViewPreloadCountPerSide;
+    NSInteger refreshStart = index - PLPhotoMainScrollViewPreloadCountPerSide;
+    NSInteger refreshEnd = index + PLPhotoMainScrollViewPreloadCountPerSide;
     if (refreshStart < 0) {
         refreshStart = 0;
     }
@@ -194,8 +224,34 @@ static NSInteger const kBottomScrollViewPreloadCountPerSide = 20; // bottomScrol
     [self.mainScrollView setContentOffset:CGPointMake(index * self.mainScrollView.width, 0) animated:NO];
 }
 - (void)bottomScrollViewScrollToIndex:(NSInteger)index {
+    NSInteger refreshStart = index - PLPhotoBottomScrollViewPreloadCountPerSide;
+    NSInteger refreshEnd = index + PLPhotoBottomScrollViewPreloadCountPerSide;
+    if (refreshStart < 0) {
+        refreshStart = 0;
+    }
+    if (refreshEnd >= self.fileModels.count) {
+        refreshEnd = self.fileModels.count - 1;
+    }
+    
+    for (NSInteger i = refreshStart; i <= refreshEnd; i++) {
+        PLPhotoBottomCellView *cellView = (PLPhotoBottomCellView *)[self.bottomScrollView viewWithTag:1000 + self.fileModels[i].plIndex];
+        cellView.fileModel = self.fileModels[i];
+    }
+    
+    CGFloat offsetX = 0;
+    for (NSInteger i = 0; i < index; i++) {
+        PLPhotoBottomCellView *cellView = (PLPhotoBottomCellView *)[self.bottomScrollView viewWithTag:1000 + self.fileModels[i].plIndex];
+        offsetX += PLPhotoBottomScrollViewCellViewSpacingH;
+        offsetX += cellView.width;
+    }
+    [self.bottomScrollView setContentOffset:CGPointMake(offsetX, 0) animated:NO];
+}
+
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
 }
+
 
 #pragma mark - Actions
 - (IBAction)backButtonPressed:(UIButton *)sender {

@@ -27,8 +27,9 @@
 
 #pragma mark - Configure
 - (void)setupImageView {
-    self.imageView = [[UIImageView alloc] initWithFrame:self.bounds];
+    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height - PLScrollViewIndicatorMargin)];
     self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.imageView.backgroundColor = [UIColor cyanColor];
     [self addSubview:self.imageView];
 }
 
@@ -39,6 +40,10 @@
     }
     
     _fileModel = fileModel;
+    
+    if (self.imageView.image) {
+        return;
+    }
     
     UIImage *memoryImage = [[SDImageCache sharedImageCache] imageFromMemoryCacheForKey:fileModel.filePath];
     if (memoryImage) {

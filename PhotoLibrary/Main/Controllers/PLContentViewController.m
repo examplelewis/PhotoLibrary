@@ -142,7 +142,6 @@
     self.flowLayout.minimumInteritemSpacing = [PLUniversalManager defaultManager].rowColumnSpacing;
     self.flowLayout.minimumLineSpacing = [PLUniversalManager defaultManager].rowColumnSpacing;
     
-    CGFloat screenWidth = MAX(kScreenWidth, kScreenHeight);
     CGFloat itemWidth = (screenWidth - ([PLUniversalManager defaultManager].columnsPerRow + 1) * [PLUniversalManager defaultManager].rowColumnSpacing) / [PLUniversalManager defaultManager].columnsPerRow;
     self.flowLayout.itemSize = CGSizeMake(floorf(itemWidth), floorf(itemWidth));
     

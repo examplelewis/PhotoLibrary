@@ -70,6 +70,10 @@
     
     _fileModel = fileModel;
     
+    if (self.imageView.image) {
+        return;
+    }
+    
     UIImage *memoryImage = [[SDImageCache sharedImageCache] imageFromMemoryCacheForKey:fileModel.filePath];
     if (memoryImage) {
         self.imageView.image = memoryImage;

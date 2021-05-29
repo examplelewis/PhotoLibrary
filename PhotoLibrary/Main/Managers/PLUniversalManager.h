@@ -27,6 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)restoreContentsAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion;
 - (void)deleteContentsAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion;
 
+#pragma mark - Tools
++ (CGSize)imageSizeOfFilePath:(NSString *)filePath;
+
 @end
 
 NS_ASSUME_NONNULL_END

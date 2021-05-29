@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="ipad12_9rounded" orientation="landscape" layout="fullscreen" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -57,7 +57,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V9l-Ye-dKz">
-                            <rect key="frame" x="0.0" y="732" width="50" height="100"/>
+                            <rect key="frame" x="0.0" y="677" width="50" height="100"/>
                             <color key="backgroundColor" systemColor="systemBlueColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="100" id="OTc-b8-smj"/>
@@ -76,7 +76,7 @@
                         <constraint firstAttribute="trailing" secondItem="PFP-Qc-SZ0" secondAttribute="trailing" id="DaQ-WZ-S00"/>
                         <constraint firstAttribute="trailing" secondItem="NFN-hH-zY3" secondAttribute="trailing" id="FF0-rF-EZG"/>
                         <constraint firstItem="PFP-Qc-SZ0" firstAttribute="leading" secondItem="EEv-N7-qgk" secondAttribute="leading" id="JtI-lN-xSq"/>
-                        <constraint firstItem="V9l-Ye-dKz" firstAttribute="top" secondItem="NFN-hH-zY3" secondAttribute="bottom" constant="75" id="KfD-uM-L60"/>
+                        <constraint firstItem="V9l-Ye-dKz" firstAttribute="top" secondItem="NFN-hH-zY3" secondAttribute="bottom" constant="20" id="KfD-uM-L60"/>
                         <constraint firstAttribute="width" constant="50" id="PGn-Qb-bX7"/>
                         <constraint firstItem="NFN-hH-zY3" firstAttribute="top" secondItem="PFP-Qc-SZ0" secondAttribute="bottom" constant="5" id="X7H-lD-2S5"/>
                         <constraint firstItem="V9l-Ye-dKz" firstAttribute="leading" secondItem="EEv-N7-qgk" secondAttribute="leading" id="YcR-hD-LEo"/>
@@ -114,7 +114,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nod-hM-VjB">
-                            <rect key="frame" x="0.0" y="732" width="50" height="100"/>
+                            <rect key="frame" x="0.0" y="677" width="50" height="100"/>
                             <color key="backgroundColor" systemColor="systemBlueColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="100" id="ree-ZA-RAr"/>
@@ -154,7 +154,7 @@
                         <constraint firstItem="oeJ-yg-LAs" firstAttribute="leading" secondItem="9Nf-MS-STl" secondAttribute="leading" id="kEt-Ip-SjI"/>
                         <constraint firstAttribute="trailing" secondItem="Mki-cH-sIO" secondAttribute="trailing" id="mGH-P5-Zka"/>
                         <constraint firstItem="0RB-7B-OjQ" firstAttribute="top" secondItem="Mki-cH-sIO" secondAttribute="bottom" constant="5" id="oS9-u9-3fV"/>
-                        <constraint firstItem="Nod-hM-VjB" firstAttribute="top" secondItem="0RB-7B-OjQ" secondAttribute="bottom" constant="75" id="rDC-9p-jhS"/>
+                        <constraint firstItem="Nod-hM-VjB" firstAttribute="top" secondItem="0RB-7B-OjQ" secondAttribute="bottom" constant="20" id="rDC-9p-jhS"/>
                     </constraints>
                 </view>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cG2-1w-uBf">

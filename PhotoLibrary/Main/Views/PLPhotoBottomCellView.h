@@ -8,17 +8,10 @@
 #import <UIKit/UIKit.h>
 #import "PLPhotoFileModel.h"
 
-typedef NS_ENUM(NSUInteger, PLPhotoBottomCellViewType) {
-    PLPhotoBottomCellViewTypeImage,
-    PLPhotoBottomCellViewTypePlaceholderLeading,
-    PLPhotoBottomCellViewTypePlaceholderTrailing,
-};
-
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PLPhotoBottomCellView : UIView
 
-@property (nonatomic, assign) PLPhotoBottomCellViewType type;
 @property (nonatomic, strong) PLPhotoFileModel *fileModel;
 
 @end

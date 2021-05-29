@@ -50,6 +50,7 @@
     _tempPath = NSTemporaryDirectory();
     
     _trashFolderPath = [self pathOfContentInCachesFolder:@"废纸篓"];
+    NSLog(@"trashFolderPath: %@", self.trashFolderPath);
 }
 - (void)updatePreferences {
     _mimeImageTypes = @[@"jpg", @"jpeg", @"png", @"gif"];

@@ -91,4 +91,45 @@
     });
 }
 
+#pragma mark - Tools
++ (CGSize)imageSizeOfFilePath:(NSString *)filePath {
+    NSURL *imageFileURL = [NSURL fileURLWithPath:filePath];
+    CGImageSourceRef imageSource = CGImageSourceCreateWithURL((CFURLRef)imageFileURL, NULL);
+    if (imageSource == NULL) {
+        return CGSizeZero;
+    }
+    
+    CGFloat width = 0.0f, height = 0.0f;
+    CFDictionaryRef imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, NULL);
+    
+    CFRelease(imageSource);
+    
+    if (imageProperties != NULL) {
+        CFNumberRef widthNum  = CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelWidth);
+        if (widthNum != NULL) {
+            CFNumberGetValue(widthNum, kCFNumberCGFloatType, &width);
+        }
+        CFNumberRef heightNum = CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelHeight);
+        if (heightNum != NULL) {
+            CFNumberGetValue(heightNum, kCFNumberCGFloatType, &height);
+        }
+
+        // Check orientation and flip size if required
+        CFNumberRef orientationNum = CFDictionaryGetValue(imageProperties, kCGImagePropertyOrientation);
+        if (orientationNum != NULL) {
+            int orientation;
+            CFNumberGetValue(orientationNum, kCFNumberIntType, &orientation);
+            if (orientation > 4) {
+                CGFloat temp = width;
+                width = height;
+                height = temp;
+            }
+        }
+
+        CFRelease(imageProperties);
+    }
+    
+    return CGSizeMake(width, height);
+}
+
 @end
