@@ -173,15 +173,22 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
     }
     
     NSInteger index = roundf(self.mainScrollView.contentOffset.x / scrollViewWidth); // 还原操作前，正在看的index
-    NSInteger plIndex = self.fileModels[index].plIndex; // 还原操作前，正在看的图片对应的plIndex
+    NSInteger plIndex = -1; // 如果plIndex == -1，说明还原之前所有文件都删光了
+    if (self.fileModels.count > 0) {
+        plIndex = self.fileModels[index].plIndex; // 还原操作前，正在看的图片对应的plIndex
+    }
     
     [self.fileModels addObject:self.deleteModels.lastObject];
-    [self.fileModels sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"filePath" ascending:YES]]];
+    [self.fileModels.lastObject restoreFile]; // 文件操作
+    [self.fileModels sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"filePath" ascending:YES]]]; // 需要按照文件名重新排序
     [self.deleteModels removeLastObject];
     [self refreshCellViews];
     
     // 还原操作后，根据之前保留下来的plIndex，查找正确的index，并且跳转
-    NSInteger scrollIndex = [[self.fileModels valueForKey:@"plIndex"] indexOfObject:@(plIndex)];
+    NSInteger scrollIndex = 0; // 如果还原之前所有文件都删光了，那么直接跳转到第一个就可以了
+    if (plIndex != -1) {
+        scrollIndex = [[self.fileModels valueForKey:@"plIndex"] indexOfObject:@(plIndex)];
+    }
     if (scrollIndex != NSNotFound) {
         [self mainScrollViewScrollToIndex:scrollIndex];
     }
@@ -193,6 +200,7 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
     
     NSInteger index = roundf(self.mainScrollView.contentOffset.x / scrollViewWidth); // 需要删除的index
     [self.deleteModels addObject:self.fileModels[index]];
+    [self.deleteModels.lastObject trashFile]; // 文件操作
     [self.fileModels removeObjectAtIndex:index];
     [self refreshCellViews];
     
