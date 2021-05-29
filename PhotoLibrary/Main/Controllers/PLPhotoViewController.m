@@ -22,7 +22,7 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
 
 @property (nonatomic, strong) NSMutableArray<PLPhotoFileModel *> *fileModels;
 @property (nonatomic, strong) NSMutableArray<PLPhotoFileModel *> *deleteModels;
-@property (nonatomic, strong) NSMutableArray<PLPhotoMainCellView *> *cellViews;
+@property (nonatomic, strong) NSMutableArray<PLPhotoMainCellView *> *mainCellViews;
 
 @property (nonatomic, strong) IBOutlet UIScrollView *mainScrollView;
 
@@ -49,7 +49,7 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
     
     if (self.fileModels.count == 0) {
         [self readFiles];
-        [self createCellViews];
+        [self createMainCellViews];
     }
 }
 
@@ -66,12 +66,12 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
     
     self.fileModels = [NSMutableArray array];
     self.deleteModels = [NSMutableArray array];
-    self.cellViews = [NSMutableArray array];
+    self.mainCellViews = [NSMutableArray array];
     
     // UI
-    [self setupScrollView];
+    [self setupMainScrollView];
 }
-- (void)setupScrollView {
+- (void)setupMainScrollView {
     self.mainScrollView.frame = CGRectMake(kMarginH, 0, scrollViewWidth, scrollViewHeight);
     self.mainScrollView.showsHorizontalScrollIndicator = NO;
     self.mainScrollView.showsVerticalScrollIndicator = NO;
@@ -81,7 +81,7 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
     self.mainScrollView.delegate = self;
     
     // 单击切换
-    UITapGestureRecognizer *oneTapGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneTapGRPressed:)];
+    UITapGestureRecognizer *oneTapGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(mainScrollViewOneTapGRPressed:)];
     [self.mainScrollView addGestureRecognizer:oneTapGR];
 }
 
@@ -95,12 +95,12 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
         [self.fileModels addObject:[PLPhotoFileModel fileModelWithFilePath:files[i] plIndex:i]];
     }
 }
-- (void)createCellViews {
+- (void)createMainCellViews {
     for (NSInteger i = 0; i < self.fileModels.count; i++) {
         PLPhotoMainCellView *cellView = [[PLPhotoMainCellView alloc] initWithFrame:CGRectMake(i * scrollViewWidth, 0, scrollViewWidth, scrollViewHeight)];
         cellView.tag = i + 1000;
         
-        [self.cellViews addObject:cellView];
+        [self.mainCellViews addObject:cellView];
         [self.mainScrollView addSubview:cellView];
     }
     
@@ -114,9 +114,9 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
 }
 
 #pragma mark - Refresh
-- (void)refreshCellViews {
+- (void)refreshMainCellViews {
     for (NSInteger i = 0; i < self.deleteModels.count; i++) {
-        NSArray<PLPhotoMainCellView *> *cellViews = [self.cellViews filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PLPhotoMainCellView * _Nullable cellView, NSDictionary<NSString *,id> * _Nullable bindings) {
+        NSArray<PLPhotoMainCellView *> *cellViews = [self.mainCellViews filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PLPhotoMainCellView * _Nullable cellView, NSDictionary<NSString *,id> * _Nullable bindings) {
             return cellView.fileModel.plIndex == self.deleteModels[i].plIndex;
         }]];
         if (cellViews.count > 0) {
@@ -126,7 +126,7 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
     }
 
     for (NSInteger i = 0; i < self.fileModels.count; i++) {
-        NSArray<PLPhotoMainCellView *> *cellViews = [self.cellViews filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PLPhotoMainCellView * _Nullable cellView, NSDictionary<NSString *,id> * _Nullable bindings) {
+        NSArray<PLPhotoMainCellView *> *cellViews = [self.mainCellViews filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PLPhotoMainCellView * _Nullable cellView, NSDictionary<NSString *,id> * _Nullable bindings) {
             return cellView.fileModel.plIndex == self.fileModels[i].plIndex;
         }]];
         if (cellViews.count > 0) {
@@ -140,7 +140,7 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
     }
 }
 
-#pragma mark - ScrollView
+#pragma mark - MainScrollView
 - (void)mainScrollViewScrollToIndex:(NSInteger)index {
     NSInteger refreshStart = index - kPreloadCountPerSide;
     NSInteger refreshEnd = index + kPreloadCountPerSide;
@@ -178,7 +178,7 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
     [self.fileModels.lastObject restoreFile]; // 文件操作
     [self.fileModels sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"filePath" ascending:YES]]]; // 需要按照文件名重新排序
     [self.deleteModels removeLastObject];
-    [self refreshCellViews];
+    [self refreshMainCellViews];
     
     // 还原操作后，根据之前保留下来的plIndex，查找正确的index，并且跳转
     NSInteger scrollIndex = 0; // 如果还原之前所有文件都删光了，那么直接跳转到第一个就可以了
@@ -198,7 +198,7 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
     [self.deleteModels addObject:self.fileModels[index]];
     [self.deleteModels.lastObject trashFile]; // 文件操作
     [self.fileModels removeObjectAtIndex:index];
-    [self refreshCellViews];
+    [self refreshMainCellViews];
     
     // 如果删除了最后一张图片，显示删除完了之后的最后一张图片
     if (index >= self.fileModels.count) {
@@ -209,7 +209,7 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
 - (IBAction)bottomButtonPressed:(UIButton *)sender {
     
 }
-- (void)oneTapGRPressed:(UIGestureRecognizer *)sender {
+- (void)mainScrollViewOneTapGRPressed:(UIGestureRecognizer *)sender {
     NSInteger index = roundf(self.mainScrollView.contentOffset.x / scrollViewWidth);
     CGPoint point = [sender locationInView:self.mainScrollView];
     CGFloat currentOffsetX = point.x - index * scrollViewWidth;
