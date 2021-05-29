@@ -119,27 +119,23 @@ static NSInteger const kPreloadCountPerSide = 5; // 前后预加载的数量
         NSArray<PLPhotoMainCellView *> *cellViews = [self.cellViews filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PLPhotoMainCellView * _Nullable cellView, NSDictionary<NSString *,id> * _Nullable bindings) {
             return cellView.fileModel.plIndex == self.deleteModels[i].plIndex;
         }]];
-        if (cellViews.count == 0) {
-            continue;
+        if (cellViews.count > 0) {
+            PLPhotoMainCellView *cellView = cellViews.firstObject;
+            [cellView removeFromSuperview];
         }
-
-        PLPhotoMainCellView *cellView = cellViews.firstObject;
-        [cellView removeFromSuperview];
     }
 
     for (NSInteger i = 0; i < self.fileModels.count; i++) {
         NSArray<PLPhotoMainCellView *> *cellViews = [self.cellViews filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PLPhotoMainCellView * _Nullable cellView, NSDictionary<NSString *,id> * _Nullable bindings) {
             return cellView.fileModel.plIndex == self.fileModels[i].plIndex;
         }]];
-        if (cellViews.count == 0) {
-            continue;
-        }
+        if (cellViews.count > 0) {
+            PLPhotoMainCellView *cellView = cellViews.firstObject;
+            cellView.frame = CGRectMake(i * scrollViewWidth, 0, scrollViewWidth, scrollViewHeight);
 
-        PLPhotoMainCellView *cellView = cellViews.firstObject;
-        cellView.frame = CGRectMake(i * scrollViewWidth, 0, scrollViewWidth, scrollViewHeight);
-
-        if (!cellView.superview) {
-            [self.mainScrollView addSubview:cellView];
+            if (!cellView.superview) {
+                [self.mainScrollView addSubview:cellView];
+            }
         }
     }
 }
