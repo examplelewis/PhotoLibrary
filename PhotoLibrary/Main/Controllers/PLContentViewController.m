@@ -12,6 +12,7 @@
 
 #import "PLContentCollectionViewCell.h"
 #import "PLContentCollectionHeaderReusableView.h"
+#import "PLPhotoViewController.h"
 
 @interface PLContentViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
@@ -36,6 +37,8 @@
 @property (nonatomic, strong) NSMutableArray<NSString *> *selects;
 @property (nonatomic, assign) BOOL opreatingFiles;
 
+@property(nonatomic, assign) BOOL refreshFilesWhenViewDidAppear; // 当前Controller被展示时，是否刷新数据。只有跳转到PLPhotoViewController后返回才需要刷新
+
 @end
 
 @implementation PLContentViewController
@@ -58,6 +61,12 @@
     
     if (self.folders.count == 0 && self.files.count == 0) {
         [self.collectionView.mj_header beginRefreshing];
+    } else {
+        if (self.refreshFilesWhenViewDidAppear) {
+            self.refreshFilesWhenViewDidAppear = NO;
+            
+            [self refreshFiles];
+        }
     }
 }
 
@@ -297,7 +306,16 @@
             vc.folderType = self.folderType;
             [self.navigationController pushViewController:vc animated:YES];
         } else {
-            
+            // 废纸篓目录下的文件，暂时不展示图片
+            if (self.folderType != PLContentFolderTypeTrash) {
+                PLPhotoViewController *vc = [[PLPhotoViewController alloc] initWithNibName:@"PLPhotoViewController" bundle:nil];
+                vc.folderPath = [[GYSettingManager defaultManager] pathOfContentInDocumentFolder:@"123"];
+                vc.currentIndex = indexPath.row;
+                
+                [self.navigationController pushViewController:vc animated:YES];
+                
+                self.refreshFilesWhenViewDidAppear = YES; // 跳转到 PLPhotoViewController 后，返回需要刷新文件		
+            }
         }
     } else {
         BOOL selected = [self.selects indexOfObject:cell.contentPath] != NSNotFound;
