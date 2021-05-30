@@ -28,7 +28,6 @@
 		ACE03ACB265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACE03AC9265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.xib */; };
 		ACE211CC2659F3E800FF52EC /* PLContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE211CA2659F3E800FF52EC /* PLContentViewController.m */; };
 		ACE211CD2659F3E800FF52EC /* PLContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACE211CB2659F3E800FF52EC /* PLContentViewController.xib */; };
-		ACE211D42659F6AF00FF52EC /* PLContentLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = ACE211D32659F6AF00FF52EC /* PLContentLayout.m */; };
 		ACE56D4026594CBA0027A68A /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACE56D3926594B2A0027A68A /* WebKit.framework */; };
 		ACEA4AEB265BE99D00D141D4 /* UIImage+PLAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEA4AEA265BE99D00D141D4 /* UIImage+PLAdd.m */; };
 		ACEA4B04265BF2FD00D141D4 /* PLUniversalManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEA4B03265BF2FD00D141D4 /* PLUniversalManager.m */; };
@@ -104,8 +103,6 @@
 		ACE211C92659F3E800FF52EC /* PLContentViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLContentViewController.h; sourceTree = "<group>"; };
 		ACE211CA2659F3E800FF52EC /* PLContentViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLContentViewController.m; sourceTree = "<group>"; };
 		ACE211CB2659F3E800FF52EC /* PLContentViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PLContentViewController.xib; sourceTree = "<group>"; };
-		ACE211D22659F6AF00FF52EC /* PLContentLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLContentLayout.h; sourceTree = "<group>"; };
-		ACE211D32659F6AF00FF52EC /* PLContentLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLContentLayout.m; sourceTree = "<group>"; };
 		ACE211EC265A085A00FF52EC /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		ACE211ED265A085A00FF52EC /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		ACE56D3926594B2A0027A68A /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
@@ -278,18 +275,8 @@
 		ACE211D12659F67400FF52EC /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				ACE211D22659F6AF00FF52EC /* PLContentLayout.h */,
-				ACE211D32659F6AF00FF52EC /* PLContentLayout.m */,
-				ACE03ABF265A95C900BDC5AA /* PLContentCollectionViewCell.h */,
-				ACE03AC0265A95C900BDC5AA /* PLContentCollectionViewCell.m */,
-				ACE03AC1265A95C900BDC5AA /* PLContentCollectionViewCell.xib */,
-				ACE03AC7265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.h */,
-				ACE03AC8265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.m */,
-				ACE03AC9265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.xib */,
-				ACC29E7726612D96001E7B78 /* PLPhotoMainCellView.h */,
-				ACC29E7826612D96001E7B78 /* PLPhotoMainCellView.m */,
-				ACA6667E2662594400338972 /* PLPhotoBottomCellView.h */,
-				ACA6667F2662594400338972 /* PLPhotoBottomCellView.m */,
+				ACF759A62663C3750005322B /* General */,
+				ACF759A72663C3840005322B /* For iPad */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -310,15 +297,8 @@
 		ACE56D50265951610027A68A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				ACE211C92659F3E800FF52EC /* PLContentViewController.h */,
-				ACE211CA2659F3E800FF52EC /* PLContentViewController.m */,
-				ACE211CB2659F3E800FF52EC /* PLContentViewController.xib */,
-				ACDF2270265FE00000608CD0 /* PLPhotoViewController.h */,
-				ACDF2271265FE00000608CD0 /* PLPhotoViewController.m */,
-				ACDF2272265FE00000608CD0 /* PLPhotoViewController.xib */,
-				ACF7599F2663AEA80005322B /* PLContentPhoneViewController.h */,
-				ACF759A02663AEA80005322B /* PLContentPhoneViewController.m */,
-				ACF759A12663AEA80005322B /* PLContentPhoneViewController.xib */,
+				ACF759A42663C31B0005322B /* For iPad */,
+				ACF759A52663C32B0005322B /* For iPhone */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -439,6 +419,53 @@
 			children = (
 			);
 			path = "Third Parties";
+			sourceTree = "<group>";
+		};
+		ACF759A42663C31B0005322B /* For iPad */ = {
+			isa = PBXGroup;
+			children = (
+				ACE211C92659F3E800FF52EC /* PLContentViewController.h */,
+				ACE211CA2659F3E800FF52EC /* PLContentViewController.m */,
+				ACE211CB2659F3E800FF52EC /* PLContentViewController.xib */,
+				ACDF2270265FE00000608CD0 /* PLPhotoViewController.h */,
+				ACDF2271265FE00000608CD0 /* PLPhotoViewController.m */,
+				ACDF2272265FE00000608CD0 /* PLPhotoViewController.xib */,
+			);
+			path = "For iPad";
+			sourceTree = "<group>";
+		};
+		ACF759A52663C32B0005322B /* For iPhone */ = {
+			isa = PBXGroup;
+			children = (
+				ACF7599F2663AEA80005322B /* PLContentPhoneViewController.h */,
+				ACF759A02663AEA80005322B /* PLContentPhoneViewController.m */,
+				ACF759A12663AEA80005322B /* PLContentPhoneViewController.xib */,
+			);
+			path = "For iPhone";
+			sourceTree = "<group>";
+		};
+		ACF759A62663C3750005322B /* General */ = {
+			isa = PBXGroup;
+			children = (
+				ACE03ABF265A95C900BDC5AA /* PLContentCollectionViewCell.h */,
+				ACE03AC0265A95C900BDC5AA /* PLContentCollectionViewCell.m */,
+				ACE03AC1265A95C900BDC5AA /* PLContentCollectionViewCell.xib */,
+				ACE03AC7265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.h */,
+				ACE03AC8265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.m */,
+				ACE03AC9265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.xib */,
+				ACC29E7726612D96001E7B78 /* PLPhotoMainCellView.h */,
+				ACC29E7826612D96001E7B78 /* PLPhotoMainCellView.m */,
+			);
+			path = General;
+			sourceTree = "<group>";
+		};
+		ACF759A72663C3840005322B /* For iPad */ = {
+			isa = PBXGroup;
+			children = (
+				ACA6667E2662594400338972 /* PLPhotoBottomCellView.h */,
+				ACA6667F2662594400338972 /* PLPhotoBottomCellView.m */,
+			);
+			path = "For iPad";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -641,7 +668,6 @@
 				ACEBB7A526588A07005778FB /* NSDictionary+GYAdd.m in Sources */,
 				ACEBB7A126588A07005778FB /* NSObject+GYAdd.m in Sources */,
 				ACEBB79E26588A07005778FB /* GYFileManager.m in Sources */,
-				ACE211D42659F6AF00FF52EC /* PLContentLayout.m in Sources */,
 				ACEBB79D26588A07005778FB /* GYHTTPManager.m in Sources */,
 				ACE211CC2659F3E800FF52EC /* PLContentViewController.m in Sources */,
 				AC262505265812AA00939375 /* main.m in Sources */,
