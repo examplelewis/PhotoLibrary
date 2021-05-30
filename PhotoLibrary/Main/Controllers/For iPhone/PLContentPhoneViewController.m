@@ -11,7 +11,7 @@
 
 #import "PLContentCollectionViewCell.h"
 #import "PLContentCollectionHeaderReusableView.h"
-#import "PLPhotoViewController.h"
+#import "PLPhotoPhoneViewController.h"
 
 @interface PLContentPhoneViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
@@ -228,18 +228,22 @@
             vc.folderType = self.folderType;
             [self.navigationController pushViewController:vc animated:YES];
         } else {
-            
+            PLPhotoPhoneViewController *vc = [[PLPhotoPhoneViewController alloc] initWithNibName:@"PLPhotoPhoneViewController" bundle:nil];
+            vc.folderPath = self.folderPath;
+
+            [self.navigationController pushViewController:vc animated:YES];
+
+            self.refreshFilesWhenViewDidAppear = YES; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
         }
     } else {
         // 废纸篓目录下的文件，暂时不展示图片
         if (self.folderType != PLContentFolderTypeTrash) {
-//                PLPhotoViewController *vc = [[PLPhotoViewController alloc] initWithNibName:@"PLPhotoViewController" bundle:nil];
-//                vc.folderPath = self.folderPath;
-//                vc.currentIndex = indexPath.row;
-//
-//                [self.navigationController pushViewController:vc animated:YES];
-//
-//                self.refreshFilesWhenViewDidAppear = YES; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
+            PLPhotoPhoneViewController *vc = [[PLPhotoPhoneViewController alloc] initWithNibName:@"PLPhotoPhoneViewController" bundle:nil];
+            vc.folderPath = self.folderPath;
+
+            [self.navigationController pushViewController:vc animated:YES];
+
+            self.refreshFilesWhenViewDidAppear = YES; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
         }
     }
 }

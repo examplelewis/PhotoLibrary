@@ -11,6 +11,7 @@
 #import "PLContentViewController.h"
 #import "PLContentPhoneViewController.h"
 #import "PLPhotoViewController.h"
+#import "PLPhotoPhoneViewController.h"
 
 @interface ViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -76,6 +77,10 @@
     
     self.folders = [GYFileManager folderPathsInFolder:[GYSettingManager defaultManager].documentPath];
     self.folders = [self.folders sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES]]];
+    self.folders = [self.folders filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSString * _Nullable folderPath, NSDictionary<NSString *,id> * _Nullable bindings) {
+        return ![folderPath.lastPathComponent isEqualToString:@"~~Test"];
+    }]];
+    
     [self.tableView reloadData];
 }
 
@@ -140,11 +145,18 @@
 
 #pragma mark - Action
 - (void)barButtonItemDidPress:(UIBarButtonItem *)sender {
-    PLPhotoViewController *vc = [[PLPhotoViewController alloc] initWithNibName:@"PLPhotoViewController" bundle:nil];
-    vc.folderPath = [[GYSettingManager defaultManager] pathOfContentInDocumentFolder:@"~Game/arknights"];
-    vc.currentIndex = 0;
-    
-    [self.navigationController pushViewController:vc animated:YES];
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        PLPhotoViewController *vc = [[PLPhotoViewController alloc] initWithNibName:@"PLPhotoViewController" bundle:nil];
+        vc.folderPath = [[GYSettingManager defaultManager] pathOfContentInDocumentFolder:@"~~Test"];
+        vc.currentIndex = 0;
+        
+        [self.navigationController pushViewController:vc animated:YES];
+    } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+        PLPhotoPhoneViewController *vc = [[PLPhotoPhoneViewController alloc] initWithNibName:@"PLPhotoPhoneViewController" bundle:nil];
+        vc.folderPath = [[GYSettingManager defaultManager] pathOfContentInDocumentFolder:@"~~Test"];
+
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 

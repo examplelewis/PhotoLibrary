@@ -15,6 +15,9 @@ typedef NS_ENUM(NSUInteger, PLContentFolderType) {
 
 
 static CGFloat const PLSafeAreaBottom = 20.0f;
+static CGFloat const PLNorchPhoneSafeAreaTop = 44.0f;
+static CGFloat const PLNorchPhoneSafeAreaBottom = 34.0f;
+static CGFloat const PLNavigationBarHeight = 44.0f;
 static CGFloat const PLScrollViewIndicatorMargin = 9.0f; // 滚动条的高度+间距一共为9
 
 static CGFloat const PLPhotoMainScrollViewMarginH = 50.f;

@@ -45,6 +45,8 @@
 		ACEBB7A626588A07005778FB /* NSString+GYAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB79526588A07005778FB /* NSString+GYAdd.m */; };
 		ACF759A22663AEA80005322B /* PLContentPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF759A02663AEA80005322B /* PLContentPhoneViewController.m */; };
 		ACF759A32663AEA80005322B /* PLContentPhoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACF759A12663AEA80005322B /* PLContentPhoneViewController.xib */; };
+		ACF759B02663C4180005322B /* PLPhotoPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF759AE2663C4180005322B /* PLPhotoPhoneViewController.m */; };
+		ACF759B12663C4180005322B /* PLPhotoPhoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACF759AF2663C4180005322B /* PLPhotoPhoneViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -144,6 +146,9 @@
 		ACF7599F2663AEA80005322B /* PLContentPhoneViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLContentPhoneViewController.h; sourceTree = "<group>"; };
 		ACF759A02663AEA80005322B /* PLContentPhoneViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLContentPhoneViewController.m; sourceTree = "<group>"; };
 		ACF759A12663AEA80005322B /* PLContentPhoneViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PLContentPhoneViewController.xib; sourceTree = "<group>"; };
+		ACF759AD2663C4180005322B /* PLPhotoPhoneViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLPhotoPhoneViewController.h; sourceTree = "<group>"; };
+		ACF759AE2663C4180005322B /* PLPhotoPhoneViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLPhotoPhoneViewController.m; sourceTree = "<group>"; };
+		ACF759AF2663C4180005322B /* PLPhotoPhoneViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PLPhotoPhoneViewController.xib; sourceTree = "<group>"; };
 		DFA84B250B7AFDF508A1ACC2 /* Pods-PhotoLibrary.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoLibrary.release.xcconfig"; path = "Target Support Files/Pods-PhotoLibrary/Pods-PhotoLibrary.release.xcconfig"; sourceTree = "<group>"; };
 		F8DA00690153E25CFC113A7C /* Pods-PhotoLibrary.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoLibrary.debug.xcconfig"; path = "Target Support Files/Pods-PhotoLibrary/Pods-PhotoLibrary.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -440,6 +445,9 @@
 				ACF7599F2663AEA80005322B /* PLContentPhoneViewController.h */,
 				ACF759A02663AEA80005322B /* PLContentPhoneViewController.m */,
 				ACF759A12663AEA80005322B /* PLContentPhoneViewController.xib */,
+				ACF759AD2663C4180005322B /* PLPhotoPhoneViewController.h */,
+				ACF759AE2663C4180005322B /* PLPhotoPhoneViewController.m */,
+				ACF759AF2663C4180005322B /* PLPhotoPhoneViewController.xib */,
 			);
 			path = "For iPhone";
 			sourceTree = "<group>";
@@ -578,6 +586,7 @@
 				ACF759A32663AEA80005322B /* PLContentPhoneViewController.xib in Resources */,
 				ACE03ACB265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.xib in Resources */,
 				ACDF2274265FE00000608CD0 /* PLPhotoViewController.xib in Resources */,
+				ACF759B12663C4180005322B /* PLPhotoPhoneViewController.xib in Resources */,
 				ACE211CD2659F3E800FF52EC /* PLContentViewController.xib in Resources */,
 				AC2624FD265812A900939375 /* Main.storyboard in Resources */,
 				ACE03AC3265A95C900BDC5AA /* PLContentCollectionViewCell.xib in Resources */,
@@ -650,6 +659,7 @@
 				ACE03ACA265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.m in Sources */,
 				ACC29E7926612D96001E7B78 /* PLPhotoMainCellView.m in Sources */,
 				ACA6667A26623E7700338972 /* PLPhotoFileModel.m in Sources */,
+				ACF759B02663C4180005322B /* PLPhotoPhoneViewController.m in Sources */,
 				ACEA4B04265BF2FD00D141D4 /* PLUniversalManager.m in Sources */,
 				ACE03AC2265A95C900BDC5AA /* PLContentCollectionViewCell.m in Sources */,
 				AC2624FA265812A900939375 /* ViewController.m in Sources */,
