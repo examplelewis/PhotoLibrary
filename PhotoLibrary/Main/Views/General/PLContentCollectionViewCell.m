@@ -74,13 +74,17 @@
                         image = [UIImage sd_imageWithGIFData:data];
                     } else {
                         image = [UIImage imageWithData:data];
-                        // 压缩图片，防止爆内存
-                        if (image.size.width < 1000 && image.size.height < 1000) {
+                        if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
                             image = [image resizeScaleImage:1.0f];
-                        } else if (image.size.width < 2000 && image.size.height < 2000) {
-                            image = [image resizeScaleImage:0.8f];
-                        } else {
-                            image = [image resizeScaleImage:0.7f];
+                        } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+                            // 压缩图片，防止爆内存
+                            if (image.size.width < 1000 && image.size.height < 1000) {
+                                image = [image resizeScaleImage:1.0f];
+                            } else if (image.size.width < 2000 && image.size.height < 2000) {
+                                image = [image resizeScaleImage:0.8f];
+                            } else {
+                                image = [image resizeScaleImage:0.7f];
+                            }
                         }
                     }
                     [[SDImageCache sharedImageCache] storeImage:image forKey:contentPath completion:nil];
