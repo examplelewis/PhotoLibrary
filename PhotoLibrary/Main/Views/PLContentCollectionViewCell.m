@@ -25,6 +25,20 @@
 #pragma mark - Setter
 - (void)setContentPath:(NSString *)contentPath {
     _contentPath = [contentPath copy];
+    
+    if ([contentPath isEqualToString:@"DefaultImage"]) {
+        _isFolder = NO;
+        self.cellType = PLContentCollectionViewCellTypeNormal;
+        
+        self.folderImageView.hidden = YES;
+        self.nameLabel.hidden = NO;
+        self.nameLabel.text = @"轻点进入图片页";
+        
+        self.imageView.image = [UIImage imageNamed:@"DefaultImage"];
+        
+        return;
+    }
+    
     _isFolder = [GYFileManager contentIsFolderAtPath:contentPath];
     self.cellType = PLContentCollectionViewCellTypeNormal;
     

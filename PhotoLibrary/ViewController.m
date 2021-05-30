@@ -7,7 +7,9 @@
 
 #import "ViewController.h"
 #import <MJRefresh.h>
+
 #import "PLContentViewController.h"
+#import "PLContentPhoneViewController.h"
 #import "PLPhotoViewController.h"
 
 @interface ViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -73,6 +75,7 @@
     [self.tableView.mj_header endRefreshing];
     
     self.folders = [GYFileManager folderPathsInFolder:[GYSettingManager defaultManager].documentPath];
+    self.folders = [self.folders sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES]]];
     [self.tableView reloadData];
 }
 
@@ -106,18 +109,32 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (indexPath.section == 0) {
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         PLContentViewController *vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
-        vc.folderPath = self.folders[indexPath.row];
-        vc.folderType = PLContentFolderTypeNormal;
-        [self.navigationController pushViewController:vc animated:YES];
-    } else {
-        if (indexPath.row == 0) {
-            PLContentViewController *vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
-            vc.folderPath = [GYSettingManager defaultManager].trashFolderPath;
-            vc.folderType = PLContentFolderTypeTrash;
-            [self.navigationController pushViewController:vc animated:YES];
+        if (indexPath.section == 0) {
+            vc.folderPath = self.folders[indexPath.row];
+            vc.folderType = PLContentFolderTypeNormal;
+        } else {
+            if (indexPath.row == 0) {
+                vc.folderPath = [GYSettingManager defaultManager].trashFolderPath;
+                vc.folderType = PLContentFolderTypeTrash;
+            }
         }
+        
+        [self.navigationController pushViewController:vc animated:YES];
+    } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+        PLContentPhoneViewController *vc = [[PLContentPhoneViewController alloc] initWithNibName:@"PLContentPhoneViewController" bundle:nil];
+        if (indexPath.section == 0) {
+            vc.folderPath = self.folders[indexPath.row];
+            vc.folderType = PLContentFolderTypeNormal;
+        } else {
+            if (indexPath.row == 0) {
+                vc.folderPath = [GYSettingManager defaultManager].trashFolderPath;
+                vc.folderType = PLContentFolderTypeTrash;
+            }
+        }
+        
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 

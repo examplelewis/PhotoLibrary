@@ -44,6 +44,8 @@
 		ACEBB7A426588A07005778FB /* NSArray+GYAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB79326588A07005778FB /* NSArray+GYAdd.m */; };
 		ACEBB7A526588A07005778FB /* NSDictionary+GYAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB79426588A07005778FB /* NSDictionary+GYAdd.m */; };
 		ACEBB7A626588A07005778FB /* NSString+GYAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB79526588A07005778FB /* NSString+GYAdd.m */; };
+		ACF759A22663AEA80005322B /* PLContentPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF759A02663AEA80005322B /* PLContentPhoneViewController.m */; };
+		ACF759A32663AEA80005322B /* PLContentPhoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACF759A12663AEA80005322B /* PLContentPhoneViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -142,6 +144,9 @@
 		ACEBB79726588A07005778FB /* UIColor+GYAdd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+GYAdd.h"; sourceTree = "<group>"; };
 		ACEBB79826588A07005778FB /* NSError+GYAdd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+GYAdd.h"; sourceTree = "<group>"; };
 		ACEBB79926588A07005778FB /* NSArray+GYAdd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+GYAdd.h"; sourceTree = "<group>"; };
+		ACF7599F2663AEA80005322B /* PLContentPhoneViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLContentPhoneViewController.h; sourceTree = "<group>"; };
+		ACF759A02663AEA80005322B /* PLContentPhoneViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLContentPhoneViewController.m; sourceTree = "<group>"; };
+		ACF759A12663AEA80005322B /* PLContentPhoneViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PLContentPhoneViewController.xib; sourceTree = "<group>"; };
 		DFA84B250B7AFDF508A1ACC2 /* Pods-PhotoLibrary.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoLibrary.release.xcconfig"; path = "Target Support Files/Pods-PhotoLibrary/Pods-PhotoLibrary.release.xcconfig"; sourceTree = "<group>"; };
 		F8DA00690153E25CFC113A7C /* Pods-PhotoLibrary.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoLibrary.debug.xcconfig"; path = "Target Support Files/Pods-PhotoLibrary/Pods-PhotoLibrary.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -311,6 +316,9 @@
 				ACDF2270265FE00000608CD0 /* PLPhotoViewController.h */,
 				ACDF2271265FE00000608CD0 /* PLPhotoViewController.m */,
 				ACDF2272265FE00000608CD0 /* PLPhotoViewController.xib */,
+				ACF7599F2663AEA80005322B /* PLContentPhoneViewController.h */,
+				ACF759A02663AEA80005322B /* PLContentPhoneViewController.m */,
+				ACF759A12663AEA80005322B /* PLContentPhoneViewController.xib */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -540,6 +548,7 @@
 			files = (
 				AC262502265812AA00939375 /* LaunchScreen.storyboard in Resources */,
 				AC2624FF265812AA00939375 /* Assets.xcassets in Resources */,
+				ACF759A32663AEA80005322B /* PLContentPhoneViewController.xib in Resources */,
 				ACE03ACB265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.xib in Resources */,
 				ACDF2274265FE00000608CD0 /* PLPhotoViewController.xib in Resources */,
 				ACE211CD2659F3E800FF52EC /* PLContentViewController.xib in Resources */,
@@ -620,6 +629,7 @@
 				ACEBB7A326588A07005778FB /* NSError+GYAdd.m in Sources */,
 				AC2624F4265812A900939375 /* AppDelegate.m in Sources */,
 				ACA666802662594400338972 /* PLPhotoBottomCellView.m in Sources */,
+				ACF759A22663AEA80005322B /* PLContentPhoneViewController.m in Sources */,
 				ACEBB7A426588A07005778FB /* NSArray+GYAdd.m in Sources */,
 				ACEA4AEB265BE99D00D141D4 /* UIImage+PLAdd.m in Sources */,
 				ACEBB79F26588A07005778FB /* GYSettingManager.m in Sources */,

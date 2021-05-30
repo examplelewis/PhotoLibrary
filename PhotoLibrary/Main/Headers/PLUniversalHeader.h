@@ -8,6 +8,12 @@
 #ifndef PLUniversalHeader_h
 #define PLUniversalHeader_h
 
+typedef NS_ENUM(NSUInteger, PLContentFolderType) {
+    PLContentFolderTypeNormal,
+    PLContentFolderTypeTrash,
+};
+
+
 static CGFloat const PLSafeAreaBottom = 20.0f;
 static CGFloat const PLScrollViewIndicatorMargin = 9.0f; // 滚动条的高度+间距一共为9
 
