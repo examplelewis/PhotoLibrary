@@ -224,12 +224,12 @@
         NSString *nextFolderPath = self.folders[indexPath.row];
         if ([GYFileManager folderPathsInFolder:nextFolderPath].count > 0) {
             PLContentPhoneViewController *vc = [[PLContentPhoneViewController alloc] initWithNibName:@"PLContentPhoneViewController" bundle:nil];
-            vc.folderPath = self.folders[indexPath.row];
+            vc.folderPath = nextFolderPath;
             vc.folderType = self.folderType;
             [self.navigationController pushViewController:vc animated:YES];
         } else {
             PLPhotoPhoneViewController *vc = [[PLPhotoPhoneViewController alloc] initWithNibName:@"PLPhotoPhoneViewController" bundle:nil];
-            vc.folderPath = self.folderPath;
+            vc.folderPath = nextFolderPath;
 
             [self.navigationController pushViewController:vc animated:YES];
 
@@ -239,7 +239,7 @@
         // 废纸篓目录下的文件，暂时不展示图片
         if (self.folderType != PLContentFolderTypeTrash) {
             PLPhotoPhoneViewController *vc = [[PLPhotoPhoneViewController alloc] initWithNibName:@"PLPhotoPhoneViewController" bundle:nil];
-            vc.folderPath = self.folderPath;
+            vc.folderPath = self.folders[indexPath.row];
 
             [self.navigationController pushViewController:vc animated:YES];
 
