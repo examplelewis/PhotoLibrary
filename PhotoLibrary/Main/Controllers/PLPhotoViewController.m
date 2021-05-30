@@ -45,7 +45,7 @@
     if (self.fileModels.count == 0) {
         [self readFiles];
         [self createMainCellViews];
-        [self createBottomCellViews];
+//        [self createBottomCellViews];
     }
 }
 
@@ -85,6 +85,7 @@
     self.bottomScrollView.backgroundColor = [UIColor whiteColor];
     self.bottomScrollView.showsHorizontalScrollIndicator = YES;
     self.bottomScrollView.showsVerticalScrollIndicator = NO;
+    self.bottomScrollView.hidden = YES;
 //    self.mainScrollView.delegate = self;
 }
 
