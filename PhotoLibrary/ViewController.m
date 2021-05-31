@@ -57,7 +57,9 @@
     self.folders = @[];
     
     // UI
+#if TARGET_IPHONE_SIMULATOR
     [self setupNavigationBar];
+#endif
     [self setupTableView];
 }
 - (void)setupNavigationBar {
