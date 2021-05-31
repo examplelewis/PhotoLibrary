@@ -13,7 +13,9 @@
 #import "PLPhotoViewController.h"
 #import "PLPhotoPhoneViewController.h"
 
-@interface ViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface ViewController () <UITableViewDataSource, UITableViewDelegate> {
+    NSArray *ignoreFolders;
+}
 
 @property (nonatomic, strong) NSArray<NSString *> *folders;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
@@ -51,6 +53,7 @@
 #pragma mark - Configure
 - (void)setupUIAndData {
     // Data
+    ignoreFolders = @[@"~~Test", @"废纸篓"];
     self.folders = @[];
     
     // UI
@@ -78,7 +81,7 @@
     self.folders = [GYFileManager folderPathsInFolder:[GYSettingManager defaultManager].documentPath];
     self.folders = [self.folders sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES]]];
     self.folders = [self.folders filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSString * _Nullable folderPath, NSDictionary<NSString *,id> * _Nullable bindings) {
-        return ![folderPath.lastPathComponent isEqualToString:@"~~Test"];
+        return [self->ignoreFolders indexOfObject:folderPath.lastPathComponent] == NSNotFound;
     }]];
     
     [self.tableView reloadData];

@@ -49,7 +49,7 @@
     _preferencePath = NSSearchPathForDirectoriesInDomains(NSPreferencePanesDirectory, NSUserDomainMask, YES).firstObject;
     _tempPath = NSTemporaryDirectory();
     
-    _trashFolderPath = [self pathOfContentInCachesFolder:@"废纸篓"];
+    _trashFolderPath = [self pathOfContentInDocumentFolder:@"废纸篓"];
     NSLog(@"trashFolderPath: %@", self.trashFolderPath);
 }
 - (void)updatePreferences {
