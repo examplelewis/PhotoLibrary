@@ -99,7 +99,7 @@
     self.flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
     
     // Folder Item Size
-    NSInteger folderColumnsPerRow = 4;
+    NSInteger folderColumnsPerRow = 3;
     CGFloat folderItemWidth = (kScreenWidth - (folderColumnsPerRow + 1) * PLRowColumnSpacing) / folderColumnsPerRow;
     self.folderItemSize = CGSizeMake(floorf(folderItemWidth), floorf(folderItemWidth));
 }
