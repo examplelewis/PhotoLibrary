@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) UIEdgeInsets flowLayoutSectionInset;
 @property (nonatomic, assign) BOOL directlyJumpPhoto;
 
+@property (nonatomic, strong) NSSortDescriptor *fileAscendingSortDescriptor;
+
 #pragma mark - Lifecycle
 + (instancetype)defaultManager;
 
