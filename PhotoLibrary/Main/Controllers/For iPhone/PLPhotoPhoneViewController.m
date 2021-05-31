@@ -234,8 +234,8 @@
         }
         
         NSInteger currentIndex = roundf(self.scrollView.contentOffset.x / kScreenWidth);
-        if (index == currentIndex) {
-            [SVProgressHUD showErrorWithStatus:@"当前正在该页"];
+        if ((index - 1) == currentIndex) {
+            [SVProgressHUD showInfoWithStatus:@"当前正在该页"];
             return;
         }
         
