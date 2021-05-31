@@ -306,6 +306,15 @@
 - (IBAction)bottomButtonPressed:(UIButton *)sender {
     
 }
+- (IBAction)infoButtonPressed:(UIButton *)sender {
+    NSInteger index = roundf(self.mainScrollView.contentOffset.x / mainScrollViewWidth);
+    PLPhotoFileModel *fileModel = self.fileModels[index];
+    CGSize imageSize = [PLUniversalManager imageSizeOfFilePath:fileModel.filePath];
+    NSString *fileSize = [GYFileManager fileSizeDescriptionAtPath:fileModel.filePath];
+    
+    [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"%@\n%@", NSStringFromCGSize(imageSize), fileSize]];
+}
+
 - (void)mainScrollViewOneTapGRPressed:(UIGestureRecognizer *)sender {
     NSInteger index = roundf(self.mainScrollView.contentOffset.x / mainScrollViewWidth);
     CGPoint point = [sender locationInView:self.mainScrollView];

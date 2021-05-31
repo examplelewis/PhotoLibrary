@@ -60,8 +60,9 @@
 - (void)setupNavigationBar {
     UIBarButtonItem *deleteBBI = [[UIBarButtonItem alloc] initWithTitle:@"删除" style:UIBarButtonItemStylePlain target:self action:@selector(deleteBarButtonItemPressed:)];
     UIBarButtonItem *restoreBBI = [[UIBarButtonItem alloc] initWithTitle:@"撤销" style:UIBarButtonItemStylePlain target:self action:@selector(restoreBarButtonItemPressed:)];
+    UIBarButtonItem *infoBBI = [[UIBarButtonItem alloc] initWithTitle:@"信息" style:UIBarButtonItemStylePlain target:self action:@selector(infoBarButtonItemPressed:)];
     
-    self.navigationItem.rightBarButtonItems = @[deleteBBI, restoreBBI];
+    self.navigationItem.rightBarButtonItems = @[deleteBBI, restoreBBI, infoBBI];
 }
 - (void)setupScrollView {
     self.scrollView.frame = CGRectMake(0, PLNorchPhoneSafeAreaTop + PLNavigationBarHeight, kScreenWidth, scrollViewHeight);
@@ -158,7 +159,7 @@
 }
 
 #pragma mark - Actions
-- (void)restoreBarButtonItemPressed:(UIButton *)sender {
+- (void)restoreBarButtonItemPressed:(UIBarButtonItem *)sender {
     if (self.deleteModels.count == 0) {
         self.title = self.folderPath.lastPathComponent;
         
@@ -186,7 +187,7 @@
         [self scrollViewScrollToIndex:scrollIndex];
     }
 }
-- (void)deleteBarButtonItemPressed:(UIButton *)sender {
+- (void)deleteBarButtonItemPressed:(UIBarButtonItem *)sender {
     if (self.fileModels.count == 0) {
         return;
     }
@@ -202,6 +203,14 @@
         index = self.fileModels.count - 1;
     }
     [self scrollViewScrollToIndex:index]; // 跳转到下一张图片，但是因为之前删除了一张图片，所以index不变
+}
+- (void)infoBarButtonItemPressed:(UIBarButtonItem *)sender {
+    NSInteger index = roundf(self.scrollView.contentOffset.x / kScreenWidth);
+    PLPhotoFileModel *fileModel = self.fileModels[index];
+    CGSize imageSize = [PLUniversalManager imageSizeOfFilePath:fileModel.filePath];
+    NSString *fileSize = [GYFileManager fileSizeDescriptionAtPath:fileModel.filePath];
+    
+    [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"%@\n%@", NSStringFromCGSize(imageSize), fileSize]];
 }
 - (void)scrollViewOneTapGRPressed:(UIGestureRecognizer *)sender {
     NSInteger index = roundf(self.scrollView.contentOffset.x / kScreenWidth);
