@@ -92,6 +92,7 @@
     for (NSInteger i = 0; i < self.fileModels.count; i++) {
         PLPhotoMainCellView *cellView = [[PLPhotoMainCellView alloc] initWithFrame:CGRectMake(i * kScreenWidth, 0, kScreenWidth, scrollViewHeight)];
         cellView.tag = i + 1000;
+        cellView.plIndex = self.fileModels[i].plIndex;
         
         [self.cellViews addObject:cellView];
         [self.scrollView addSubview:cellView];
@@ -106,7 +107,7 @@
 - (void)refreshMainCellViews {
     for (NSInteger i = 0; i < self.deleteModels.count; i++) {
         NSArray<PLPhotoMainCellView *> *cellViews = [self.cellViews filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PLPhotoMainCellView * _Nullable cellView, NSDictionary<NSString *,id> * _Nullable bindings) {
-            return cellView.fileModel.plIndex == self.deleteModels[i].plIndex;
+            return cellView.plIndex == self.deleteModels[i].plIndex;
         }]];
         if (cellViews.count > 0) {
             PLPhotoMainCellView *cellView = cellViews.firstObject;
@@ -116,7 +117,7 @@
 
     for (NSInteger i = 0; i < self.fileModels.count; i++) {
         NSArray<PLPhotoMainCellView *> *cellViews = [self.cellViews filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PLPhotoMainCellView * _Nullable cellView, NSDictionary<NSString *,id> * _Nullable bindings) {
-            return cellView.fileModel.plIndex == self.fileModels[i].plIndex;
+            return cellView.plIndex == self.fileModels[i].plIndex;
         }]];
         if (cellViews.count > 0) {
             PLPhotoMainCellView *cellView = cellViews.firstObject;

@@ -103,6 +103,7 @@
     for (NSInteger i = 0; i < self.fileModels.count; i++) {
         PLPhotoMainCellView *cellView = [[PLPhotoMainCellView alloc] initWithFrame:CGRectMake(i * mainScrollViewWidth, 0, mainScrollViewWidth, mainScrollViewHeight)];
         cellView.tag = i + 1000;
+        cellView.plIndex = self.fileModels[i].plIndex;
         
         [self.mainCellViews addObject:cellView];
         [self.mainScrollView addSubview:cellView];
@@ -126,6 +127,7 @@
         
         PLPhotoBottomCellView *cellView = [[PLPhotoBottomCellView alloc] initWithFrame:CGRectMake(offsetX, 0, cellViewWidth, PLPhotoBottomScrollViewHeight)];
         cellView.tag = i + 1000;
+        cellView.plIndex = self.fileModels[i].plIndex;
         
         offsetX += cellViewWidth;
         
@@ -147,7 +149,7 @@
 - (void)refreshMainCellViews {
     for (NSInteger i = 0; i < self.deleteModels.count; i++) {
         NSArray<PLPhotoMainCellView *> *cellViews = [self.mainCellViews filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PLPhotoMainCellView * _Nullable cellView, NSDictionary<NSString *,id> * _Nullable bindings) {
-            return cellView.fileModel.plIndex == self.deleteModels[i].plIndex;
+            return cellView.plIndex == self.deleteModels[i].plIndex;
         }]];
         if (cellViews.count > 0) {
             PLPhotoMainCellView *cellView = cellViews.firstObject;
@@ -157,7 +159,7 @@
 
     for (NSInteger i = 0; i < self.fileModels.count; i++) {
         NSArray<PLPhotoMainCellView *> *cellViews = [self.mainCellViews filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PLPhotoMainCellView * _Nullable cellView, NSDictionary<NSString *,id> * _Nullable bindings) {
-            return cellView.fileModel.plIndex == self.fileModels[i].plIndex;
+            return cellView.plIndex == self.fileModels[i].plIndex;
         }]];
         if (cellViews.count > 0) {
             PLPhotoMainCellView *cellView = cellViews.firstObject;
@@ -174,7 +176,7 @@
 - (void)refreshBottomCellViews {
     for (NSInteger i = 0; i < self.deleteModels.count; i++) {
         NSArray<PLPhotoBottomCellView *> *cellViews = [self.bottomCellViews filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PLPhotoBottomCellView * _Nullable cellView, NSDictionary<NSString *,id> * _Nullable bindings) {
-            return cellView.fileModel.plIndex == self.deleteModels[i].plIndex;
+            return cellView.plIndex == self.deleteModels[i].plIndex;
         }]];
         if (cellViews.count > 0) {
             PLPhotoBottomCellView *cellView = cellViews.firstObject;
@@ -185,7 +187,7 @@
     CGFloat offsetX = 0;
     for (NSInteger i = 0; i < self.fileModels.count; i++) {
         NSArray<PLPhotoBottomCellView *> *cellViews = [self.bottomCellViews filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PLPhotoBottomCellView * _Nullable cellView, NSDictionary<NSString *,id> * _Nullable bindings) {
-            return cellView.fileModel.plIndex == self.fileModels[i].plIndex;
+            return cellView.plIndex == self.fileModels[i].plIndex;
         }]];
         
         if (cellViews.count > 0) {
