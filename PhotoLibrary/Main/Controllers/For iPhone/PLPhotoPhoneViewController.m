@@ -61,8 +61,9 @@
     UIBarButtonItem *deleteBBI = [[UIBarButtonItem alloc] initWithTitle:@"删除" style:UIBarButtonItemStylePlain target:self action:@selector(deleteBarButtonItemPressed:)];
     UIBarButtonItem *restoreBBI = [[UIBarButtonItem alloc] initWithTitle:@"撤销" style:UIBarButtonItemStylePlain target:self action:@selector(restoreBarButtonItemPressed:)];
     UIBarButtonItem *infoBBI = [[UIBarButtonItem alloc] initWithTitle:@"信息" style:UIBarButtonItemStylePlain target:self action:@selector(infoBarButtonItemPressed:)];
+    UIBarButtonItem *jumpToBBI = [[UIBarButtonItem alloc] initWithTitle:@"跳转至" style:UIBarButtonItemStylePlain target:self action:@selector(jumpToBarButtonItemPressed:)];
     
-    self.navigationItem.rightBarButtonItems = @[deleteBBI, restoreBBI, infoBBI];
+    self.navigationItem.rightBarButtonItems = @[deleteBBI, restoreBBI, infoBBI, jumpToBBI];
 }
 - (void)setupScrollView {
     self.scrollView.frame = CGRectMake(0, PLNorchPhoneSafeAreaTop + PLNavigationBarHeight, kScreenWidth, scrollViewHeight);
@@ -211,6 +212,38 @@
     NSString *fileSize = [GYFileManager fileSizeDescriptionAtPath:fileModel.filePath];
     
     [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"%@\n%@", NSStringFromCGSize(imageSize), fileSize]];
+}
+- (void)jumpToBarButtonItemPressed:(UIBarButtonItem *)sender {
+    UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"提示" message:@"请输入跳转的 index" preferredStyle:UIAlertControllerStyleAlert];
+    [ac addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"输入的 index 从 1 开始";
+        textField.keyboardType = UIKeyboardTypeNumberPad;
+    }];
+    @weakify(self);
+    [ac addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        if (ac.textFields.count == 0) {
+            [SVProgressHUD showErrorWithStatus:@"UIAlertController 内部出错"];
+            return;
+        }
+        
+        @strongify(self);
+        NSInteger index = [((UITextField *)ac.textFields.firstObject).text integerValue];
+        if (index <= 0 || index > self.fileModels.count) {
+            [SVProgressHUD showErrorWithStatus:@"输入的 index 越界"];
+            return;
+        }
+        
+        NSInteger currentIndex = roundf(self.scrollView.contentOffset.x / kScreenWidth);
+        if (index == currentIndex) {
+            [SVProgressHUD showErrorWithStatus:@"当前正在该页"];
+            return;
+        }
+        
+        [self scrollViewScrollToIndex:index - 1];
+    }]];
+    [ac addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+
+    [self presentViewController:ac animated:true completion:nil];
 }
 - (void)scrollViewOneTapGRPressed:(UIGestureRecognizer *)sender {
     NSInteger index = roundf(self.scrollView.contentOffset.x / kScreenWidth);

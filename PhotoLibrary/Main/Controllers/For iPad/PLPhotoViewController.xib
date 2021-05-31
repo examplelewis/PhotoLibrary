@@ -11,6 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PLPhotoViewController">
             <connections>
                 <outlet property="bottomScrollView" destination="cG2-1w-uBf" id="EGn-zO-wtC"/>
+                <outlet property="indicatorLabel" destination="1qA-Km-59m" id="61t-pI-3b4"/>
                 <outlet property="mainScrollView" destination="hlw-BT-tEx" id="F5X-3L-jVh"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -70,7 +71,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="trL-mG-bCZ">
-                            <rect key="frame" x="0.0" y="292" width="50" height="100"/>
+                            <rect key="frame" x="0.0" y="332" width="50" height="100"/>
                             <color key="backgroundColor" systemColor="systemBlueColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="100" id="scR-E9-Hic"/>
@@ -82,21 +83,46 @@
                                 <action selector="infoButtonPressed:" destination="-1" eventType="touchUpInside" id="I0K-td-fpt"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jRU-TD-6fb">
+                            <rect key="frame" x="0.0" y="227" width="50" height="100"/>
+                            <color key="backgroundColor" systemColor="systemBlueColor"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="100" id="8I7-xj-Wv5"/>
+                            </constraints>
+                            <state key="normal" title="跳转">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <connections>
+                                <action selector="jumpToButtonPressed:" destination="-1" eventType="touchUpInside" id="6Tc-qk-aOQ"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1qA-Km-59m">
+                            <rect key="frame" x="0.0" y="44" width="50" height="20.5"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
-                        <constraint firstItem="PFP-Qc-SZ0" firstAttribute="top" secondItem="trL-mG-bCZ" secondAttribute="bottom" constant="60" id="5xJ-cl-djq"/>
+                        <constraint firstItem="PFP-Qc-SZ0" firstAttribute="top" secondItem="trL-mG-bCZ" secondAttribute="bottom" constant="20" id="5xJ-cl-djq"/>
+                        <constraint firstItem="1qA-Km-59m" firstAttribute="top" secondItem="EEv-N7-qgk" secondAttribute="top" constant="44" id="9st-0M-zsY"/>
                         <constraint firstItem="PFP-Qc-SZ0" firstAttribute="centerY" secondItem="EEv-N7-qgk" secondAttribute="centerY" id="A9F-YH-fdf"/>
                         <constraint firstAttribute="trailing" secondItem="PFP-Qc-SZ0" secondAttribute="trailing" id="DaQ-WZ-S00"/>
                         <constraint firstItem="trL-mG-bCZ" firstAttribute="leading" secondItem="EEv-N7-qgk" secondAttribute="leading" id="DmZ-wD-UKQ"/>
                         <constraint firstAttribute="trailing" secondItem="NFN-hH-zY3" secondAttribute="trailing" id="FF0-rF-EZG"/>
                         <constraint firstItem="PFP-Qc-SZ0" firstAttribute="leading" secondItem="EEv-N7-qgk" secondAttribute="leading" id="JtI-lN-xSq"/>
                         <constraint firstItem="V9l-Ye-dKz" firstAttribute="top" secondItem="NFN-hH-zY3" secondAttribute="bottom" constant="20" id="KfD-uM-L60"/>
+                        <constraint firstAttribute="trailing" secondItem="1qA-Km-59m" secondAttribute="trailing" id="MMh-6L-JG3"/>
                         <constraint firstAttribute="width" constant="50" id="PGn-Qb-bX7"/>
+                        <constraint firstAttribute="trailing" secondItem="jRU-TD-6fb" secondAttribute="trailing" id="PxZ-1B-IHd"/>
                         <constraint firstItem="NFN-hH-zY3" firstAttribute="top" secondItem="PFP-Qc-SZ0" secondAttribute="bottom" constant="5" id="X7H-lD-2S5"/>
                         <constraint firstItem="V9l-Ye-dKz" firstAttribute="leading" secondItem="EEv-N7-qgk" secondAttribute="leading" id="YcR-hD-LEo"/>
+                        <constraint firstItem="1qA-Km-59m" firstAttribute="leading" secondItem="EEv-N7-qgk" secondAttribute="leading" id="b2v-7u-WZi"/>
+                        <constraint firstItem="jRU-TD-6fb" firstAttribute="leading" secondItem="EEv-N7-qgk" secondAttribute="leading" id="gcF-go-4nc"/>
                         <constraint firstAttribute="trailing" secondItem="V9l-Ye-dKz" secondAttribute="trailing" id="nAc-UB-8eE"/>
                         <constraint firstItem="NFN-hH-zY3" firstAttribute="leading" secondItem="EEv-N7-qgk" secondAttribute="leading" id="osC-O7-wo0"/>
+                        <constraint firstItem="trL-mG-bCZ" firstAttribute="top" secondItem="jRU-TD-6fb" secondAttribute="bottom" constant="5" id="yfd-JU-WeK"/>
                         <constraint firstAttribute="trailing" secondItem="trL-mG-bCZ" secondAttribute="trailing" id="ztO-tf-czx"/>
                     </constraints>
                 </view>
@@ -156,7 +182,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ed-bd-m8k">
-                            <rect key="frame" x="0.0" y="292" width="50" height="100"/>
+                            <rect key="frame" x="0.0" y="332" width="50" height="100"/>
                             <color key="backgroundColor" systemColor="systemBlueColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="100" id="Fek-iK-s9e"/>
@@ -166,6 +192,19 @@
                             </state>
                             <connections>
                                 <action selector="infoButtonPressed:" destination="-1" eventType="touchUpInside" id="Wvr-TA-bdK"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TMt-6t-kar">
+                            <rect key="frame" x="0.0" y="227" width="50" height="100"/>
+                            <color key="backgroundColor" systemColor="systemBlueColor"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="100" id="AIF-UF-600"/>
+                            </constraints>
+                            <state key="normal" title="跳转">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <connections>
+                                <action selector="jumpToButtonPressed:" destination="-1" eventType="touchUpInside" id="7yJ-Vf-Ya1"/>
                             </connections>
                         </button>
                     </subviews>
@@ -181,11 +220,14 @@
                         <constraint firstItem="Mki-cH-sIO" firstAttribute="leading" secondItem="9Nf-MS-STl" secondAttribute="leading" id="d5f-Ji-WBG"/>
                         <constraint firstItem="oeJ-yg-LAs" firstAttribute="top" secondItem="9Nf-MS-STl" secondAttribute="top" constant="44" id="dRT-7n-yKc"/>
                         <constraint firstItem="Mki-cH-sIO" firstAttribute="centerY" secondItem="9Nf-MS-STl" secondAttribute="centerY" id="f7M-Cp-IO2"/>
-                        <constraint firstItem="Mki-cH-sIO" firstAttribute="top" secondItem="7ed-bd-m8k" secondAttribute="bottom" constant="60" id="h0d-7g-rKI"/>
+                        <constraint firstItem="Mki-cH-sIO" firstAttribute="top" secondItem="7ed-bd-m8k" secondAttribute="bottom" constant="20" id="h0d-7g-rKI"/>
                         <constraint firstAttribute="trailing" secondItem="oeJ-yg-LAs" secondAttribute="trailing" id="ht4-a0-zTS"/>
                         <constraint firstItem="oeJ-yg-LAs" firstAttribute="leading" secondItem="9Nf-MS-STl" secondAttribute="leading" id="kEt-Ip-SjI"/>
                         <constraint firstAttribute="trailing" secondItem="Mki-cH-sIO" secondAttribute="trailing" id="mGH-P5-Zka"/>
+                        <constraint firstItem="7ed-bd-m8k" firstAttribute="top" secondItem="TMt-6t-kar" secondAttribute="bottom" constant="5" id="mK5-3w-IMD"/>
                         <constraint firstItem="0RB-7B-OjQ" firstAttribute="top" secondItem="Mki-cH-sIO" secondAttribute="bottom" constant="5" id="oS9-u9-3fV"/>
+                        <constraint firstItem="TMt-6t-kar" firstAttribute="leading" secondItem="9Nf-MS-STl" secondAttribute="leading" id="pPx-R9-mWO"/>
+                        <constraint firstAttribute="trailing" secondItem="TMt-6t-kar" secondAttribute="trailing" id="q3v-Ql-y2h"/>
                         <constraint firstItem="Nod-hM-VjB" firstAttribute="top" secondItem="0RB-7B-OjQ" secondAttribute="bottom" constant="20" id="rDC-9p-jhS"/>
                     </constraints>
                 </view>

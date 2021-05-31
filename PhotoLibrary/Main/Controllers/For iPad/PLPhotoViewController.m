@@ -17,6 +17,8 @@
 @property (nonatomic, strong) NSMutableArray<PLPhotoFileModel *> *fileModels;
 @property (nonatomic, strong) NSMutableArray<PLPhotoFileModel *> *deleteModels;
 
+@property (strong, nonatomic) IBOutlet UILabel *indicatorLabel;
+
 @property (nonatomic, strong) NSMutableArray<PLPhotoMainCellView *> *mainCellViews;
 @property (nonatomic, strong) IBOutlet UIScrollView *mainScrollView;
 
@@ -98,6 +100,8 @@
     for (NSInteger i = 0; i < files.count; i++) {
         [self.fileModels addObject:[PLPhotoFileModel fileModelWithFilePath:files[i] plIndex:i]];
     }
+    
+    self.indicatorLabel.text = [NSString stringWithFormat:@"%ld", self.fileModels.count];
 }
 - (void)createMainCellViews {
     for (NSInteger i = 0; i < self.fileModels.count; i++) {
@@ -210,6 +214,8 @@
 
 #pragma mark - MainScrollView
 - (void)mainScrollViewScrollToIndex:(NSInteger)index {
+    self.indicatorLabel.text = [NSString stringWithFormat:@"%ld\n%ld", index + 1, self.fileModels.count];
+    
     NSInteger refreshStart = index - PLPhotoMainScrollViewPreloadCountPerSide;
     NSInteger refreshEnd = index + PLPhotoMainScrollViewPreloadCountPerSide;
     if (refreshStart < 0) {
@@ -262,6 +268,8 @@
 }
 - (IBAction)restoreButtonPressed:(UIButton *)sender {
     if (self.deleteModels.count == 0) {
+        self.indicatorLabel.text = @"0";
+        
         return;
     }
     
@@ -313,6 +321,38 @@
     NSString *fileSize = [GYFileManager fileSizeDescriptionAtPath:fileModel.filePath];
     
     [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"%@\n%@", NSStringFromCGSize(imageSize), fileSize]];
+}
+- (IBAction)jumpToButtonPressed:(UIButton *)sender {
+    UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"提示" message:@"请输入跳转的 index" preferredStyle:UIAlertControllerStyleAlert];
+    [ac addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"输入的 index 从 1 开始";
+        textField.keyboardType = UIKeyboardTypeNumberPad;
+    }];
+    @weakify(self);
+    [ac addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        if (ac.textFields.count == 0) {
+            [SVProgressHUD showErrorWithStatus:@"UIAlertController 内部出错"];
+            return;
+        }
+        
+        @strongify(self);
+        NSInteger index = [((UITextField *)ac.textFields.firstObject).text integerValue];
+        if (index <= 0 || index > self.fileModels.count) {
+            [SVProgressHUD showErrorWithStatus:@"输入的 index 越界"];
+            return;
+        }
+        
+        NSInteger currentIndex = roundf(self.mainScrollView.contentOffset.x / self->mainScrollViewWidth);
+        if (index == currentIndex) {
+            [SVProgressHUD showErrorWithStatus:@"当前正在该页"];
+            return;
+        }
+        
+        [self mainScrollViewScrollToIndex:index - 1];
+    }]];
+    [ac addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+
+    [self presentViewController:ac animated:true completion:nil];
 }
 
 - (void)mainScrollViewOneTapGRPressed:(UIGestureRecognizer *)sender {
