@@ -226,6 +226,7 @@
             PLContentPhoneViewController *vc = [[PLContentPhoneViewController alloc] initWithNibName:@"PLContentPhoneViewController" bundle:nil];
             vc.folderPath = nextFolderPath;
             vc.folderType = self.folderType;
+            
             [self.navigationController pushViewController:vc animated:YES];
         } else {
             PLPhotoPhoneViewController *vc = [[PLPhotoPhoneViewController alloc] initWithNibName:@"PLPhotoPhoneViewController" bundle:nil];

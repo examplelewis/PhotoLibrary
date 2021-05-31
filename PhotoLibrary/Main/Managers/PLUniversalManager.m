@@ -24,6 +24,7 @@
     if (self) {
         _rowColumnSpacing = PLRowColumnSpacing;
         _columnsPerRow = PLColumnsPerRow;
+        _directlyJumpPhoto = NO; // 默认不是直接跳转到图片页
     }
     
     return self;
@@ -44,6 +45,15 @@
     _columnsPerRow = columnsPerRow;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:PLColumnPerRowSliderValueChanged object:nil];
+}
+- (void)setDirectlyJumpPhoto:(BOOL)directlyJumpPhoto {
+    if (_directlyJumpPhoto == directlyJumpPhoto) {
+        return;
+    }
+    
+    _directlyJumpPhoto = directlyJumpPhoto;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:PLJumpSwitchValueChanged object:nil];
 }
 
 #pragma mark - File Ops

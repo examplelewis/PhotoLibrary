@@ -97,13 +97,18 @@
                     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
                         image = [image resizeScaleImage:1.0f];
                     } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-                        // 压缩图片，防止爆内存
-                        if (image.size.width < 1000 && image.size.height < 1000) {
+                        if ([PLUniversalManager defaultManager].directlyJumpPhoto) {
+                            // 直接跳转到图片页的，因为没有使用列表页的缓存，并且图片页使用ScrollView，没有内存问题，因此使用原尺寸大小
                             image = [image resizeScaleImage:1.0f];
-                        } else if (image.size.width < 2000 && image.size.height < 2000) {
-                            image = [image resizeScaleImage:0.8f];
                         } else {
-                            image = [image resizeScaleImage:0.7f];
+                            // 压缩图片，防止爆内存
+                            if (image.size.width < 1000 && image.size.height < 1000) {
+                                image = [image resizeScaleImage:1.0f];
+                            } else if (image.size.width < 2000 && image.size.height < 2000) {
+                                image = [image resizeScaleImage:0.8f];
+                            } else {
+                                image = [image resizeScaleImage:0.7f];
+                            }
                         }
                     }
                 }

@@ -17,7 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) CGFloat rowColumnSpacing;
 @property (nonatomic, assign) NSInteger columnsPerRow;
-@property(nonatomic, assign) UIEdgeInsets flowLayoutSectionInset;
+@property (nonatomic, assign) UIEdgeInsets flowLayoutSectionInset;
+@property (nonatomic, assign) BOOL directlyJumpPhoto;
 
 #pragma mark - Lifecycle
 + (instancetype)defaultManager;

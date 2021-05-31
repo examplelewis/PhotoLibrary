@@ -22,6 +22,7 @@
 @property (nonatomic, strong) UIBarButtonItem *sliderBBI;
 @property (nonatomic, strong) UIBarButtonItem *deleteBBI;
 @property (nonatomic, strong) UIBarButtonItem *allBBI;
+@property (nonatomic, strong) UIBarButtonItem *jumpSwitchBBI; // 是否直接跳转到图片页
 
 @property (nonatomic, strong) UICollectionViewFlowLayout *flowLayout;
 @property (nonatomic, assign) CGSize folderItemSize;
@@ -84,6 +85,7 @@
 }
 - (void)setupNotifications {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(columnPerRowSliderValueChanged:) name:PLColumnPerRowSliderValueChanged object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jumpSwitchValueChanged:) name:PLJumpSwitchValueChanged object:nil];
 }
 - (void)setupUIAndData {
     // Data
@@ -124,11 +126,19 @@
     [sliderView addSubview:slider];
     self.sliderBBI = [[UIBarButtonItem alloc] initWithCustomView:sliderView];
     
+    UIView *jumpSwitchView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 47, 44)];
+    UISwitch *jumpSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(0, 6.5, 47, 31)];
+    jumpSwitch.tag = 100;
+    jumpSwitch.on = [PLUniversalManager defaultManager].directlyJumpPhoto;
+    [jumpSwitch addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
+    [jumpSwitchView addSubview:jumpSwitch];
+    self.jumpSwitchBBI = [[UIBarButtonItem alloc] initWithCustomView:jumpSwitchView];
+    
     [self setupNavigationBarItems];
 }
 - (void)setupNavigationBarItems {
     if (self.folderType == PLContentFolderTypeNormal) {
-        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.trashBBI, self.sliderBBI, self.allBBI];
+        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.trashBBI, self.sliderBBI, self.allBBI, self.jumpSwitchBBI];
     } else {
         self.navigationItem.rightBarButtonItems = @[self.editBBI, self.restoreBBI, self.sliderBBI, self.allBBI, self.deleteBBI];
     }
@@ -300,10 +310,23 @@
     PLContentCollectionViewCell *cell = (PLContentCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     if (cell.cellType == PLContentCollectionViewCellTypeNormal) {
         if (cell.isFolder) {
-            PLContentViewController *vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
-            vc.folderPath = self.folders[indexPath.row];
-            vc.folderType = self.folderType;
-            [self.navigationController pushViewController:vc animated:YES];
+            NSString *nextFolderPath = self.folders[indexPath.row];
+            // 如果一个文件都没有，那么即便打开了directlyJumpPhoto开关，也跳转文件夹列表
+            if ([PLUniversalManager defaultManager].directlyJumpPhoto && [GYFileManager filePathsInFolder:nextFolderPath].count > 0) {
+                PLPhotoViewController *vc = [[PLPhotoViewController alloc] initWithNibName:@"PLPhotoViewController" bundle:nil];
+                vc.folderPath = nextFolderPath;
+                vc.currentIndex = 0;
+                
+                [self.navigationController pushViewController:vc animated:YES];
+                
+                self.refreshFilesWhenViewDidAppear = YES; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
+            } else {
+                PLContentViewController *vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
+                vc.folderPath = nextFolderPath;
+                vc.folderType = self.folderType;
+                
+                [self.navigationController pushViewController:vc animated:YES];
+            }
         } else {
             // 废纸篓目录下的文件，暂时不展示图片
             if (self.folderType != PLContentFolderTypeTrash) {
@@ -466,6 +489,9 @@
     [self setupCollectionViewFlowLayout];
     [self.collectionView reloadData];
 }
+- (void)switchValueChanged:(StepSlider *)sender {
+    [PLUniversalManager defaultManager].directlyJumpPhoto = ![PLUniversalManager defaultManager].directlyJumpPhoto;
+}
 
 #pragma mark - Notifications
 - (void)columnPerRowSliderValueChanged:(NSNotification *)sender {
@@ -476,6 +502,11 @@
     // 更新flowLayout后刷新collectionView
     [self setupCollectionViewFlowLayout];
     [self.collectionView reloadData];
+}
+- (void)jumpSwitchValueChanged:(NSNotification *)sender {
+    UIView *jumpSwitchView = self.jumpSwitchBBI.customView;
+    UISwitch *jumpSwitch = (UISwitch *)[jumpSwitchView viewWithTag:100];
+    jumpSwitch.on = [PLUniversalManager defaultManager].directlyJumpPhoto;
 }
 
 @end
