@@ -127,7 +127,7 @@
 #pragma mark - Refresh
 - (void)refreshFiles {
     self.folders = [GYFileManager folderPathsInFolder:self.folderPath];
-    self.folders = [self.folders sortedArrayUsingDescriptors:@[[PLUniversalManager defaultManager].fileAscendingSortDescriptor]];
+    self.folders = [self.folders sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES]]];
     NSArray *imageFiles = [GYFileManager filePathsInFolder:self.folderPath extensions:[GYSettingManager defaultManager].mimeImageTypes];
     if (imageFiles.count > 0) {
         self.files = @[@"DefaultImage"];

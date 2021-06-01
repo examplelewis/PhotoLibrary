@@ -189,9 +189,9 @@
 #pragma mark - Refresh
 - (void)refreshFiles {
     self.folders = [GYFileManager folderPathsInFolder:self.folderPath];
-    self.folders = [self.folders sortedArrayUsingDescriptors:@[[PLUniversalManager defaultManager].fileAscendingSortDescriptor]];
+    self.folders = [self.folders sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES]]];
     self.files = [GYFileManager filePathsInFolder:self.folderPath extensions:[GYSettingManager defaultManager].mimeImageTypes];
-    self.files = [self.files sortedArrayUsingDescriptors:@[[PLUniversalManager defaultManager].fileAscendingSortDescriptor]];
+    self.files = [self.files sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES]]];
     self.bothFoldersAndFiles = (self.folders.count > 0 && self.files.count > 0);
     
     [self setupTitle];

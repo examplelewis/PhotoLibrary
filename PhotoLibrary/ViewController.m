@@ -81,7 +81,7 @@
     [self.tableView.mj_header endRefreshing];
     
     self.folders = [GYFileManager folderPathsInFolder:[GYSettingManager defaultManager].documentPath];
-    self.folders = [self.folders sortedArrayUsingDescriptors:@[[PLUniversalManager defaultManager].fileAscendingSortDescriptor]];
+    self.folders = [self.folders sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES]]];
     self.folders = [self.folders filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSString * _Nullable folderPath, NSDictionary<NSString *,id> * _Nullable bindings) {
         return [self->ignoreFolders indexOfObject:folderPath.lastPathComponent] == NSNotFound;
     }]];
