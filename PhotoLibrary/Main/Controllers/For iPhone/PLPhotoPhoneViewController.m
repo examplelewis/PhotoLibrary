@@ -136,11 +136,13 @@
 
 #pragma mark - MainScrollView
 - (void)scrollViewScrollToIndex:(NSInteger)index {
-    if (self.fileModels.count  == 0) {
+    if (self.fileModels.count == 0) {
+        self.title = self.folderPath.lastPathComponent;
+        
         return;
+    } else {
+        self.title = [NSString stringWithFormat:@"%@(%ld/%ld)", self.folderPath.lastPathComponent, index + 1, self.fileModels.count];
     }
-    
-    self.title = [NSString stringWithFormat:@"%@(%ld/%ld)", self.folderPath.lastPathComponent, index + 1, self.fileModels.count];
     
     NSInteger refreshStart = index - PLPhotoMainScrollViewPreloadCountPerSide;
     NSInteger refreshEnd = index + PLPhotoMainScrollViewPreloadCountPerSide;
@@ -188,8 +190,6 @@
 }
 - (void)deleteBarButtonItemPressed:(UIBarButtonItem *)sender {
     if (self.fileModels.count == 0) {
-        self.title = self.folderPath.lastPathComponent;
-        
         return;
     }
     

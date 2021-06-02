@@ -214,7 +214,13 @@
 
 #pragma mark - MainScrollView
 - (void)mainScrollViewScrollToIndex:(NSInteger)index {
-    self.indicatorLabel.text = [NSString stringWithFormat:@"%ld\n%ld", index + 1, self.fileModels.count];
+    if (self.fileModels.count == 0) {
+        self.indicatorLabel.text = @"0";
+        
+        return;
+    } else {
+        self.indicatorLabel.text = [NSString stringWithFormat:@"%ld\n%ld", index + 1, self.fileModels.count];
+    }
     
     NSInteger refreshStart = index - PLPhotoMainScrollViewPreloadCountPerSide;
     NSInteger refreshEnd = index + PLPhotoMainScrollViewPreloadCountPerSide;
@@ -294,8 +300,6 @@
 }
 - (IBAction)deleteButtonPressed:(UIButton *)sender {
     if (self.fileModels.count == 0) {
-        self.indicatorLabel.text = @"0";
-        
         return;
     }
     
