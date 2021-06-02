@@ -162,8 +162,6 @@
 #pragma mark - Actions
 - (void)restoreBarButtonItemPressed:(UIBarButtonItem *)sender {
     if (self.deleteModels.count == 0) {
-        self.title = self.folderPath.lastPathComponent;
-        
         return;
     }
     
@@ -190,6 +188,8 @@
 }
 - (void)deleteBarButtonItemPressed:(UIBarButtonItem *)sender {
     if (self.fileModels.count == 0) {
+        self.title = self.folderPath.lastPathComponent;
+        
         return;
     }
     

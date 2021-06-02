@@ -268,8 +268,6 @@
 }
 - (IBAction)restoreButtonPressed:(UIButton *)sender {
     if (self.deleteModels.count == 0) {
-        self.indicatorLabel.text = @"0";
-        
         return;
     }
     
@@ -296,6 +294,8 @@
 }
 - (IBAction)deleteButtonPressed:(UIButton *)sender {
     if (self.fileModels.count == 0) {
+        self.indicatorLabel.text = @"0";
+        
         return;
     }
     
