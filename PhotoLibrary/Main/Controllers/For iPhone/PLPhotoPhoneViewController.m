@@ -81,7 +81,7 @@
 #pragma mark - Read
 - (void)readFiles {
     NSArray *files = [GYFileManager filePathsInFolder:self.folderPath extensions:[GYSettingManager defaultManager].mimeImageTypes].mutableCopy;
-    files = [files sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES]]];
+    files = [files sortedArrayUsingDescriptors:@[[PLUniversalManager fileAscendingSortDescriptorWithKey:@"self"]]];
     
     [self.fileModels removeAllObjects];
     for (NSInteger i = 0; i < files.count; i++) {
@@ -175,7 +175,7 @@
     
     [self.fileModels addObject:self.deleteModels.lastObject];
     [self.fileModels.lastObject restoreFile]; // 文件操作
-    [self.fileModels sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"filePath" ascending:YES]]]; // 需要按照文件名重新排序
+    [self.fileModels sortUsingDescriptors:@[[PLUniversalManager fileAscendingSortDescriptorWithKey:@"filePath"]]]; // 需要按照文件名重新排序
     [self.deleteModels removeLastObject];
     [self refreshMainCellViews];
     

@@ -25,10 +25,6 @@
         _rowColumnSpacing = PLRowColumnSpacing;
         _columnsPerRow = PLColumnsPerRow;
         _directlyJumpPhoto = NO; // 默认不是直接跳转到图片页
-        
-        _fileAscendingSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending:YES comparator:^(NSString *obj1, NSString *obj2) {
-            return [obj1 compare:obj2 options:NSNumericSearch];
-        }];
     }
     
     return self;
@@ -103,6 +99,9 @@
             completion();
         }
     });
+}
++ (NSSortDescriptor *)fileAscendingSortDescriptorWithKey:(NSString *)key {
+    return [NSSortDescriptor sortDescriptorWithKey:key ascending:YES selector:@selector(localizedStandardCompare:)];
 }
 
 #pragma mark - Tools

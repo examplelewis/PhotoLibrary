@@ -20,8 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) UIEdgeInsets flowLayoutSectionInset;
 @property (nonatomic, assign) BOOL directlyJumpPhoto;
 
-@property (nonatomic, strong) NSSortDescriptor *fileAscendingSortDescriptor;
-
 #pragma mark - Lifecycle
 + (instancetype)defaultManager;
 
@@ -29,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)trashContentsAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion;
 - (void)restoreContentsAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion;
 - (void)deleteContentsAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion;
++ (NSSortDescriptor *)fileAscendingSortDescriptorWithKey:(NSString *)key;
 
 #pragma mark - Tools
 + (CGSize)imageSizeOfFilePath:(NSString *)filePath;
