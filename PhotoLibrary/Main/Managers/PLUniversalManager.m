@@ -24,7 +24,7 @@
     if (self) {
         _rowColumnSpacing = PLRowColumnSpacing;
         _columnsPerRow = PLColumnsPerRow;
-        _directlyJumpPhoto = NO; // 默认不是直接跳转到图片页
+        _directlyJumpPhoto = YES; // 默认直接跳转到图片页
     }
     
     return self;
