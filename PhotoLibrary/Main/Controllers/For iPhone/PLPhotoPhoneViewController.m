@@ -211,7 +211,7 @@
     CGSize imageSize = [PLUniversalManager imageSizeOfFilePath:fileModel.filePath];
     NSString *fileSize = [GYFileManager fileSizeDescriptionAtPath:fileModel.filePath];
     
-    [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"%@\n%@", NSStringFromCGSize(imageSize), fileSize]];
+    [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"%@\n%@\n%@", fileModel.filePath.lastPathComponent, NSStringFromCGSize(imageSize), fileSize]];
 }
 - (void)jumpToBarButtonItemPressed:(UIBarButtonItem *)sender {
     UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"提示" message:@"请输入跳转的 index" preferredStyle:UIAlertControllerStyleAlert];
