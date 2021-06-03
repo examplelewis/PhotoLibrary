@@ -5,11 +5,11 @@
 //  Created by 龚宇 on 21/05/30.
 //
 
-#import <UIKit/UIKit.h>
+#import "PLViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PLContentPhoneViewController : UIViewController
+@interface PLContentPhoneViewController : PLViewController
 
 @property (nonatomic, copy) NSString *folderPath;
 @property (nonatomic, assign) PLContentFolderType folderType;

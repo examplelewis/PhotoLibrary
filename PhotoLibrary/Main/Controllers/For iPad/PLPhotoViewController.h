@@ -5,11 +5,11 @@
 //  Created by 龚宇 on 21/05/27.
 //
 
-#import <UIKit/UIKit.h>
+#import "PLViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PLPhotoViewController : UIViewController
+@interface PLPhotoViewController : PLViewController
 
 @property (nonatomic, copy) NSString *folderPath;
 @property (nonatomic, assign) NSInteger currentIndex;

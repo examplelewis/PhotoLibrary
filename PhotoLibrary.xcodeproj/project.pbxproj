@@ -43,6 +43,8 @@
 		ACEBB7A426588A07005778FB /* NSArray+GYAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB79326588A07005778FB /* NSArray+GYAdd.m */; };
 		ACEBB7A526588A07005778FB /* NSDictionary+GYAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB79426588A07005778FB /* NSDictionary+GYAdd.m */; };
 		ACEBB7A626588A07005778FB /* NSString+GYAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = ACEBB79526588A07005778FB /* NSString+GYAdd.m */; };
+		ACF21AB926690C2D00AEF2CE /* PLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF21AB726690C2D00AEF2CE /* PLViewController.m */; };
+		ACF21ABA26690C2D00AEF2CE /* PLViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACF21AB826690C2D00AEF2CE /* PLViewController.xib */; };
 		ACF759A22663AEA80005322B /* PLContentPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF759A02663AEA80005322B /* PLContentPhoneViewController.m */; };
 		ACF759A32663AEA80005322B /* PLContentPhoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACF759A12663AEA80005322B /* PLContentPhoneViewController.xib */; };
 		ACF759B02663C4180005322B /* PLPhotoPhoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF759AE2663C4180005322B /* PLPhotoPhoneViewController.m */; };
@@ -143,6 +145,9 @@
 		ACEBB79726588A07005778FB /* UIColor+GYAdd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+GYAdd.h"; sourceTree = "<group>"; };
 		ACEBB79826588A07005778FB /* NSError+GYAdd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+GYAdd.h"; sourceTree = "<group>"; };
 		ACEBB79926588A07005778FB /* NSArray+GYAdd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+GYAdd.h"; sourceTree = "<group>"; };
+		ACF21AB626690C2D00AEF2CE /* PLViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLViewController.h; sourceTree = "<group>"; };
+		ACF21AB726690C2D00AEF2CE /* PLViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLViewController.m; sourceTree = "<group>"; };
+		ACF21AB826690C2D00AEF2CE /* PLViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PLViewController.xib; sourceTree = "<group>"; };
 		ACF7599F2663AEA80005322B /* PLContentPhoneViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLContentPhoneViewController.h; sourceTree = "<group>"; };
 		ACF759A02663AEA80005322B /* PLContentPhoneViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLContentPhoneViewController.m; sourceTree = "<group>"; };
 		ACF759A12663AEA80005322B /* PLContentPhoneViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PLContentPhoneViewController.xib; sourceTree = "<group>"; };
@@ -349,6 +354,9 @@
 		ACEBB77326588A07005778FB /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				ACF21AB626690C2D00AEF2CE /* PLViewController.h */,
+				ACF21AB726690C2D00AEF2CE /* PLViewController.m */,
+				ACF21AB826690C2D00AEF2CE /* PLViewController.xib */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -587,6 +595,7 @@
 				ACE03ACB265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.xib in Resources */,
 				ACDF2274265FE00000608CD0 /* PLPhotoViewController.xib in Resources */,
 				ACF759B12663C4180005322B /* PLPhotoPhoneViewController.xib in Resources */,
+				ACF21ABA26690C2D00AEF2CE /* PLViewController.xib in Resources */,
 				ACE211CD2659F3E800FF52EC /* PLContentViewController.xib in Resources */,
 				AC2624FD265812A900939375 /* Main.storyboard in Resources */,
 				ACE03AC3265A95C900BDC5AA /* PLContentCollectionViewCell.xib in Resources */,
@@ -672,6 +681,7 @@
 				ACEBB79F26588A07005778FB /* GYSettingManager.m in Sources */,
 				ACEBB7A226588A07005778FB /* UIColor+GYAdd.m in Sources */,
 				ACEBB79B26588A07005778FB /* GYUtilityManager.m in Sources */,
+				ACF21AB926690C2D00AEF2CE /* PLViewController.m in Sources */,
 				ACEBB79A26588A07005778FB /* GYLogManager.m in Sources */,
 				ACDF2273265FE00000608CD0 /* PLPhotoViewController.m in Sources */,
 				ACEBB79C26588A07005778FB /* GYExceptionManager.m in Sources */,

@@ -5,9 +5,9 @@
 //  Created by 龚宇 on 21/05/22.
 //
 
-#import <UIKit/UIKit.h>
+#import "PLViewController.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : PLViewController
 
 
 @end
