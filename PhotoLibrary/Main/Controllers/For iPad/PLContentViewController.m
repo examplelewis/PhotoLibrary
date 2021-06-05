@@ -85,7 +85,6 @@
 }
 - (void)setupNotifications {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(columnPerRowSliderValueChanged:) name:PLColumnPerRowSliderValueChanged object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(jumpSwitchValueChanged:) name:PLJumpSwitchValueChanged object:nil];
 }
 - (void)setupUIAndData {
     // Data
@@ -130,7 +129,7 @@
     UISwitch *jumpSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(0, 6.5, 47, 31)];
     jumpSwitch.tag = 100;
     jumpSwitch.on = [PLUniversalManager defaultManager].directlyJumpPhoto;
-    [jumpSwitch addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
+    [jumpSwitch addTarget:self action:@selector(jumpSwitchValueChanged:) forControlEvents:UIControlEventValueChanged];
     [jumpSwitchView addSubview:jumpSwitch];
     self.jumpSwitchBBI = [[UIBarButtonItem alloc] initWithCustomView:jumpSwitchView];
     
@@ -489,24 +488,15 @@
     [self setupCollectionViewFlowLayout];
     [self.collectionView reloadData];
 }
-- (void)switchValueChanged:(StepSlider *)sender {
+- (void)jumpSwitchValueChanged:(UISwitch *)sender {
     [PLUniversalManager defaultManager].directlyJumpPhoto = ![PLUniversalManager defaultManager].directlyJumpPhoto;
 }
 
 #pragma mark - Notifications
 - (void)columnPerRowSliderValueChanged:(NSNotification *)sender {
-    UIView *sliderView = self.sliderBBI.customView;
-    StepSlider *slider = (StepSlider *)[sliderView viewWithTag:100];
-    slider.index = [PLUniversalManager defaultManager].columnsPerRow - 4;
-    
     // 更新flowLayout后刷新collectionView
     [self setupCollectionViewFlowLayout];
     [self.collectionView reloadData];
-}
-- (void)jumpSwitchValueChanged:(NSNotification *)sender {
-    UIView *jumpSwitchView = self.jumpSwitchBBI.customView;
-    UISwitch *jumpSwitch = (UISwitch *)[jumpSwitchView viewWithTag:100];
-    jumpSwitch.on = [PLUniversalManager defaultManager].directlyJumpPhoto;
 }
 
 @end

@@ -46,15 +46,6 @@
     
     [[NSNotificationCenter defaultCenter] postNotificationName:PLColumnPerRowSliderValueChanged object:nil];
 }
-- (void)setDirectlyJumpPhoto:(BOOL)directlyJumpPhoto {
-    if (_directlyJumpPhoto == directlyJumpPhoto) {
-        return;
-    }
-    
-    _directlyJumpPhoto = directlyJumpPhoto;
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:PLJumpSwitchValueChanged object:nil];
-}
 
 #pragma mark - File Ops
 - (void)trashContentsAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion {
