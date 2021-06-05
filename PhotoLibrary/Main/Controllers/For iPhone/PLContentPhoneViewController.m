@@ -23,7 +23,6 @@
 @property (nonatomic, copy) NSArray<NSString *> *files;
 
 @property (nonatomic, assign) BOOL bothFoldersAndFiles;
-@property (nonatomic, assign) PLContentFolderType folderType;
 @property (nonatomic, assign) PLContentCollectionViewCellType cellType;
 
 @property (nonatomic, strong) NSMutableArray<NSString *> *selects;
@@ -224,11 +223,8 @@
         PLNavigationType type = [PLNavigationManager navigateToContentAtFolderPath:self.folders[indexPath.row]];
         self.refreshFilesWhenViewDidAppear = type == PLNavigationTypePhoto; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
     } else {
-        // 废纸篓目录下的文件，暂时不展示图片
-        if (self.folderType != PLContentFolderTypeTrash) {
-            PLNavigationType type = [PLNavigationManager navigateToPhotoAtFolderPath:self.folderPath index:0];
-            self.refreshFilesWhenViewDidAppear = type == PLNavigationTypePhoto; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
-        }
+        PLNavigationType type = [PLNavigationManager navigateToPhotoAtFolderPath:self.folderPath index:0];
+        self.refreshFilesWhenViewDidAppear = type == PLNavigationTypePhoto; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
     }
 }
 
@@ -258,13 +254,6 @@
     } else {
         return self.flowLayout.headerReferenceSize;
     }
-}
-
-#pragma mark - Setter
-- (void)setFolderPath:(NSString *)folderPath  {
-    _folderPath = folderPath.copy;
-    
-    self.folderType = [folderPath isEqualToString:[GYSettingManager defaultManager].trashFolderPath] ? PLContentFolderTypeTrash : PLContentFolderTypeNormal;
 }
 
 @end

@@ -8,7 +8,7 @@
 #import <Foundation/Foundation.h>
 
 static CGFloat const PLRowColumnSpacing = 12.0f;
-static NSInteger const PLColumnsPerRow = 5;
+static NSInteger const PLColumnsPerRow = 4;
 static NSInteger const PLFolderColumnsPerRow = 8;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)defaultManager;
 
 #pragma mark - File Ops
++ (void)createFolders;
 - (void)trashContentsAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion;
 - (void)restoreContentsAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion;
 - (void)deleteContentsAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion;

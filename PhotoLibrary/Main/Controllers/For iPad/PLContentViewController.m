@@ -17,11 +17,11 @@
 @interface PLContentViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) UIBarButtonItem *editBBI;
-@property (nonatomic, strong) UIBarButtonItem *trashBBI;
-@property (nonatomic, strong) UIBarButtonItem *restoreBBI;
-@property (nonatomic, strong) UIBarButtonItem *sliderBBI;
-@property (nonatomic, strong) UIBarButtonItem *deleteBBI;
 @property (nonatomic, strong) UIBarButtonItem *allBBI;
+@property (nonatomic, strong) UIBarButtonItem *trashBBI;
+@property (nonatomic, strong) UIBarButtonItem *mixWorksBBI;
+@property (nonatomic, strong) UIBarButtonItem *editWorksBBI;
+@property (nonatomic, strong) UIBarButtonItem *sliderBBI;
 @property (nonatomic, strong) UIBarButtonItem *jumpSwitchBBI; // 是否直接跳转到图片页
 
 @property (nonatomic, strong) UICollectionViewFlowLayout *flowLayout;
@@ -32,7 +32,6 @@
 @property (nonatomic, copy) NSArray<NSString *> *files;
 
 @property (nonatomic, assign) BOOL bothFoldersAndFiles;
-@property (nonatomic, assign) PLContentFolderType folderType;
 @property (nonatomic, assign) PLContentCollectionViewCellType cellType;
 
 @property (nonatomic, strong) NSMutableArray<NSString *> *selects;
@@ -104,28 +103,19 @@
 - (void)setupNavigationBar {
     self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editBarButtonItemDidPress:)];
     
-    self.trashBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(trashBarButtonItemDidPress:)];
-    self.trashBBI.enabled = NO;
-    
-    self.restoreBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemUndo target:self action:@selector(restoreBarButtonItemDidPress:)];
-    self.restoreBBI.enabled = NO;
-    
-    self.deleteBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteBarButtonItemDidPress:)];
-    self.deleteBBI.enabled = NO;
-    
     self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
     self.allBBI.enabled = NO;
     
-    UIView *sliderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 44)];
-    StepSlider *slider = [[StepSlider alloc] initWithFrame:CGRectMake(0, 9, 300, 26)];
-    slider.tag = 100;
-    slider.maxCount = 6;
-    slider.index = [PLUniversalManager defaultManager].columnsPerRow - 4;
-    [slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
-    [sliderView addSubview:slider];
-    self.sliderBBI = [[UIBarButtonItem alloc] initWithCustomView:sliderView];
+    self.trashBBI = [[UIBarButtonItem alloc] initWithTitle:@"删除" style:UIBarButtonItemStylePlain target:self action:@selector(trashBarButtonItemDidPress:)];
+    self.trashBBI.enabled = NO;
     
-    UIView *jumpSwitchView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 47, 44)];
+    self.mixWorksBBI = [[UIBarButtonItem alloc] initWithTitle:@"混合作品" style:UIBarButtonItemStylePlain target:self action:@selector(mixWorksBarButtonItemDidPress:)];
+    self.mixWorksBBI.enabled = NO;
+    
+    self.editWorksBBI = [[UIBarButtonItem alloc] initWithTitle:@"编辑作品" style:UIBarButtonItemStylePlain target:self action:@selector(editWorksBarButtonItemDidPress:)];
+    self.editWorksBBI.enabled = NO;
+    
+    UIView *jumpSwitchView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 55, 44)];
     UISwitch *jumpSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(0, 6.5, 47, 31)];
     jumpSwitch.tag = 100;
     jumpSwitch.on = [PLUniversalManager defaultManager].directlyJumpPhoto;
@@ -133,14 +123,19 @@
     [jumpSwitchView addSubview:jumpSwitch];
     self.jumpSwitchBBI = [[UIBarButtonItem alloc] initWithCustomView:jumpSwitchView];
     
+    UIView *sliderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
+    StepSlider *slider = [[StepSlider alloc] initWithFrame:CGRectMake(0, 9, 200, 26)];
+    slider.tag = 100;
+    slider.maxCount = 4;
+    slider.index = [PLUniversalManager defaultManager].columnsPerRow - 4;
+    [slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+    [sliderView addSubview:slider];
+    self.sliderBBI = [[UIBarButtonItem alloc] initWithCustomView:sliderView];
+    
     [self setupNavigationBarItems];
 }
 - (void)setupNavigationBarItems {
-    if (self.folderType == PLContentFolderTypeNormal) {
-        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.trashBBI, self.sliderBBI, self.allBBI, self.jumpSwitchBBI];
-    } else {
-        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.restoreBBI, self.sliderBBI, self.allBBI, self.deleteBBI];
-    }
+    self.navigationItem.rightBarButtonItems = @[self.editBBI, self.allBBI, self.trashBBI, self.mixWorksBBI, self.editWorksBBI, self.jumpSwitchBBI, self.sliderBBI];
 }
 - (void)setupAllBBI {
     BOOL selectAll = (self.selects.count == (self.folders.count + self.files.count)) && self.selects.count != 0; // 如果没有文件(夹)，就不算全选
@@ -312,11 +307,8 @@
             PLNavigationType type = [PLNavigationManager navigateToContentAtFolderPath:self.folders[indexPath.row]];
             self.refreshFilesWhenViewDidAppear = type == PLNavigationTypePhoto; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
         } else {
-            // 废纸篓目录下的文件，暂时不展示图片
-            if (self.folderType != PLContentFolderTypeTrash) {
-                PLNavigationType type = [PLNavigationManager navigateToPhotoAtFolderPath:self.folderPath index:indexPath.row];
-                self.refreshFilesWhenViewDidAppear = type == PLNavigationTypePhoto; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
-            }
+            PLNavigationType type = [PLNavigationManager navigateToPhotoAtFolderPath:self.folderPath index:indexPath.row];
+            self.refreshFilesWhenViewDidAppear = type == PLNavigationTypePhoto; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
         }
     } else {
         BOOL selected = [self.selects indexOfObject:cell.contentPath] != NSNotFound;
@@ -367,19 +359,19 @@
     if (self.cellType == PLContentCollectionViewCellTypeNormal) {
         self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(editBarButtonItemDidPress:)];
         self.trashBBI.enabled = YES;
-        self.restoreBBI.enabled = YES;
         self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
         self.allBBI.enabled = YES;
-        self.deleteBBI.enabled = YES;
+        self.mixWorksBBI.enabled = YES;
+        self.editWorksBBI.enabled = YES;
         
         self.cellType = PLContentCollectionViewCellTypeEdit;
     } else {
         self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editBarButtonItemDidPress:)];
         self.trashBBI.enabled = NO;
-        self.restoreBBI.enabled = NO;
         self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
         self.allBBI.enabled = NO;
-        self.deleteBBI.enabled = NO;
+        self.mixWorksBBI.enabled = NO;
+        self.editWorksBBI.enabled = NO;
         
         self.cellType = PLContentCollectionViewCellTypeNormal;
     }
@@ -408,42 +400,6 @@
         [self refreshAfterOperatingFiles];
     }];
 }
-- (void)restoreBarButtonItemDidPress:(UIBarButtonItem *)sender {
-    if (self.opreatingFiles) {
-        return;
-    }
-    if (self.selects.count == 0) {
-        return;
-    }
-    
-    [SVProgressHUD show];
-    self.opreatingFiles = YES;
-    @weakify(self);
-    [[PLUniversalManager defaultManager] restoreContentsAtPaths:self.selects completion:^{
-        @strongify(self);
-        
-        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"已将%ld个项目还原", self.selects.count]];
-        [self refreshAfterOperatingFiles];
-    }];
-}
-- (void)deleteBarButtonItemDidPress:(UIBarButtonItem *)sender {
-    if (self.opreatingFiles) {
-        return;
-    }
-    if (self.selects.count == 0) {
-        return;
-    }
-    
-    [SVProgressHUD show];
-    self.opreatingFiles = YES;
-    @weakify(self);
-    [[PLUniversalManager defaultManager] deleteContentsAtPaths:self.selects completion:^{
-        @strongify(self);
-        
-        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"已删除%ld个项目", self.selects.count]];
-        [self refreshAfterOperatingFiles];
-    }];
-}
 - (void)allBarButtonItemDidPress:(UIBarButtonItem *)sender {
     [self.selects removeAllObjects];
     if ([self.allBBI.title isEqualToString:@"全选"]) {
@@ -461,6 +417,22 @@
     [self setupTitle];
     [self setupNavigationBarItems];
 }
+- (void)mixWorksBarButtonItemDidPress:(UIBarButtonItem *)sender {
+    if (self.opreatingFiles) {
+        return;
+    }
+    if (self.selects.count == 0) {
+        return;
+    }
+}
+- (void)editWorksBarButtonItemDidPress:(UIBarButtonItem *)sender {
+    if (self.opreatingFiles) {
+        return;
+    }
+    if (self.selects.count == 0) {
+        return;
+    }
+}
 - (void)sliderValueChanged:(StepSlider *)sender {
     [PLUniversalManager defaultManager].columnsPerRow = sender.index + 4;
     
@@ -477,13 +449,6 @@
     // 更新flowLayout后刷新collectionView
     [self setupCollectionViewFlowLayout];
     [self.collectionView reloadData];
-}
-
-#pragma mark - Setter
-- (void)setFolderPath:(NSString *)folderPath  {
-    _folderPath = folderPath.copy;
-    
-    self.folderType = [folderPath isEqualToString:[GYSettingManager defaultManager].trashFolderPath] ? PLContentFolderTypeTrash : PLContentFolderTypeNormal;
 }
 
 @end

@@ -49,8 +49,13 @@
     _preferencePath = NSSearchPathForDirectoriesInDomains(NSPreferencePanesDirectory, NSUserDomainMask, YES).firstObject;
     _tempPath = NSTemporaryDirectory();
     
-    _trashFolderPath = [self pathOfContentInDocumentFolder:@"废纸篓"];
+    _trashFolderPath = [self pathOfContentInDocumentFolder:@"~~废纸篓"];
     NSLog(@"trashFolderPath: %@", self.trashFolderPath);
+    
+    _mixWorksFolderPath = [self pathOfContentInDocumentFolder:@"~~混合作品"];
+    _editWorksFolderPath = [self pathOfContentInDocumentFolder:@"~~编辑作品"];
+    _editWorksEditFolderPath = [self.editWorksFolderPath stringByAppendingPathComponent:@"编辑文件"];
+    _editWorksOriginFolderPath = [self.editWorksFolderPath stringByAppendingPathComponent:@"源文件"];
 }
 - (void)updatePreferences {
     _mimeImageTypes = @[@"jpg", @"jpeg", @"png", @"gif"];

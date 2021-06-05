@@ -56,7 +56,7 @@
 #pragma mark - Configure
 - (void)setupUIAndData {
     // Data
-    ignoreFolders = @[@"~~Test", @"废纸篓"];
+    ignoreFolders = @[@"~~Test", @"~~废纸篓", @"~~混合作品", @"~~编辑作品"];
     self.folders = @[];
     
     // UI
@@ -111,7 +111,7 @@
     if (section == 0) {
         return self.folders.count;
     } else if (section == 1) {
-        return 1;
+        return 2;
     } else {
         return 1;
     }
@@ -126,7 +126,11 @@
         cell.textLabel.text = self.folders[indexPath.row].lastPathComponent;
         cell.accessoryView = nil;
     } else if (indexPath.section == 1) {
-        cell.textLabel.text = @"废纸篓";
+        if (indexPath.row == 0) {
+            cell.textLabel.text = @"混合作品";
+        } else if (indexPath.row == 1) {
+            cell.textLabel.text = @"编辑作品";
+        }
         cell.accessoryView = nil;
     } else {
         if (indexPath.row == 0) {
@@ -152,7 +156,9 @@
         [PLNavigationManager navigateToContentAtFolderPath:self.folders[indexPath.row]];
     } else if (indexPath.section == 1) {
         if (indexPath.row == 0) {
-            [PLNavigationManager navigateToContentAtFolderPath:[GYSettingManager defaultManager].trashFolderPath];
+            
+        } else if (indexPath.row == 1) {
+            
         }
     } else {
         if (indexPath.row == 0) {
