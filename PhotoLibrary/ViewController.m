@@ -156,9 +156,9 @@
         [PLNavigationManager navigateToContentAtFolderPath:self.folders[indexPath.row]];
     } else if (indexPath.section == 1) {
         if (indexPath.row == 0) {
-            
+            [PLNavigationManager navigateToContentAtFolderPath:[GYSettingManager defaultManager].mixWorksFolderPath];
         } else if (indexPath.row == 1) {
-            
+            [PLNavigationManager navigateToContentAtFolderPath:[GYSettingManager defaultManager].editWorksEditFolderPath];
         }
     } else {
         if (indexPath.row == 0) {

@@ -136,7 +136,11 @@
     [self setupNavigationBarItems];
 }
 - (void)setupNavigationBarItems {
-    self.navigationItem.rightBarButtonItems = @[self.editBBI, self.allBBI, self.trashBBI, self.mixWorksBBI, self.editWorksBBI, self.jumpSwitchBBI, self.sliderBBI];
+    if (self.folderType == PLContentFolderTypeNormal) {
+        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.allBBI, self.trashBBI, self.mixWorksBBI, self.editWorksBBI, self.jumpSwitchBBI, self.sliderBBI];
+    } else {
+        self.navigationItem.rightBarButtonItems = @[];
+    }
 }
 - (void)setupAllBBI {
     BOOL selectAll = (self.selects.count == (self.folders.count + self.files.count)) && self.selects.count != 0; // 如果没有文件(夹)，就不算全选
