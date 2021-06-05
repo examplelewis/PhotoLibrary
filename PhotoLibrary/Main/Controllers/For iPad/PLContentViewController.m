@@ -32,6 +32,7 @@
 @property (nonatomic, copy) NSArray<NSString *> *files;
 
 @property (nonatomic, assign) BOOL bothFoldersAndFiles;
+@property (nonatomic, assign) PLContentFolderType folderType;
 @property (nonatomic, assign) PLContentCollectionViewCellType cellType;
 
 @property (nonatomic, strong) NSMutableArray<NSString *> *selects;
@@ -469,6 +470,21 @@
     // 更新flowLayout后刷新collectionView
     [self setupCollectionViewFlowLayout];
     [self.collectionView reloadData];
+}
+
+#pragma mark - Setter
+- (void)setFolderPath:(NSString *)folderPath {
+    _folderPath = folderPath.copy;
+    
+    if ([folderPath hasPrefix:[GYSettingManager defaultManager].trashFolderPath]) {
+        self.folderType = PLContentFolderTypeTrash;
+    } else if ([folderPath hasPrefix:[GYSettingManager defaultManager].mixWorksFolderPath]) {
+        self.folderType = PLContentFolderTypeMixWorks;
+    } else if ([folderPath hasPrefix:[GYSettingManager defaultManager].editWorksFolderPath]) {
+        self.folderType = PLContentFolderTypeEditWorks;
+    } else {
+        self.folderType = PLContentFolderTypeNormal;
+    }
 }
 
 @end

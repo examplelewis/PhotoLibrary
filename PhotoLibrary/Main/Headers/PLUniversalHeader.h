@@ -8,6 +8,12 @@
 #ifndef PLUniversalHeader_h
 #define PLUniversalHeader_h
 
+typedef NS_ENUM(NSUInteger, PLContentFolderType) {
+    PLContentFolderTypeNormal,
+    PLContentFolderTypeTrash,
+    PLContentFolderTypeMixWorks,
+    PLContentFolderTypeEditWorks,
+};
 
 
 static CGFloat const PLSafeAreaBottom = 20.0f;
