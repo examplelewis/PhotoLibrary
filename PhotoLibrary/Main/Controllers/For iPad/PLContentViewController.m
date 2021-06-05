@@ -442,6 +442,16 @@
     if (self.selects.count == 0) {
         return;
     }
+    
+    [SVProgressHUD show];
+    self.opreatingFiles = YES;
+    @weakify(self);
+    [[PLUniversalManager defaultManager] moveContentsToEditWorksAtPaths:self.selects completion:^{
+        @strongify(self);
+        
+        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"已将%ld个项目移动到编辑作品", self.selects.count]];
+        [self refreshAfterOperatingFiles];
+    }];
 }
 - (void)sliderValueChanged:(StepSlider *)sender {
     [PLUniversalManager defaultManager].columnsPerRow = sender.index + 4;

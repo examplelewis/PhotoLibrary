@@ -119,6 +119,31 @@
         }
     });
 }
+- (void)moveContentsToEditWorksAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        for (NSInteger i = 0; i < contentPaths.count; i++) {
+            NSString *contentPath = contentPaths[i];
+            
+            // 先将文件移动到“编辑作品”的“源文件”下
+            NSString *originTargetPath = [contentPath stringByReplacingOccurrencesOfString:[GYSettingManager defaultManager].documentPath withString:[GYSettingManager defaultManager].editWorksOriginFolderPath];
+            NSString *originTargetFolderPath = originTargetPath.stringByDeletingLastPathComponent;
+            
+            [GYFileManager createFolderAtPath:originTargetFolderPath];
+            [GYFileManager moveItemFromPath:contentPath toPath:originTargetPath];
+            
+            // 再将文件复制到“编辑作品”的“编辑文件”下
+            NSString *editTargetPath = [contentPath stringByReplacingOccurrencesOfString:[GYSettingManager defaultManager].documentPath withString:[GYSettingManager defaultManager].editWorksEditFolderPath];
+            NSString *editTargetFolderPath = editTargetPath.stringByDeletingLastPathComponent;
+            
+            [GYFileManager createFolderAtPath:editTargetFolderPath];
+            [GYFileManager copyItemFromPath:originTargetPath toPath:editTargetPath];
+        }
+        
+        if (completion) {
+            completion();
+        }
+    });
+}
 + (NSSortDescriptor *)fileAscendingSortDescriptorWithKey:(NSString *)key {
     return [NSSortDescriptor sortDescriptorWithKey:key ascending:YES selector:@selector(localizedStandardCompare:)];
 }
