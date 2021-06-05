@@ -35,6 +35,7 @@
 #import "UIImage+PLAdd.h"
 
 #import "PLUniversalManager.h"
+#import "PLNavigationManager.h"
 
 static DDLogLevel ddLogLevel = DDLogLevelAll;
 

@@ -17,6 +17,7 @@
 		AC262505265812AA00939375 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AC262504265812AA00939375 /* main.m */; };
 		AC26250F265812AB00939375 /* PhotoLibraryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC26250E265812AB00939375 /* PhotoLibraryTests.m */; };
 		AC26251A265812AB00939375 /* PhotoLibraryUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC262519265812AB00939375 /* PhotoLibraryUITests.m */; };
+		ACA33A44266B5E40002E7F67 /* PLNavigationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA33A43266B5E40002E7F67 /* PLNavigationManager.m */; };
 		ACA6667A26623E7700338972 /* PLPhotoFileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA6667926623E7700338972 /* PLPhotoFileModel.m */; };
 		ACA666802662594400338972 /* PLPhotoBottomCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA6667F2662594400338972 /* PLPhotoBottomCellView.m */; };
 		ACC29E7926612D96001E7B78 /* PLPhotoMainCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = ACC29E7826612D96001E7B78 /* PLPhotoMainCellView.m */; };
@@ -89,6 +90,8 @@
 		AC262519265812AB00939375 /* PhotoLibraryUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoLibraryUITests.m; sourceTree = "<group>"; };
 		AC26251B265812AB00939375 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AC26270D26581CD900939375 /* PhotoLibrary-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PhotoLibrary-Prefix.pch"; sourceTree = "<group>"; };
+		ACA33A42266B5E40002E7F67 /* PLNavigationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLNavigationManager.h; sourceTree = "<group>"; };
+		ACA33A43266B5E40002E7F67 /* PLNavigationManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLNavigationManager.m; sourceTree = "<group>"; };
 		ACA6667826623E7700338972 /* PLPhotoFileModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLPhotoFileModel.h; sourceTree = "<group>"; };
 		ACA6667926623E7700338972 /* PLPhotoFileModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLPhotoFileModel.m; sourceTree = "<group>"; };
 		ACA6667E2662594400338972 /* PLPhotoBottomCellView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLPhotoBottomCellView.h; sourceTree = "<group>"; };
@@ -318,6 +321,8 @@
 			children = (
 				ACEA4B02265BF2FD00D141D4 /* PLUniversalManager.h */,
 				ACEA4B03265BF2FD00D141D4 /* PLUniversalManager.m */,
+				ACA33A42266B5E40002E7F67 /* PLNavigationManager.h */,
+				ACA33A43266B5E40002E7F67 /* PLNavigationManager.m */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -670,6 +675,7 @@
 				ACA6667A26623E7700338972 /* PLPhotoFileModel.m in Sources */,
 				ACF759B02663C4180005322B /* PLPhotoPhoneViewController.m in Sources */,
 				ACEA4B04265BF2FD00D141D4 /* PLUniversalManager.m in Sources */,
+				ACA33A44266B5E40002E7F67 /* PLNavigationManager.m in Sources */,
 				ACE03AC2265A95C900BDC5AA /* PLContentCollectionViewCell.m in Sources */,
 				AC2624FA265812A900939375 /* ViewController.m in Sources */,
 				ACEBB7A326588A07005778FB /* NSError+GYAdd.m in Sources */,

@@ -221,30 +221,13 @@
     
     PLContentCollectionViewCell *cell = (PLContentCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     if (cell.isFolder) {
-        NSString *nextFolderPath = self.folders[indexPath.row];
-        if ([GYFileManager folderPathsInFolder:nextFolderPath].count > 0) {
-            PLContentPhoneViewController *vc = [[PLContentPhoneViewController alloc] initWithNibName:@"PLContentPhoneViewController" bundle:nil];
-            vc.folderPath = nextFolderPath;
-            vc.folderType = self.folderType;
-            
-            [self.navigationController pushViewController:vc animated:YES];
-        } else {
-            PLPhotoPhoneViewController *vc = [[PLPhotoPhoneViewController alloc] initWithNibName:@"PLPhotoPhoneViewController" bundle:nil];
-            vc.folderPath = nextFolderPath;
-
-            [self.navigationController pushViewController:vc animated:YES];
-
-            self.refreshFilesWhenViewDidAppear = YES; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
-        }
+        PLNavigationType type = [PLNavigationManager navigateToContentAtFolderPath:self.folders[indexPath.row]];
+        self.refreshFilesWhenViewDidAppear = type == PLNavigationTypePhoto; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
     } else {
         // 废纸篓目录下的文件，暂时不展示图片
         if (self.folderType != PLContentFolderTypeTrash) {
-            PLPhotoPhoneViewController *vc = [[PLPhotoPhoneViewController alloc] initWithNibName:@"PLPhotoPhoneViewController" bundle:nil];
-            vc.folderPath = self.folders[indexPath.row];
-
-            [self.navigationController pushViewController:vc animated:YES];
-
-            self.refreshFilesWhenViewDidAppear = YES; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
+            PLNavigationType type = [PLNavigationManager navigateToPhotoAtFolderPath:self.folderPath index:0];
+            self.refreshFilesWhenViewDidAppear = type == PLNavigationTypePhoto; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
         }
     }
 }

@@ -309,33 +309,13 @@
     PLContentCollectionViewCell *cell = (PLContentCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     if (cell.cellType == PLContentCollectionViewCellTypeNormal) {
         if (cell.isFolder) {
-            NSString *nextFolderPath = self.folders[indexPath.row];
-            // 如果一个文件都没有，那么即便打开了directlyJumpPhoto开关，也跳转文件夹列表
-            if ([PLUniversalManager defaultManager].directlyJumpPhoto && [GYFileManager filePathsInFolder:nextFolderPath].count > 0) {
-                PLPhotoViewController *vc = [[PLPhotoViewController alloc] initWithNibName:@"PLPhotoViewController" bundle:nil];
-                vc.folderPath = nextFolderPath;
-                vc.currentIndex = 0;
-                
-                [self.navigationController pushViewController:vc animated:YES];
-                
-                self.refreshFilesWhenViewDidAppear = YES; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
-            } else {
-                PLContentViewController *vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
-                vc.folderPath = nextFolderPath;
-                vc.folderType = self.folderType;
-                
-                [self.navigationController pushViewController:vc animated:YES];
-            }
+            PLNavigationType type = [PLNavigationManager navigateToContentAtFolderPath:self.folders[indexPath.row]];
+            self.refreshFilesWhenViewDidAppear = type == PLNavigationTypePhoto; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
         } else {
             // 废纸篓目录下的文件，暂时不展示图片
             if (self.folderType != PLContentFolderTypeTrash) {
-                PLPhotoViewController *vc = [[PLPhotoViewController alloc] initWithNibName:@"PLPhotoViewController" bundle:nil];
-                vc.folderPath = self.folderPath;
-                vc.currentIndex = indexPath.row;
-                
-                [self.navigationController pushViewController:vc animated:YES];
-                
-                self.refreshFilesWhenViewDidAppear = YES; // 跳转到 PLPhotoViewController 后，返回需要刷新文件		
+                PLNavigationType type = [PLNavigationManager navigateToPhotoAtFolderPath:self.folderPath index:indexPath.row];
+                self.refreshFilesWhenViewDidAppear = type == PLNavigationTypePhoto; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
             }
         }
     } else {

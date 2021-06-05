@@ -148,59 +148,22 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        if (indexPath.section == 0) {
-            PLContentViewController *vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
-            vc.folderPath = self.folders[indexPath.row];
-            
-            [self.navigationController pushViewController:vc animated:YES];
-        } else if (indexPath.section == 1) {
-            if (indexPath.row == 0) {
-                PLContentViewController *vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
-                vc.folderPath = [GYSettingManager defaultManager].trashFolderPath;
-                
-                [self.navigationController pushViewController:vc animated:YES];
-            }
-        } else {
-            if (indexPath.row == 0) {
-                // do nothing...
-            }
+    if (indexPath.section == 0) {
+        [PLNavigationManager navigateToContentAtFolderPath:self.folders[indexPath.row]];
+    } else if (indexPath.section == 1) {
+        if (indexPath.row == 0) {
+            [PLNavigationManager navigateToContentAtFolderPath:[GYSettingManager defaultManager].trashFolderPath];
         }
-    } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-        if (indexPath.section == 0) {
-            PLContentPhoneViewController *vc = [[PLContentPhoneViewController alloc] initWithNibName:@"PLContentPhoneViewController" bundle:nil];
-            vc.folderPath = self.folders[indexPath.row];
-            
-            [self.navigationController pushViewController:vc animated:YES];
-        } else if (indexPath.section == 1) {
-            if (indexPath.row == 0) {
-                PLContentPhoneViewController *vc = [[PLContentPhoneViewController alloc] initWithNibName:@"PLContentPhoneViewController" bundle:nil];
-                vc.folderPath = [GYSettingManager defaultManager].trashFolderPath;
-                
-                [self.navigationController pushViewController:vc animated:YES];
-            }
-        } else {
-            if (indexPath.row == 0) {
-                // do nothing...
-            }
+    } else {
+        if (indexPath.row == 0) {
+            // do nothing...
         }
     }
 }
 
 #pragma mark - Action
 - (void)barButtonItemDidPress:(UIBarButtonItem *)sender {
-    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        PLPhotoViewController *vc = [[PLPhotoViewController alloc] initWithNibName:@"PLPhotoViewController" bundle:nil];
-        vc.folderPath = [[GYSettingManager defaultManager] pathOfContentInDocumentFolder:@"~~Test"];
-        vc.currentIndex = 0;
-        
-        [self.navigationController pushViewController:vc animated:YES];
-    } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-        PLPhotoPhoneViewController *vc = [[PLPhotoPhoneViewController alloc] initWithNibName:@"PLPhotoPhoneViewController" bundle:nil];
-        vc.folderPath = [[GYSettingManager defaultManager] pathOfContentInDocumentFolder:@"~~Test"];
-
-        [self.navigationController pushViewController:vc animated:YES];
-    }
+    [PLNavigationManager navigateToPhotoAtFolderPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:@"~~Test"] index:0];
 }
 - (void)jumpSwitchValueChanged:(UISwitch *)sender {
     [PLUniversalManager defaultManager].directlyJumpPhoto = sender.isOn;
