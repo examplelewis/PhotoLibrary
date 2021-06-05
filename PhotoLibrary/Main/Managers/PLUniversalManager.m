@@ -107,7 +107,7 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         for (NSInteger i = 0; i < contentPaths.count; i++) {
             NSString *contentPath = contentPaths[i];
-            NSString *targetPath = [contentPath stringByReplacingOccurrencesOfString:[GYSettingManager defaultManager].documentPath withString:[GYSettingManager defaultManager].mixWorksFolderPath];
+            NSString *targetPath = [[GYSettingManager defaultManager].mixWorksFolderPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@", contentPath.md5String, contentPath.pathExtension]];
             NSString *targetFolderPath = targetPath.stringByDeletingLastPathComponent;
             
             [GYFileManager createFolderAtPath:targetFolderPath];
