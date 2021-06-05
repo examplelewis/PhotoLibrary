@@ -23,7 +23,7 @@
 @property (nonatomic, copy) NSArray<NSString *> *files;
 
 @property (nonatomic, assign) BOOL bothFoldersAndFiles;
-
+@property (nonatomic, assign) PLContentFolderType folderType;
 @property (nonatomic, assign) PLContentCollectionViewCellType cellType;
 
 @property (nonatomic, strong) NSMutableArray<NSString *> *selects;
@@ -275,6 +275,13 @@
     } else {
         return self.flowLayout.headerReferenceSize;
     }
+}
+
+#pragma mark - Setter
+- (void)setFolderPath:(NSString *)folderPath  {
+    _folderPath = folderPath.copy;
+    
+    self.folderType = [folderPath isEqualToString:[GYSettingManager defaultManager].trashFolderPath] ? PLContentFolderTypeTrash : PLContentFolderTypeNormal;
 }
 
 @end

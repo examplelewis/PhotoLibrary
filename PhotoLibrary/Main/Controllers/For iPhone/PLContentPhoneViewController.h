@@ -12,7 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface PLContentPhoneViewController : PLViewController
 
 @property (nonatomic, copy) NSString *folderPath;
-@property (nonatomic, assign) PLContentFolderType folderType;
 
 @end
 

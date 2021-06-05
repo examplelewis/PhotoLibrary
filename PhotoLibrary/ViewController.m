@@ -20,6 +20,9 @@
 @property (nonatomic, strong) NSArray<NSString *> *folders;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
+@property (nonatomic, strong) UISwitch *jumpSwitch;
+@property (nonatomic, strong) UILabel *jumpLabel;
+
 @end
 
 @implementation ViewController
@@ -60,11 +63,22 @@
 #if TARGET_IPHONE_SIMULATOR
     [self setupNavigationBar];
 #endif
+    [self setupJumpUI];
     [self setupTableView];
 }
 - (void)setupNavigationBar {
     UIBarButtonItem *rightBBI = [[UIBarButtonItem alloc] initWithTitle:@"测试" style:UIBarButtonItemStylePlain target:self action:@selector(barButtonItemDidPress:)];
     self.navigationItem.rightBarButtonItems = @[rightBBI];
+}
+- (void)setupJumpUI {
+    self.jumpSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(0, 6.5, 47, 31)];
+    self.jumpSwitch.tag = 100;
+    self.jumpSwitch.on = [PLUniversalManager defaultManager].directlyJumpPhoto;
+    [self.jumpSwitch addTarget:self action:@selector(jumpSwitchValueChanged:) forControlEvents:UIControlEventValueChanged];
+    
+    self.jumpLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 18, 21)];
+    self.jumpLabel.font = [UIFont systemFontOfSize:17];
+    self.jumpLabel.text = @"是";
 }
 - (void)setupTableView {
     self.tableView.tableFooterView = [UIView new];
@@ -91,11 +105,13 @@
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 3;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
         return self.folders.count;
+    } else if (section == 1) {
+        return 1;
     } else {
         return 1;
     }
@@ -108,8 +124,21 @@
     
     if (indexPath.section == 0) {
         cell.textLabel.text = self.folders[indexPath.row].lastPathComponent;
-    } else {
+        cell.accessoryView = nil;
+    } else if (indexPath.section == 1) {
         cell.textLabel.text = @"废纸篓";
+        cell.accessoryView = nil;
+    } else {
+        if (indexPath.row == 0) {
+            cell.textLabel.text = @"直接查看图片";
+            if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+                cell.accessoryView = self.jumpSwitch;
+            } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+                cell.accessoryView = self.jumpLabel;
+            } else {
+                cell.accessoryView = nil;
+            }
+        }
     }
     
     return cell;
@@ -120,31 +149,41 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        PLContentViewController *vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
         if (indexPath.section == 0) {
+            PLContentViewController *vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
             vc.folderPath = self.folders[indexPath.row];
-            vc.folderType = PLContentFolderTypeNormal;
+            
+            [self.navigationController pushViewController:vc animated:YES];
+        } else if (indexPath.section == 1) {
+            if (indexPath.row == 0) {
+                PLContentViewController *vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
+                vc.folderPath = [GYSettingManager defaultManager].trashFolderPath;
+                
+                [self.navigationController pushViewController:vc animated:YES];
+            }
         } else {
             if (indexPath.row == 0) {
-                vc.folderPath = [GYSettingManager defaultManager].trashFolderPath;
-                vc.folderType = PLContentFolderTypeTrash;
+                // do nothing...
             }
         }
-        
-        [self.navigationController pushViewController:vc animated:YES];
     } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-        PLContentPhoneViewController *vc = [[PLContentPhoneViewController alloc] initWithNibName:@"PLContentPhoneViewController" bundle:nil];
         if (indexPath.section == 0) {
+            PLContentPhoneViewController *vc = [[PLContentPhoneViewController alloc] initWithNibName:@"PLContentPhoneViewController" bundle:nil];
             vc.folderPath = self.folders[indexPath.row];
-            vc.folderType = PLContentFolderTypeNormal;
+            
+            [self.navigationController pushViewController:vc animated:YES];
+        } else if (indexPath.section == 1) {
+            if (indexPath.row == 0) {
+                PLContentPhoneViewController *vc = [[PLContentPhoneViewController alloc] initWithNibName:@"PLContentPhoneViewController" bundle:nil];
+                vc.folderPath = [GYSettingManager defaultManager].trashFolderPath;
+                
+                [self.navigationController pushViewController:vc animated:YES];
+            }
         } else {
             if (indexPath.row == 0) {
-                vc.folderPath = [GYSettingManager defaultManager].trashFolderPath;
-                vc.folderType = PLContentFolderTypeTrash;
+                // do nothing...
             }
         }
-        
-        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 
@@ -163,6 +202,14 @@
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
-
+- (void)jumpSwitchValueChanged:(UISwitch *)sender {
+    [PLUniversalManager defaultManager].directlyJumpPhoto = sender.isOn;
+    
+    // NSUserDefaults 必须在主线程上跑才回正确存储数据
+    dispatch_main_async_safe(^{
+        [[NSUserDefaults standardUserDefaults] setBool:[PLUniversalManager defaultManager].directlyJumpPhoto forKey:PLDirectlyJumpUserDefaultsKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    });
+}
 
 @end

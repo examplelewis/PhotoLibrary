@@ -24,7 +24,7 @@
     if (self) {
         _rowColumnSpacing = PLRowColumnSpacing;
         _columnsPerRow = PLColumnsPerRow;
-        _directlyJumpPhoto = YES; // 默认直接跳转到图片页
+        _directlyJumpPhoto = [[NSUserDefaults standardUserDefaults] boolForKey:PLDirectlyJumpUserDefaultsKey]; // 是否直接跳转到图片页从UserDefaults里读取
     }
     
     return self;

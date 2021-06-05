@@ -10,4 +10,6 @@
 
 static NSString * const PLColumnPerRowSliderValueChanged = @"com.gongyuTest.PhotoLibrary.columnPerRowSliderValueChanged";
 
+static NSString * const PLDirectlyJumpUserDefaultsKey = @"com.gongyuTest.PhotoLibrary.directlyJumpUserDefaultsKey";
+
 #endif /* PLNotificationsHeader_h */
