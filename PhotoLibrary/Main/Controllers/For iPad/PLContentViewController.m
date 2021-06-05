@@ -424,6 +424,16 @@
     if (self.selects.count == 0) {
         return;
     }
+    
+    [SVProgressHUD show];
+    self.opreatingFiles = YES;
+    @weakify(self);
+    [[PLUniversalManager defaultManager] moveContentsToMixWorksAtPaths:self.selects completion:^{
+        @strongify(self);
+        
+        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"已将%ld个项目移动到混合作品", self.selects.count]];
+        [self refreshAfterOperatingFiles];
+    }];
 }
 - (void)editWorksBarButtonItemDidPress:(UIBarButtonItem *)sender {
     if (self.opreatingFiles) {

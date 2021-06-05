@@ -103,6 +103,22 @@
         }
     });
 }
+- (void)moveContentsToMixWorksAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        for (NSInteger i = 0; i < contentPaths.count; i++) {
+            NSString *contentPath = contentPaths[i];
+            NSString *targetPath = [contentPath stringByReplacingOccurrencesOfString:[GYSettingManager defaultManager].documentPath withString:[GYSettingManager defaultManager].mixWorksFolderPath];
+            NSString *targetFolderPath = targetPath.stringByDeletingLastPathComponent;
+            
+            [GYFileManager createFolderAtPath:targetFolderPath];
+            [GYFileManager moveItemFromPath:contentPath toPath:targetPath];
+        }
+        
+        if (completion) {
+            completion();
+        }
+    });
+}
 + (NSSortDescriptor *)fileAscendingSortDescriptorWithKey:(NSString *)key {
     return [NSSortDescriptor sortDescriptorWithKey:key ascending:YES selector:@selector(localizedStandardCompare:)];
 }
