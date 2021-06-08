@@ -110,10 +110,8 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         for (NSInteger i = 0; i < contentPaths.count; i++) {
             NSString *contentPath = contentPaths[i];
-            NSString *targetPath = [[GYSettingManager defaultManager].mixWorksFolderPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.%@", contentPath.md5String, contentPath.pathExtension]];
-            NSString *targetFolderPath = targetPath.stringByDeletingLastPathComponent;
-            
-            [GYFileManager createFolderAtPath:targetFolderPath];
+            NSString *targetPath = [[GYSettingManager defaultManager].mixWorksFolderPath stringByAppendingPathComponent:contentPath.lastPathComponent];
+            targetPath = [PLUniversalManager nonConflictFilePathForFilePath:targetPath];
             [GYFileManager moveItemFromPath:contentPath toPath:targetPath];
         }
         
@@ -140,6 +138,20 @@
             
             [GYFileManager createFolderAtPath:editTargetFolderPath];
             [GYFileManager copyItemFromPath:originTargetPath toPath:editTargetPath];
+        }
+        
+        if (completion) {
+            completion();
+        }
+    });
+}
+- (void)moveContentsToOtherWorksAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        for (NSInteger i = 0; i < contentPaths.count; i++) {
+            NSString *contentPath = contentPaths[i];
+            NSString *targetPath = [[GYSettingManager defaultManager].otherWorksFolderPath stringByAppendingPathComponent:contentPath.lastPathComponent];
+            targetPath = [PLUniversalManager nonConflictFilePathForFilePath:targetPath];
+            [GYFileManager moveItemFromPath:contentPath toPath:targetPath];
         }
         
         if (completion) {
@@ -190,6 +202,17 @@
     }
     
     return CGSizeMake(width, height);
+}
++ (NSString *)nonConflictFilePathForFilePath:(NSString *)filePath {
+    NSString *outputFilePath = filePath.copy;
+    NSInteger i = 2;
+    
+    while ([GYFileManager fileExistsAtPath:outputFilePath]) {
+        outputFilePath = [filePath.stringByDeletingPathExtension stringByAppendingFormat:@" %ld.%@", i, filePath.pathExtension];
+        i += 1;
+    }
+    
+    return outputFilePath;
 }
 
 @end

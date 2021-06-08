@@ -19,8 +19,7 @@
 @property (nonatomic, strong) UIBarButtonItem *editBBI;
 @property (nonatomic, strong) UIBarButtonItem *allBBI;
 @property (nonatomic, strong) UIBarButtonItem *trashBBI;
-@property (nonatomic, strong) UIBarButtonItem *mixWorksBBI;
-@property (nonatomic, strong) UIBarButtonItem *editWorksBBI;
+@property (nonatomic, strong) UIBarButtonItem *menuBBI;
 @property (nonatomic, strong) UIBarButtonItem *sliderBBI;
 @property (nonatomic, strong) UIBarButtonItem *jumpSwitchBBI; // 是否直接跳转到图片页
 
@@ -110,11 +109,22 @@
     self.trashBBI = [[UIBarButtonItem alloc] initWithTitle:@"删除" style:UIBarButtonItemStylePlain target:self action:@selector(trashBarButtonItemDidPress:)];
     self.trashBBI.enabled = NO;
     
-    self.mixWorksBBI = [[UIBarButtonItem alloc] initWithTitle:@"混合作品" style:UIBarButtonItemStylePlain target:self action:@selector(mixWorksBarButtonItemDidPress:)];
-    self.mixWorksBBI.enabled = NO;
-    
-    self.editWorksBBI = [[UIBarButtonItem alloc] initWithTitle:@"编辑作品" style:UIBarButtonItemStylePlain target:self action:@selector(editWorksBarButtonItemDidPress:)];
-    self.editWorksBBI.enabled = NO;
+    @weakify(self);
+    UIAction *mixWorksAction = [UIAction actionWithTitle:@"移动到混合作品" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+        @strongify(self);
+        [self moveToMixWorks];
+    }];
+    UIAction *editWorksAction = [UIAction actionWithTitle:@"移动到编辑作品" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+        @strongify(self);
+        [self moveToEditWorks];
+    }];
+    UIAction *otherAction = [UIAction actionWithTitle:@"移动到其他作品" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+        @strongify(self);
+        [self moveToOtherWorks];
+    }];
+    UIMenu *menu = [UIMenu menuWithTitle:@"" children:@[mixWorksAction, editWorksAction, otherAction]];
+    self.menuBBI = [[UIBarButtonItem alloc] initWithTitle:@"操作" menu:menu];
+    self.menuBBI.enabled = NO;
     
     UIView *jumpSwitchView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 55, 44)];
     UISwitch *jumpSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(0, 6.5, 47, 31)];
@@ -137,7 +147,7 @@
 }
 - (void)setupNavigationBarItems {
     if (self.folderType == PLContentFolderTypeNormal) {
-        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.allBBI, self.trashBBI, self.mixWorksBBI, self.editWorksBBI, self.jumpSwitchBBI, self.sliderBBI];
+        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.allBBI, self.trashBBI, self.menuBBI, self.jumpSwitchBBI, self.sliderBBI];
     } else {
         self.navigationItem.rightBarButtonItems = @[];
     }
@@ -370,8 +380,7 @@
         self.trashBBI.enabled = YES;
         self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
         self.allBBI.enabled = YES;
-        self.mixWorksBBI.enabled = YES;
-        self.editWorksBBI.enabled = YES;
+        self.menuBBI.enabled = YES;
         
         self.cellType = PLContentCollectionViewCellTypeEdit;
     } else {
@@ -379,8 +388,7 @@
         self.trashBBI.enabled = NO;
         self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
         self.allBBI.enabled = NO;
-        self.mixWorksBBI.enabled = NO;
-        self.editWorksBBI.enabled = NO;
+        self.menuBBI.enabled = NO;
         
         self.cellType = PLContentCollectionViewCellTypeNormal;
     }
@@ -426,7 +434,19 @@
     [self setupTitle];
     [self setupNavigationBarItems];
 }
-- (void)mixWorksBarButtonItemDidPress:(UIBarButtonItem *)sender {
+- (void)sliderValueChanged:(StepSlider *)sender {
+    [PLUniversalManager defaultManager].columnsPerRow = sender.index + 4;
+    
+    // 更新flowLayout后刷新collectionView
+    [self setupCollectionViewFlowLayout];
+    [self.collectionView reloadData];
+}
+- (void)jumpSwitchValueChanged:(UISwitch *)sender {
+    [PLUniversalManager defaultManager].directlyJumpPhoto = ![PLUniversalManager defaultManager].directlyJumpPhoto;
+}
+
+#pragma mark - UIMenu Ops
+- (void)moveToMixWorks {
     if (self.opreatingFiles) {
         return;
     }
@@ -444,13 +464,18 @@
         [self refreshAfterOperatingFiles];
     }];
 }
-- (void)editWorksBarButtonItemDidPress:(UIBarButtonItem *)sender {
+- (void)moveToEditWorks {
     if (self.opreatingFiles) {
         return;
     }
     if (self.selects.count == 0) {
         return;
     }
+    
+    // Gif图片不可编辑
+    [self.selects filterUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSString * _Nullable filePath, NSDictionary<NSString *,id> * _Nullable bindings) {
+        return ![filePath.pathExtension.lowercaseString isEqualToString:@"gif"];
+    }]];
     
     [SVProgressHUD show];
     self.opreatingFiles = YES;
@@ -462,15 +487,23 @@
         [self refreshAfterOperatingFiles];
     }];
 }
-- (void)sliderValueChanged:(StepSlider *)sender {
-    [PLUniversalManager defaultManager].columnsPerRow = sender.index + 4;
+- (void)moveToOtherWorks {
+    if (self.opreatingFiles) {
+        return;
+    }
+    if (self.selects.count == 0) {
+        return;
+    }
     
-    // 更新flowLayout后刷新collectionView
-    [self setupCollectionViewFlowLayout];
-    [self.collectionView reloadData];
-}
-- (void)jumpSwitchValueChanged:(UISwitch *)sender {
-    [PLUniversalManager defaultManager].directlyJumpPhoto = ![PLUniversalManager defaultManager].directlyJumpPhoto;
+    [SVProgressHUD show];
+    self.opreatingFiles = YES;
+    @weakify(self);
+    [[PLUniversalManager defaultManager] moveContentsToOtherWorksAtPaths:self.selects completion:^{
+        @strongify(self);
+        
+        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"已将%ld个项目移动到其他作品", self.selects.count]];
+        [self refreshAfterOperatingFiles];
+    }];
 }
 
 #pragma mark - Notifications

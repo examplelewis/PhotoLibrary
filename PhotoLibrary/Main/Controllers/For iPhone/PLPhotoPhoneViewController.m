@@ -8,12 +8,6 @@
 #import "PLPhotoPhoneViewController.h"
 #import "PLPhotoMainCellView.h"
 
-typedef NS_ENUM(NSUInteger, PLWorksType) {
-    PLWorksTypeMixWorks,
-    PLWorksTypeEditWorks,
-    PLWorksTypeOtherWorks,
-};
-
 @interface PLPhotoPhoneViewController () {
     CGFloat scrollViewHeight;
 }
@@ -272,7 +266,7 @@ typedef NS_ENUM(NSUInteger, PLWorksType) {
     [self scrollViewScrollToIndex:index];
 }
 
-#pragma mark - UIMenus
+#pragma mark - UIMenu Ops
 - (void)jumpToPage {
     UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"提示" message:@"请输入跳转的 index" preferredStyle:UIAlertControllerStyleAlert];
     [ac addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
@@ -311,7 +305,13 @@ typedef NS_ENUM(NSUInteger, PLWorksType) {
     }
     
     NSInteger index = roundf(self.scrollView.contentOffset.x / kScreenWidth); // 需要移动的index
-    [self.moveModels addObject:self.fileModels[index]];
+    PLPhotoFileModel *model = self.fileModels[index];
+    if (worksType == PLWorksTypeEditWorks && [model.filePath.pathExtension.lowercaseString isEqualToString:@"gif"]) {
+        [SVProgressHUD showInfoWithStatus:@"GIF图片不可编辑!"];
+        return;
+    }
+    
+    [self.moveModels addObject:model];
     if (worksType == PLWorksTypeMixWorks) {
         [self.moveModels.lastObject moveToMixWorks]; // 文件操作
     } else if (worksType == PLWorksTypeEditWorks) {

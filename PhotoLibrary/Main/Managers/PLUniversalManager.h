@@ -30,10 +30,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)deleteContentsAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion;
 - (void)moveContentsToMixWorksAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion;
 - (void)moveContentsToEditWorksAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion;
+- (void)moveContentsToOtherWorksAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion;
 + (NSSortDescriptor *)fileAscendingSortDescriptorWithKey:(NSString *)key;
 
 #pragma mark - Tools
 + (CGSize)imageSizeOfFilePath:(NSString *)filePath;
++ (NSString *)nonConflictFilePathForFilePath:(NSString *)filePath;
 
 @end
 

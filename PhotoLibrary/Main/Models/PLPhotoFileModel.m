@@ -57,9 +57,11 @@
     
     _trashFilePath = [filePath stringByReplacingOccurrencesOfString:[GYSettingManager defaultManager].documentPath withString:[GYSettingManager defaultManager].trashFolderPath];
     _mixWorksFilePath = [[GYSettingManager defaultManager].mixWorksFolderPath stringByAppendingPathComponent:filePath.lastPathComponent];
+    _mixWorksFilePath = [PLUniversalManager nonConflictFilePathForFilePath:self.mixWorksFilePath];
     _editWorksOriginFilePath = [filePath stringByReplacingOccurrencesOfString:[GYSettingManager defaultManager].documentPath withString:[GYSettingManager defaultManager].editWorksOriginFolderPath];
     _editWorksEditFilePath = [filePath stringByReplacingOccurrencesOfString:[GYSettingManager defaultManager].documentPath withString:[GYSettingManager defaultManager].editWorksEditFolderPath];
     _otherWorksFilePath = [[GYSettingManager defaultManager].otherWorksFolderPath stringByAppendingPathComponent:filePath.lastPathComponent];
+    _otherWorksFilePath = [PLUniversalManager nonConflictFilePathForFilePath:self.otherWorksFilePath];
 }
 
 @end
