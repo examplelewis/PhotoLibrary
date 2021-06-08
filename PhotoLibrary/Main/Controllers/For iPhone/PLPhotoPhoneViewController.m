@@ -26,6 +26,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self setupTitleWithCurrentIndex:0];
     [self setupNotifications];
     [self setupUIAndData];
 }
@@ -39,12 +40,17 @@
 }
 
 #pragma mark - Configure
+- (void)setupTitleWithCurrentIndex:(NSInteger)index {
+    if (self.fileModels.count == 0) {
+        self.title = self.folderPath.lastPathComponent;
+    } else {
+        self.title = [NSString stringWithFormat:@"(%ld/%ld)", index + 1, self.fileModels.count];
+    }
+}
 - (void)setupNotifications {
     
 }
 - (void)setupUIAndData {
-    self.title = self.folderPath.lastPathComponent;
-    
     // Data
     scrollViewHeight = kScreenHeight - PLNorchPhoneSafeAreaTop - PLNavigationBarHeight;
     
@@ -88,7 +94,7 @@
         [self.fileModels addObject:[PLPhotoFileModel fileModelWithFilePath:files[i] plIndex:i]];
     }
     
-    self.title = [NSString stringWithFormat:@"%@(%ld)", self.folderPath.lastPathComponent, self.fileModels.count];
+    [self setupTitleWithCurrentIndex:0];
 }
 - (void)createMainCellViews {
     for (NSInteger i = 0; i < self.fileModels.count; i++) {
@@ -136,12 +142,10 @@
 
 #pragma mark - MainScrollView
 - (void)scrollViewScrollToIndex:(NSInteger)index {
+    [self setupTitleWithCurrentIndex:index];
+    
     if (self.fileModels.count == 0) {
-        self.title = self.folderPath.lastPathComponent;
-        
         return;
-    } else {
-        self.title = [NSString stringWithFormat:@"%@(%ld/%ld)", self.folderPath.lastPathComponent, index + 1, self.fileModels.count];
     }
     
     NSInteger refreshStart = index - PLPhotoMainScrollViewPreloadCountPerSide;
