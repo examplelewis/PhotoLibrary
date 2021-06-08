@@ -52,16 +52,16 @@
     // 创建废纸篓文件夹
     [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].trashFolderPath];
     
-    // 暂时只有iPad添加两个功能
-    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        // 创建混合作品文件夹
-        [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].mixWorksFolderPath];
-        
-        // 创建编辑作品文件夹及其子文件夹
-        [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].editWorksFolderPath];
-        [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].editWorksEditFolderPath];
-        [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].editWorksOriginFolderPath];
-    }
+    // 创建混合作品文件夹
+    [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].mixWorksFolderPath];
+    
+    // 创建编辑作品文件夹及其子文件夹
+    [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].editWorksFolderPath];
+    [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].editWorksEditFolderPath];
+    [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].editWorksOriginFolderPath];
+    
+    // 创建其他作品文件夹
+    [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].otherWorksFolderPath];
 }
 - (void)trashContentsAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

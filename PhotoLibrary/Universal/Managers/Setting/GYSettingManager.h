@@ -33,6 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSString *editWorksFolderPath; // 编辑作品文件夹
 @property (nonatomic, strong, readonly) NSString *editWorksOriginFolderPath; // 编辑作品[源文件]文件夹
 @property (nonatomic, strong, readonly) NSString *editWorksEditFolderPath; // 编辑作品[编辑文件]文件夹
+@property (nonatomic, strong, readonly) NSString *otherWorksFolderPath; // 其他作品文件夹
 
 @property (nonatomic, strong, readonly) NSArray *mimeImageTypes;
 @property (nonatomic, strong, readonly) NSArray *mimeVideoTypes;

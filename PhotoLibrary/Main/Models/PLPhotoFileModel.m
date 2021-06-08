@@ -31,11 +31,35 @@
     
     [GYFileManager moveItemFromPath:self.trashFilePath toPath:self.filePath];
 }
+- (void)moveToMixWorks {
+    [GYFileManager moveItemFromPath:self.filePath toPath:self.mixWorksFilePath];
+}
+- (void)moveToEditWorks {
+    // 先将文件移动到"源文件"文件夹中
+    NSString *superOriginFolderPath = self.editWorksOriginFilePath.stringByDeletingLastPathComponent;
+    [GYFileManager createFolderAtPath:superOriginFolderPath];
+    
+    [GYFileManager moveItemFromPath:self.filePath toPath:self.editWorksOriginFilePath];
+    
+    // 再将文件复制到"编辑文件"文件夹中
+    NSString *superEditFolderPath = self.editWorksEditFilePath.stringByDeletingLastPathComponent;
+    [GYFileManager createFolderAtPath:superEditFolderPath];
+    
+    [GYFileManager copyItemFromPath:self.editWorksOriginFilePath toPath:self.editWorksEditFilePath];
+}
+- (void)moveToOtherWorks {
+    [GYFileManager moveItemFromPath:self.filePath toPath:self.otherWorksFilePath];
+}
 
 #pragma mark - Setter
 - (void)setFilePath:(NSString *)filePath {
     _filePath = [filePath copy];
+    
     _trashFilePath = [filePath stringByReplacingOccurrencesOfString:[GYSettingManager defaultManager].documentPath withString:[GYSettingManager defaultManager].trashFolderPath];
+    _mixWorksFilePath = [[GYSettingManager defaultManager].mixWorksFolderPath stringByAppendingPathComponent:filePath.lastPathComponent];
+    _editWorksOriginFilePath = [filePath stringByReplacingOccurrencesOfString:[GYSettingManager defaultManager].documentPath withString:[GYSettingManager defaultManager].editWorksOriginFolderPath];
+    _editWorksEditFilePath = [filePath stringByReplacingOccurrencesOfString:[GYSettingManager defaultManager].documentPath withString:[GYSettingManager defaultManager].editWorksEditFolderPath];
+    _otherWorksFilePath = [[GYSettingManager defaultManager].otherWorksFolderPath stringByAppendingPathComponent:filePath.lastPathComponent];
 }
 
 @end

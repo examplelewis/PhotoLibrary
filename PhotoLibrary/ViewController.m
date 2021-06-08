@@ -111,7 +111,7 @@
     if (section == 0) {
         return self.folders.count;
     } else if (section == 1) {
-        return 2;
+        return 3;
     } else {
         return 1;
     }
@@ -130,6 +130,8 @@
             cell.textLabel.text = @"混合作品";
         } else if (indexPath.row == 1) {
             cell.textLabel.text = @"编辑作品";
+        } else if (indexPath.row == 2) {
+            cell.textLabel.text = @"其他作品";
         }
         cell.accessoryView = nil;
     } else {
@@ -159,6 +161,8 @@
             [PLNavigationManager navigateToContentAtFolderPath:[GYSettingManager defaultManager].mixWorksFolderPath];
         } else if (indexPath.row == 1) {
             [PLNavigationManager navigateToContentAtFolderPath:[GYSettingManager defaultManager].editWorksEditFolderPath];
+        } else if (indexPath.row == 2) {
+            [PLNavigationManager navigateToContentAtFolderPath:[GYSettingManager defaultManager].otherWorksFolderPath];
         }
     } else {
         if (indexPath.row == 0) {

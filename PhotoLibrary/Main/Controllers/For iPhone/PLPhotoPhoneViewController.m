@@ -8,12 +8,19 @@
 #import "PLPhotoPhoneViewController.h"
 #import "PLPhotoMainCellView.h"
 
+typedef NS_ENUM(NSUInteger, PLWorksType) {
+    PLWorksTypeMixWorks,
+    PLWorksTypeEditWorks,
+    PLWorksTypeOtherWorks,
+};
+
 @interface PLPhotoPhoneViewController () {
     CGFloat scrollViewHeight;
 }
 
 @property (nonatomic, strong) NSMutableArray<PLPhotoFileModel *> *fileModels;
 @property (nonatomic, strong) NSMutableArray<PLPhotoFileModel *> *deleteModels;
+@property (nonatomic, strong) NSMutableArray<PLPhotoFileModel *> *moveModels;
 
 @property (nonatomic, strong) NSMutableArray<PLPhotoMainCellView *> *cellViews;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -26,7 +33,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self setupTitleWithCurrentIndex:0];
     [self setupNotifications];
     [self setupUIAndData];
 }
@@ -56,10 +62,12 @@
     
     self.fileModels = [NSMutableArray array];
     self.deleteModels = [NSMutableArray array];
+    self.moveModels = [NSMutableArray array];
     
     self.cellViews = [NSMutableArray array];
     
     // UI
+    [self setupTitleWithCurrentIndex:0];
     [self setupNavigationBar];
     [self setupScrollView];
 }
@@ -67,9 +75,28 @@
     UIBarButtonItem *deleteBBI = [[UIBarButtonItem alloc] initWithTitle:@"删除" style:UIBarButtonItemStylePlain target:self action:@selector(deleteBarButtonItemPressed:)];
     UIBarButtonItem *restoreBBI = [[UIBarButtonItem alloc] initWithTitle:@"撤销" style:UIBarButtonItemStylePlain target:self action:@selector(restoreBarButtonItemPressed:)];
     UIBarButtonItem *infoBBI = [[UIBarButtonItem alloc] initWithTitle:@"信息" style:UIBarButtonItemStylePlain target:self action:@selector(infoBarButtonItemPressed:)];
-    UIBarButtonItem *jumpToBBI = [[UIBarButtonItem alloc] initWithTitle:@"跳转至" style:UIBarButtonItemStylePlain target:self action:@selector(jumpToBarButtonItemPressed:)];
     
-    self.navigationItem.rightBarButtonItems = @[deleteBBI, restoreBBI, infoBBI, jumpToBBI];
+    @weakify(self);
+    UIAction *jumpToAction = [UIAction actionWithTitle:@"跳转至" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+        @strongify(self);
+        [self jumpToPage];
+    }];
+    UIAction *mixWorksAction = [UIAction actionWithTitle:@"移动到混合作品" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+        @strongify(self);
+        [self moveToWorks:PLWorksTypeMixWorks];
+    }];
+    UIAction *editWorksAction = [UIAction actionWithTitle:@"移动到编辑作品" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+        @strongify(self);
+        [self moveToWorks:PLWorksTypeEditWorks];
+    }];
+    UIAction *otherAction = [UIAction actionWithTitle:@"移动到其他作品" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+        @strongify(self);
+        [self moveToWorks:PLWorksTypeOtherWorks];
+    }];
+    UIMenu *menu = [UIMenu menuWithTitle:@"" children:@[jumpToAction, mixWorksAction, editWorksAction, otherAction]];
+    UIBarButtonItem *menuBBI = [[UIBarButtonItem alloc] initWithTitle:@"操作" menu:menu];
+    
+    self.navigationItem.rightBarButtonItems = @[deleteBBI, restoreBBI, infoBBI, menuBBI];
 }
 - (void)setupScrollView {
     self.scrollView.frame = CGRectMake(0, PLNorchPhoneSafeAreaTop + PLNavigationBarHeight, kScreenWidth, scrollViewHeight);
@@ -116,6 +143,16 @@
     for (NSInteger i = 0; i < self.deleteModels.count; i++) {
         NSArray<PLPhotoMainCellView *> *cellViews = [self.cellViews filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PLPhotoMainCellView * _Nullable cellView, NSDictionary<NSString *,id> * _Nullable bindings) {
             return cellView.plIndex == self.deleteModels[i].plIndex;
+        }]];
+        if (cellViews.count > 0) {
+            PLPhotoMainCellView *cellView = cellViews.firstObject;
+            [cellView removeFromSuperview];
+        }
+    }
+    
+    for (NSInteger i = 0; i < self.moveModels.count; i++) {
+        NSArray<PLPhotoMainCellView *> *cellViews = [self.cellViews filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PLPhotoMainCellView * _Nullable cellView, NSDictionary<NSString *,id> * _Nullable bindings) {
+            return cellView.plIndex == self.moveModels[i].plIndex;
         }]];
         if (cellViews.count > 0) {
             PLPhotoMainCellView *cellView = cellViews.firstObject;
@@ -217,7 +254,26 @@
     
     [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"%@\n%@\n%@", fileModel.filePath.lastPathComponent, NSStringFromCGSize(imageSize), fileSize]];
 }
-- (void)jumpToBarButtonItemPressed:(UIBarButtonItem *)sender {
+- (void)scrollViewOneTapGRPressed:(UIGestureRecognizer *)sender {
+    NSInteger index = roundf(self.scrollView.contentOffset.x / kScreenWidth);
+    CGPoint point = [sender locationInView:self.scrollView];
+    CGFloat currentOffsetX = point.x - index * kScreenWidth;
+    if (currentOffsetX <= kScreenWidth / 2.0f) {
+        index -= 1;
+        if (index < 0) {
+            return;
+        }
+    } else {
+        index += 1;
+        if (index >= self.fileModels.count) {
+            return;
+        }
+    }
+    [self scrollViewScrollToIndex:index];
+}
+
+#pragma mark - UIMenus
+- (void)jumpToPage {
     UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"提示" message:@"请输入跳转的 index" preferredStyle:UIAlertControllerStyleAlert];
     [ac addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
         textField.placeholder = @"输入的 index 从 1 开始";
@@ -249,22 +305,28 @@
 
     [self presentViewController:ac animated:true completion:nil];
 }
-- (void)scrollViewOneTapGRPressed:(UIGestureRecognizer *)sender {
-    NSInteger index = roundf(self.scrollView.contentOffset.x / kScreenWidth);
-    CGPoint point = [sender locationInView:self.scrollView];
-    CGFloat currentOffsetX = point.x - index * kScreenWidth;
-    if (currentOffsetX <= kScreenWidth / 2.0f) {
-        index -= 1;
-        if (index < 0) {
-            return;
-        }
-    } else {
-        index += 1;
-        if (index >= self.fileModels.count) {
-            return;
-        }
+- (void)moveToWorks:(PLWorksType)worksType {
+    if (self.fileModels.count == 0) {
+        return;
     }
-    [self scrollViewScrollToIndex:index];
+    
+    NSInteger index = roundf(self.scrollView.contentOffset.x / kScreenWidth); // 需要移动的index
+    [self.moveModels addObject:self.fileModels[index]];
+    if (worksType == PLWorksTypeMixWorks) {
+        [self.moveModels.lastObject moveToMixWorks]; // 文件操作
+    } else if (worksType == PLWorksTypeEditWorks) {
+        [self.moveModels.lastObject moveToEditWorks]; // 文件操作
+    } else if (worksType == PLWorksTypeOtherWorks) {
+        [self.moveModels.lastObject moveToOtherWorks]; // 文件操作
+    }
+    [self.fileModels removeObjectAtIndex:index];
+    [self refreshMainCellViews];
+    
+    // 如果删除了最后一张图片，显示删除完了之后的最后一张图片
+    if (index >= self.fileModels.count) {
+        index = self.fileModels.count - 1;
+    }
+    [self scrollViewScrollToIndex:index]; // 跳转到下一张图片，但是因为之前移动了一张图片，所以index不变
 }
 
 @end
