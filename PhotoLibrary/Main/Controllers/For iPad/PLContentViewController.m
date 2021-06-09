@@ -134,10 +134,10 @@
     [jumpSwitchView addSubview:jumpSwitch];
     self.jumpSwitchBBI = [[UIBarButtonItem alloc] initWithCustomView:jumpSwitchView];
     
-    UIView *sliderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
-    StepSlider *slider = [[StepSlider alloc] initWithFrame:CGRectMake(0, 9, 200, 26)];
+    UIView *sliderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 270, 44)];
+    StepSlider *slider = [[StepSlider alloc] initWithFrame:CGRectMake(0, 9, 270, 26)];
     slider.tag = 100;
-    slider.maxCount = 4;
+    slider.maxCount = 6;
     slider.index = [PLUniversalManager defaultManager].columnsPerRow - 4;
     [slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
     [sliderView addSubview:slider];
