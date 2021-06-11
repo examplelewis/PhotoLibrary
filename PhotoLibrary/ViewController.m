@@ -18,7 +18,7 @@
 }
 
 @property (nonatomic, strong) NSArray<NSString *> *folders;
-@property (nonatomic, strong) NSArray<NSNumber *> *folderFileCounts;
+@property (nonatomic, strong) NSArray<NSString *> *folderContentCounts;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong) UISwitch *jumpSwitch;
@@ -96,10 +96,11 @@
         return [self->ignoreFolders indexOfObject:folderPath.lastPathComponent] == NSNotFound;
     }]];
     
-    self.folderFileCounts = @[];
+    self.folderContentCounts = @[];
     for (NSInteger i = 0; i < self.folders.count; i++) {
-        NSInteger count = [GYFileManager folderPathsInFolder:self.folders[i]].count;
-        self.folderFileCounts = [self.folderFileCounts arrayByAddingObject:@(count)];
+        NSInteger foldersCount = [GYFileManager folderPathsInFolder:self.folders[i]].count;
+        NSInteger filesCount = [GYFileManager filePathsInFolder:self.folders[i]].count;
+        self.folderContentCounts = [self.folderContentCounts arrayByAddingObject:[NSString stringWithFormat:@"%ld / %ld", foldersCount, filesCount]];
     }
     
     [self.tableView reloadData];
@@ -127,7 +128,7 @@
     if (indexPath.section == 0) {
         cell.textLabel.text = self.folders[indexPath.row].lastPathComponent;
         cell.accessoryView = nil;
-        cell.detailTextLabel.text = self.folderFileCounts[indexPath.row].description;
+        cell.detailTextLabel.text = self.folderContentCounts[indexPath.row];
     } else if (indexPath.section == 1) {
         if (indexPath.row == 0) {
             cell.textLabel.text = @"混合作品";

@@ -56,7 +56,7 @@
         self.folderImageView.hidden = NO;
         self.nameLabel.hidden = NO;
         self.nameLabel.text = contentPath.lastPathComponent;
-        self.fileCountLabel.text = [NSString stringWithFormat:@"%ld", [GYFileManager folderPathsInFolder:contentPath].count];
+        self.fileCountLabel.text = [NSString stringWithFormat:@"%ld / %ld", [GYFileManager folderPathsInFolder:contentPath].count, [GYFileManager filePathsInFolder:contentPath].count];
         self.fileCountLabel.hidden = NO;
         
         self.imageView.hidden = YES;
