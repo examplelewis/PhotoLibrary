@@ -18,10 +18,10 @@
 }
 
 @property (nonatomic, strong) NSArray<NSString *> *folders;
+@property (nonatomic, strong) NSArray<NSNumber *> *folderFileCounts;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong) UISwitch *jumpSwitch;
-@property (nonatomic, strong) UILabel *jumpLabel;
 
 @end
 
@@ -75,10 +75,6 @@
     self.jumpSwitch.tag = 100;
     self.jumpSwitch.on = [PLUniversalManager defaultManager].directlyJumpPhoto;
     [self.jumpSwitch addTarget:self action:@selector(jumpSwitchValueChanged:) forControlEvents:UIControlEventValueChanged];
-    
-    self.jumpLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 18, 21)];
-    self.jumpLabel.font = [UIFont systemFontOfSize:17];
-    self.jumpLabel.text = @"是";
 }
 - (void)setupTableView {
     self.tableView.tableFooterView = [UIView new];
@@ -100,6 +96,12 @@
         return [self->ignoreFolders indexOfObject:folderPath.lastPathComponent] == NSNotFound;
     }]];
     
+    self.folderFileCounts = @[];
+    for (NSInteger i = 0; i < self.folders.count; i++) {
+        NSInteger count = [GYFileManager folderPathsInFolder:self.folders[i]].count;
+        self.folderFileCounts = [self.folderFileCounts arrayByAddingObject:@(count)];
+    }
+    
     [self.tableView reloadData];
 }
 
@@ -119,12 +121,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
     }
     
     if (indexPath.section == 0) {
         cell.textLabel.text = self.folders[indexPath.row].lastPathComponent;
         cell.accessoryView = nil;
+        cell.detailTextLabel.text = self.folderFileCounts[indexPath.row].description;
     } else if (indexPath.section == 1) {
         if (indexPath.row == 0) {
             cell.textLabel.text = @"混合作品";
@@ -134,16 +137,23 @@
             cell.textLabel.text = @"其他作品";
         }
         cell.accessoryView = nil;
+        cell.detailTextLabel.text = nil;
     } else {
         if (indexPath.row == 0) {
             cell.textLabel.text = @"直接查看图片";
             if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
                 cell.accessoryView = self.jumpSwitch;
+                cell.detailTextLabel.text = nil;
             } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-                cell.accessoryView = self.jumpLabel;
+                cell.accessoryView = nil;
+                cell.detailTextLabel.text = @"是";
             } else {
                 cell.accessoryView = nil;
+                cell.detailTextLabel.text = nil;
             }
+        } else {
+            cell.accessoryView = nil;
+            cell.detailTextLabel.text = nil;
         }
     }
     
