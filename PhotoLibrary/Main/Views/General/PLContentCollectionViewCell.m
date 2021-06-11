@@ -13,6 +13,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *nameLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *selectImageView;
 @property (strong, nonatomic) IBOutlet UIImageView *folderImageView;
+@property (strong, nonatomic) IBOutlet UILabel *fileCountLabel;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *fileCountLabelCenterYConstraint;
 
 @end
 
@@ -20,6 +22,14 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
+    
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        self.fileCountLabelCenterYConstraint.constant = 25.0f;
+    } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+        self.fileCountLabelCenterYConstraint.constant = 15.0f;
+    } else {
+        self.fileCountLabelCenterYConstraint.constant = 10.0f;
+    }
 }
 
 #pragma mark - Setter
@@ -46,11 +56,14 @@
         self.folderImageView.hidden = NO;
         self.nameLabel.hidden = NO;
         self.nameLabel.text = contentPath.lastPathComponent;
+        self.fileCountLabel.text = [NSString stringWithFormat:@"%ld", [GYFileManager folderPathsInFolder:contentPath].count];
+        self.fileCountLabel.hidden = NO;
         
         self.imageView.hidden = YES;
     } else {
         self.folderImageView.hidden = YES;
         self.nameLabel.hidden = YES;
+        self.fileCountLabel.hidden = YES;
         
         self.imageView.hidden = NO;
         

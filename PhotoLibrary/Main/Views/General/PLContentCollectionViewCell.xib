@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -35,6 +35,12 @@
                             <constraint firstAttribute="width" constant="44" id="tfe-t4-o4j"/>
                         </constraints>
                     </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9uT-pO-iC4">
+                        <rect key="frame" x="20" y="113" width="216" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="SEy-5g-ep8"/>
@@ -45,16 +51,21 @@
                 <constraint firstAttribute="bottom" secondItem="Hte-tR-Kit" secondAttribute="bottom" constant="32" id="6ee-eA-ayK"/>
                 <constraint firstAttribute="trailing" secondItem="Hte-tR-Kit" secondAttribute="trailing" constant="20" id="BrE-rg-OeN"/>
                 <constraint firstItem="p8c-0f-fgt" firstAttribute="top" secondItem="Hte-tR-Kit" secondAttribute="bottom" id="F2Z-Rl-lzQ"/>
+                <constraint firstItem="9uT-pO-iC4" firstAttribute="centerY" secondItem="Hte-tR-Kit" secondAttribute="centerY" id="G2M-U0-8KG"/>
                 <constraint firstItem="mhu-Up-rvT" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="ggB-St-Q1H"/>
                 <constraint firstItem="p8c-0f-fgt" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="4" id="lEB-QU-LBJ"/>
                 <constraint firstAttribute="trailing" secondItem="p8c-0f-fgt" secondAttribute="trailing" constant="4" id="oOx-0M-q7b"/>
                 <constraint firstItem="mhu-Up-rvT" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="pt5-Qk-e95"/>
+                <constraint firstItem="9uT-pO-iC4" firstAttribute="trailing" secondItem="Hte-tR-Kit" secondAttribute="trailing" id="uSt-2D-PEt"/>
                 <constraint firstItem="Hte-tR-Kit" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="vjg-T0-lqX"/>
                 <constraint firstAttribute="trailing" secondItem="mhu-Up-rvT" secondAttribute="trailing" id="waL-ye-aSB"/>
                 <constraint firstItem="CAe-Rp-XSx" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="yxe-UP-18T"/>
+                <constraint firstItem="9uT-pO-iC4" firstAttribute="leading" secondItem="Hte-tR-Kit" secondAttribute="leading" id="zq3-GR-DaA"/>
             </constraints>
             <size key="customSize" width="256" height="256"/>
             <connections>
+                <outlet property="fileCountLabel" destination="9uT-pO-iC4" id="Ccq-4I-Qyt"/>
+                <outlet property="fileCountLabelCenterYConstraint" destination="G2M-U0-8KG" id="reW-a2-0Dh"/>
                 <outlet property="folderImageView" destination="Hte-tR-Kit" id="7r9-G6-0da"/>
                 <outlet property="imageView" destination="mhu-Up-rvT" id="1aK-nh-JEv"/>
                 <outlet property="nameLabel" destination="p8c-0f-fgt" id="JXi-8a-RcN"/>
