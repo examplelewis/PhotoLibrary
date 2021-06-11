@@ -62,6 +62,13 @@
     
     // 创建其他作品文件夹
     [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].otherWorksFolderPath];
+    
+    // 创建不同步骤对应的文件夹
+    [GYFileManager createFolderAtPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder1]];
+    [GYFileManager createFolderAtPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder2]];
+    [GYFileManager createFolderAtPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder3]];
+    [GYFileManager createFolderAtPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder4]];
+    [GYFileManager createFolderAtPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder5]];
 }
 - (void)trashContentsAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

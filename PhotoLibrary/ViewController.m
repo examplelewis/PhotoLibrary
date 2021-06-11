@@ -56,7 +56,7 @@
 #pragma mark - Configure
 - (void)setupUIAndData {
     // Data
-    ignoreFolders = @[@"~~Test", @"~~废纸篓", @"~~混合作品", @"~~编辑作品"];
+    ignoreFolders = @[@"~~Test", @"~~废纸篓", @"~~混合作品", @"~~编辑作品", @"~~其他作品"];
     self.folders = @[];
     
     // UI
@@ -148,6 +148,13 @@
     }
     
     return cell;
+}
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
+        return @"所有文件夹均应表示当前已经完成的阶段";
+    } else {
+        return @"";
+    }
 }
 
 #pragma mark - UITableViewDelegate
