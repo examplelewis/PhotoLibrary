@@ -134,6 +134,13 @@
             
             // 先将文件移动到“编辑作品”的“源文件”下
             NSString *originTargetPath = [contentPath stringByReplacingOccurrencesOfString:[GYSettingManager defaultManager].documentPath withString:[GYSettingManager defaultManager].editWorksOriginFolderPath];
+            // 移除5个步骤对应的文件夹，即移动文件时层级不包括当前步骤对应的文件夹
+            originTargetPath = [originTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder1] withString:@""];
+            originTargetPath = [originTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder2] withString:@""];
+            originTargetPath = [originTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder3] withString:@""];
+            originTargetPath = [originTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder4] withString:@""];
+            originTargetPath = [originTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder5] withString:@""];
+            // 获取父级文件夹的路径
             NSString *originTargetFolderPath = originTargetPath.stringByDeletingLastPathComponent;
             
             [GYFileManager createFolderAtPath:originTargetFolderPath];
@@ -141,6 +148,13 @@
             
             // 再将文件复制到“编辑作品”的“编辑文件”下
             NSString *editTargetPath = [contentPath stringByReplacingOccurrencesOfString:[GYSettingManager defaultManager].documentPath withString:[GYSettingManager defaultManager].editWorksEditFolderPath];
+            // 移除5个步骤对应的文件夹，即拷贝文件时层级不包括当前步骤对应的文件夹
+            editTargetPath = [editTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder1] withString:@""];
+            editTargetPath = [editTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder2] withString:@""];
+            editTargetPath = [editTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder3] withString:@""];
+            editTargetPath = [editTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder4] withString:@""];
+            editTargetPath = [editTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder5] withString:@""];
+            // 获取父级文件夹的路径
             NSString *editTargetFolderPath = editTargetPath.stringByDeletingLastPathComponent;
             
             [GYFileManager createFolderAtPath:editTargetFolderPath];
