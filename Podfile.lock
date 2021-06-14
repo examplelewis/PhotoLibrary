@@ -33,9 +33,6 @@ PODS:
     - CocoaLumberjack/Core (= 3.7.2)
   - CocoaLumberjack/Core (3.7.2)
   - DateTools (2.0.0)
-  - FMDB (2.7.5):
-    - FMDB/standard (= 2.7.5)
-  - FMDB/standard (2.7.5)
   - IQKeyboardManager (6.5.6)
   - KMNavigationBarTransition (1.1.8)
   - Masonry (1.1.0)
@@ -43,34 +40,27 @@ PODS:
   - SDWebImage (5.11.1):
     - SDWebImage/Core (= 5.11.1)
   - SDWebImage/Core (5.11.1)
-  - SSZipArchive (2.2.3)
   - StepSlider (1.8.0)
   - SVProgressHUD (2.2.5)
-  - Toast (4.0.0)
   - YYCategories (1.0.4):
     - YYCategories/no-arc (= 1.0.4)
   - YYCategories/no-arc (1.0.4)
   - YYModel (1.0.4)
-  - YYText (1.0.7)
 
 DEPENDENCIES:
   - AFNetworking
   - BlocksKit
   - CocoaLumberjack
   - DateTools
-  - FMDB
   - IQKeyboardManager
   - KMNavigationBarTransition
   - Masonry
   - MJRefresh
   - SDWebImage
-  - SSZipArchive
   - StepSlider
   - SVProgressHUD
-  - Toast
   - YYCategories
   - YYModel
-  - YYText
 
 SPEC REPOS:
   trunk:
@@ -78,39 +68,31 @@ SPEC REPOS:
     - BlocksKit
     - CocoaLumberjack
     - DateTools
-    - FMDB
     - IQKeyboardManager
     - KMNavigationBarTransition
     - Masonry
     - MJRefresh
     - SDWebImage
-    - SSZipArchive
     - StepSlider
     - SVProgressHUD
-    - Toast
     - YYCategories
     - YYModel
-    - YYText
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   BlocksKit: 7f422b971407001178d181a43b99014ea2591fe6
   CocoaLumberjack: b7e05132ff94f6ae4dfa9d5bce9141893a21d9da
   DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
-  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   IQKeyboardManager: 2a6e97afdafc7becf0cb17a9a8d795e3a980717f
   KMNavigationBarTransition: 7ee1a05ff758bce9258845a803f7a8b00585bd58
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJRefresh: d2c1970d1cf6e77fcfcdfe76c943dfab8dbfa5c1
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
-  SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   StepSlider: 890db727e779fa99cb32afffc5887c1109e151f4
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
-  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   YYCategories: 6bcd4314c6661a561410dce4a793379ebd306abd
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
-  YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
 
-PODFILE CHECKSUM: 70fbb3b30c3aca02ade88290b17a291ade79d11a
+PODFILE CHECKSUM: ecc199ced6a783cf5956e6f35552e43341201ddb
 
 COCOAPODS: 1.10.1

@@ -11,7 +11,6 @@ target 'PhotoLibrary' do
   pod 'SDWebImage'
   pod 'Masonry'
   pod 'DateTools'
-  pod 'Toast'
   pod 'IQKeyboardManager'
   pod 'MJRefresh'
   pod 'YYCategories'
@@ -19,9 +18,6 @@ target 'PhotoLibrary' do
   pod 'SVProgressHUD'
   
   pod 'StepSlider'
-  pod 'SSZipArchive'
-  pod 'FMDB'
-  pod 'YYText'
   pod 'KMNavigationBarTransition'
 
 end
