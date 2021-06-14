@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) NSString *tempPath;
 
 @property (nonatomic, strong, readonly) NSString *trashFolderPath;
+@property (nonatomic, strong, readonly) NSString *fileAppCreatedTrashFolderPath; // 由“文件”App创建的.Trash文件夹
 @property (nonatomic, strong, readonly) NSString *mixWorksFolderPath; // 混合作品文件夹
 @property (nonatomic, strong, readonly) NSString *editWorksFolderPath; // 编辑作品文件夹
 @property (nonatomic, strong, readonly) NSString *editWorksOriginFolderPath; // 编辑作品[源文件]文件夹

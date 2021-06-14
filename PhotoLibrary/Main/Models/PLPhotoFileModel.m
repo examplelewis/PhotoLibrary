@@ -63,18 +63,18 @@
     
     // 移除5个步骤对应的文件夹，即移动文件时层级不包括当前步骤对应的文件夹
     _editWorksOriginFilePath = [filePath stringByReplacingOccurrencesOfString:[GYSettingManager defaultManager].documentPath withString:[GYSettingManager defaultManager].editWorksOriginFolderPath];
-    _editWorksOriginFilePath = [_editWorksOriginFilePath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder1] withString:@""];
     _editWorksOriginFilePath = [_editWorksOriginFilePath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder2] withString:@""];
     _editWorksOriginFilePath = [_editWorksOriginFilePath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder3] withString:@""];
     _editWorksOriginFilePath = [_editWorksOriginFilePath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder4] withString:@""];
     _editWorksOriginFilePath = [_editWorksOriginFilePath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder5] withString:@""];
+    _editWorksOriginFilePath = [_editWorksOriginFilePath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder7] withString:@""];
     // 移除5个步骤对应的文件夹，即移动文件时层级不包括当前步骤对应的文件夹
     _editWorksEditFilePath = [filePath stringByReplacingOccurrencesOfString:[GYSettingManager defaultManager].documentPath withString:[GYSettingManager defaultManager].editWorksEditFolderPath];
-    _editWorksEditFilePath = [_editWorksEditFilePath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder1] withString:@""];
     _editWorksEditFilePath = [_editWorksEditFilePath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder2] withString:@""];
     _editWorksEditFilePath = [_editWorksEditFilePath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder3] withString:@""];
     _editWorksEditFilePath = [_editWorksEditFilePath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder4] withString:@""];
     _editWorksEditFilePath = [_editWorksEditFilePath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder5] withString:@""];
+    _editWorksEditFilePath = [_editWorksEditFilePath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder7] withString:@""];
 }
 
 @end

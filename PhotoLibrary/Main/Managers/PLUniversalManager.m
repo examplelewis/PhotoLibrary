@@ -64,11 +64,11 @@
     [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].otherWorksFolderPath];
     
     // 创建不同步骤对应的文件夹
-    [GYFileManager createFolderAtPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder1]];
     [GYFileManager createFolderAtPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder2]];
     [GYFileManager createFolderAtPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder3]];
     [GYFileManager createFolderAtPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder4]];
     [GYFileManager createFolderAtPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder5]];
+    [GYFileManager createFolderAtPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder7]];
 }
 - (void)trashContentsAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -135,11 +135,11 @@
             // 先将文件移动到“编辑作品”的“源文件”下
             NSString *originTargetPath = [contentPath stringByReplacingOccurrencesOfString:[GYSettingManager defaultManager].documentPath withString:[GYSettingManager defaultManager].editWorksOriginFolderPath];
             // 移除5个步骤对应的文件夹，即移动文件时层级不包括当前步骤对应的文件夹
-            originTargetPath = [originTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder1] withString:@""];
             originTargetPath = [originTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder2] withString:@""];
             originTargetPath = [originTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder3] withString:@""];
             originTargetPath = [originTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder4] withString:@""];
             originTargetPath = [originTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder5] withString:@""];
+            originTargetPath = [originTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder7] withString:@""];
             // 获取父级文件夹的路径
             NSString *originTargetFolderPath = originTargetPath.stringByDeletingLastPathComponent;
             
@@ -149,11 +149,11 @@
             // 再将文件复制到“编辑作品”的“编辑文件”下
             NSString *editTargetPath = [contentPath stringByReplacingOccurrencesOfString:[GYSettingManager defaultManager].documentPath withString:[GYSettingManager defaultManager].editWorksEditFolderPath];
             // 移除5个步骤对应的文件夹，即拷贝文件时层级不包括当前步骤对应的文件夹
-            editTargetPath = [editTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder1] withString:@""];
             editTargetPath = [editTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder2] withString:@""];
             editTargetPath = [editTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder3] withString:@""];
             editTargetPath = [editTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder4] withString:@""];
             editTargetPath = [editTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder5] withString:@""];
+            editTargetPath = [editTargetPath stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@/", PLPhotoFilterStepFolder7] withString:@""];
             // 获取父级文件夹的路径
             NSString *editTargetFolderPath = editTargetPath.stringByDeletingLastPathComponent;
             

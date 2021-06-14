@@ -19,6 +19,7 @@
 
 @property (nonatomic, strong) NSArray<NSString *> *folders;
 @property (nonatomic, strong) NSArray<NSString *> *folderContentCounts;
+@property (nonatomic, copy) NSString *fileAppCreatdTrashFolderSize; // 由“文件”App创建的.Trash文件夹的大小
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong) UISwitch *jumpSwitch;
@@ -58,6 +59,7 @@
     // Data
     ignoreFolders = @[@"~~Test", @"~~废纸篓", @"~~混合作品", @"~~编辑作品", @"~~其他作品"];
     self.folders = @[];
+    self.fileAppCreatdTrashFolderSize = @"0.00MB";
     
     // UI
 #if TARGET_IPHONE_SIMULATOR
@@ -103,6 +105,10 @@
         self.folderContentCounts = [self.folderContentCounts arrayByAddingObject:[NSString stringWithFormat:@"%ld / %ld", foldersCount, filesCount]];
     }
     
+    if ([GYFileManager fileExistsAtPath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath]) {
+        self.fileAppCreatdTrashFolderSize = [GYFileManager folderSizeDescriptionAtPath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
+    }
+    
     [self.tableView reloadData];
 }
 
@@ -116,7 +122,7 @@
     } else if (section == 1) {
         return 3;
     } else {
-        return 1;
+        return 2;
     }
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -152,7 +158,12 @@
                 cell.accessoryView = nil;
                 cell.detailTextLabel.text = nil;
             }
+        } else if (indexPath.row == 1) {
+            cell.textLabel.text = @"清空“文件”App创建的.Trash文件夹";
+            cell.accessoryView = nil;
+            cell.detailTextLabel.text = self.fileAppCreatdTrashFolderSize;
         } else {
+            cell.textLabel.text = @"";
             cell.accessoryView = nil;
             cell.detailTextLabel.text = nil;
         }
@@ -162,7 +173,7 @@
 }
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        return @"所有文件夹均应表示当前已经完成的阶段";
+        return @"所有文件夹均应表示当前处于的阶段";
     } else {
         return @"";
     }
@@ -182,10 +193,17 @@
         } else if (indexPath.row == 2) {
             [PLNavigationManager navigateToContentAtFolderPath:[GYSettingManager defaultManager].otherWorksFolderPath];
         }
-    } else {
+    } else if (indexPath.section == 2) {
         if (indexPath.row == 0) {
             // do nothing...
+        } else if (indexPath.row == 1) {
+            [GYFileManager removeFilePath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
+            [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
+            
+            [self.tableView reloadSection:2 withRowAnimation:UITableViewRowAnimationNone];
         }
+    } else {
+
     }
 }
 

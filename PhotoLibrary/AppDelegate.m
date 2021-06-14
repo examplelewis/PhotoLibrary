@@ -18,7 +18,7 @@
     // 每次App启动，清空所有SDImageCache的缓存
     [[SDImageCache sharedImageCache] clearWithCacheType:SDImageCacheTypeDisk completion:nil];
     // 删除“文件”App的生成的.Trash文件
-    [GYFileManager removeFilePath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:@".Trash"]];
+    [GYFileManager removeFilePath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
     // 创建必须的文件夹
     [PLUniversalManager createFolders];
     

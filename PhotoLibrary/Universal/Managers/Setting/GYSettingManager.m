@@ -51,6 +51,7 @@
     
     _trashFolderPath = [self pathOfContentInDocumentFolder:@"~~废纸篓"];
     NSLog(@"trashFolderPath: %@", self.trashFolderPath);
+    _fileAppCreatedTrashFolderPath = [self pathOfContentInDocumentFolder:@".Trash"];
     
     _mixWorksFolderPath = [self pathOfContentInDocumentFolder:@"~~混合作品"];
     _editWorksFolderPath = [self pathOfContentInDocumentFolder:@"~~编辑作品"];
