@@ -55,24 +55,26 @@
     _isFolder = [GYFileManager contentIsFolderAtPath:contentPath];
     self.cellType = PLContentCollectionViewCellTypeNormal;
     
-    CGFloat selectImageViewSize = 44.0 - ([PLUniversalManager defaultManager].columnsPerRow - 4) * 4;
-    self.selectImageViewWidthConstraint.constant = selectImageViewSize;
-    self.selectImageViewHeightConstraint.constant = selectImageViewSize;
-    
     if (self.isFolder) {
         self.folderImageView.hidden = NO;
         self.nameLabel.hidden = NO;
         self.nameLabel.text = contentPath.lastPathComponent;
         self.fileCountLabel.text = [NSString stringWithFormat:@"%ld / %ld", [GYFileManager folderPathsInFolder:contentPath].count, [GYFileManager filePathsInFolder:contentPath].count];
         self.fileCountLabel.hidden = NO;
-        
         self.imageView.hidden = YES;
+        
+        CGFloat selectImageViewSize = 44.0 - (PLFolderColumnsPerRow - 4) * 4;
+        self.selectImageViewWidthConstraint.constant = selectImageViewSize;
+        self.selectImageViewHeightConstraint.constant = selectImageViewSize;
     } else {
         self.folderImageView.hidden = YES;
         self.nameLabel.hidden = YES;
         self.fileCountLabel.hidden = YES;
-        
         self.imageView.hidden = NO;
+        
+        CGFloat selectImageViewSize = 44.0 - ([PLUniversalManager defaultManager].columnsPerRow - 4) * 4;
+        self.selectImageViewWidthConstraint.constant = selectImageViewSize;
+        self.selectImageViewHeightConstraint.constant = selectImageViewSize;
         
         UIImage *memoryImage = [[SDImageCache sharedImageCache] imageFromMemoryCacheForKey:contentPath];
         if (memoryImage) {
