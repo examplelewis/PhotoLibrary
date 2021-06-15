@@ -197,10 +197,18 @@
         if (indexPath.row == 0) {
             // do nothing...
         } else if (indexPath.row == 1) {
-            [GYFileManager removeFilePath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
-            [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
-            
-            [self.tableView reloadSection:2 withRowAnimation:UITableViewRowAnimationNone];
+            if (![self.fileAppCreatdTrashFolderSize isEqualToString:@"0.00MB"]) {
+                @weakify(self);
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    [GYFileManager removeFilePath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
+                    [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
+                    
+                    dispatch_main_async_safe(^{
+                        @strongify(self);
+                        [self.tableView.mj_header beginRefreshing];
+                    });
+                });   
+            }
         }
     } else {
 
