@@ -14,12 +14,15 @@
 @property (strong, nonatomic) IBOutlet UIImageView *selectImageView;
 @property (strong, nonatomic) IBOutlet UIImageView *folderImageView;
 @property (strong, nonatomic) IBOutlet UILabel *fileCountLabel;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *selectImageViewWidthConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *selectImageViewHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *fileCountLabelCenterYConstraint;
 
 @end
 
 @implementation PLContentCollectionViewCell
 
+#pragma mark - Lifecycle
 - (void)awakeFromNib {
     [super awakeFromNib];
     
@@ -51,6 +54,10 @@
     
     _isFolder = [GYFileManager contentIsFolderAtPath:contentPath];
     self.cellType = PLContentCollectionViewCellTypeNormal;
+    
+    CGFloat selectImageViewSize = 44.0 - ([PLUniversalManager defaultManager].columnsPerRow - 4) * 4;
+    self.selectImageViewWidthConstraint.constant = selectImageViewSize;
+    self.selectImageViewHeightConstraint.constant = selectImageViewSize;
     
     if (self.isFolder) {
         self.folderImageView.hidden = NO;

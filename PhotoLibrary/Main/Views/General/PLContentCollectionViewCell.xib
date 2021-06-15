@@ -70,6 +70,8 @@
                 <outlet property="imageView" destination="mhu-Up-rvT" id="1aK-nh-JEv"/>
                 <outlet property="nameLabel" destination="p8c-0f-fgt" id="JXi-8a-RcN"/>
                 <outlet property="selectImageView" destination="CAe-Rp-XSx" id="oq5-zY-fP9"/>
+                <outlet property="selectImageViewHeightConstraint" destination="iBA-20-ZtL" id="o9G-Vg-mIn"/>
+                <outlet property="selectImageViewWidthConstraint" destination="tfe-t4-o4j" id="rc7-qv-EZu"/>
             </connections>
             <point key="canvasLocation" x="78" y="130"/>
         </collectionViewCell>
