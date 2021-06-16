@@ -54,5 +54,20 @@
     // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
 }
 
+#pragma mark - Setup
+- (void)setupLogger {
+    // 在系统上保持一周的日志文件
+    DDLogFileManagerDefault *logFileManager = [[DDLogFileManagerDefault alloc] initWithLogsDirectory:[GYSettingManager defaultManager].documentPath];
+    DDFileLogger *fileLogger = [[DDFileLogger alloc] initWithLogFileManager:logFileManager];
+    fileLogger.rollingFrequency = 60 * 60 * 24 * 7;
+    fileLogger.logFileManager.maximumNumberOfLogFiles = 3;
+    fileLogger.maximumFileSize = 10 * 1024 * 1024;
+    [DDLog addLogger:fileLogger];
+    
+    // RELEASE 的时候不需要添加 console 日志，只保留文件日志
+#ifdef DEBUG
+    [DDLog addLogger:[DDOSLogger sharedInstance]]; // console 日志
+#endif
+}
 
 @end
