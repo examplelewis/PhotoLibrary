@@ -877,7 +877,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 2G352K7NR7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -910,6 +911,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.gongyuTest.PhotoLibrary;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = PhotoLibrary_Development;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -922,7 +924,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 2G352K7NR7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -955,6 +958,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.gongyuTest.PhotoLibrary;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = PhotoLibrary_Development;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
