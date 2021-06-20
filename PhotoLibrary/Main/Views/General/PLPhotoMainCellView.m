@@ -105,9 +105,9 @@
                             if (image.size.width < 1000 && image.size.height < 1000) {
                                 image = [image resizeScaleImage:1.0f];
                             } else if (image.size.width < 2000 && image.size.height < 2000) {
-                                image = [image resizeScaleImage:0.8f];
+                                image = [image resizeScaleImage:0.66f];
                             } else {
-                                image = [image resizeScaleImage:0.7f];
+                                image = [image resizeScaleImage:0.33f];
                             }
                         }
                     }

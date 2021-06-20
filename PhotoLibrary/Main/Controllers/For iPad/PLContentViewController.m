@@ -71,6 +71,11 @@
 }
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    // 退出页面时清除内存中的图片
+    for (NSInteger i = 0; i < self.files.count; i++) {
+        [[SDImageCache sharedImageCache] removeImageFromMemoryForKey:self.files[i]];
+    }
 }
 
 #pragma mark - Configure
