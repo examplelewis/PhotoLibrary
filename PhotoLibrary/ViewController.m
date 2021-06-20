@@ -59,7 +59,7 @@
     // Data
     ignoreFolders = @[@"~~Test", @"~~废纸篓", @"~~混合作品", @"~~编辑作品", @"~~其他作品"];
     self.folders = @[];
-    self.fileAppCreatdTrashFolderSize = @"0.00MB";
+    self.fileAppCreatdTrashFolderSize = @"0 B";
     
     // UI
 #if TARGET_IPHONE_SIMULATOR
@@ -122,7 +122,7 @@
     } else if (section == 1) {
         return 3;
     } else {
-        return 2;
+        return 3;
     }
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -159,6 +159,10 @@
                 cell.detailTextLabel.text = nil;
             }
         } else if (indexPath.row == 1) {
+            cell.textLabel.text = @"清空硬盘上的图片缓存";
+            cell.accessoryView = nil;
+            cell.detailTextLabel.text = [GYFileManager sizeDescriptionFromSize:[[SDImageCache sharedImageCache] totalDiskSize]];
+        } else if (indexPath.row == 2) {
             cell.textLabel.text = @"清空“文件”App创建的.Trash文件夹";
             cell.accessoryView = nil;
             cell.detailTextLabel.text = self.fileAppCreatdTrashFolderSize;
@@ -197,18 +201,34 @@
         if (indexPath.row == 0) {
             // do nothing...
         } else if (indexPath.row == 1) {
-            if (![self.fileAppCreatdTrashFolderSize isEqualToString:@"0.00MB"]) {
-                @weakify(self);
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    [GYFileManager removeFilePath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
-                    [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
-                    
-                    dispatch_main_async_safe(^{
-                        @strongify(self);
-                        [self.tableView.mj_header beginRefreshing];
-                    });
-                });   
+            if ([[GYFileManager sizeDescriptionFromSize:[[SDImageCache sharedImageCache] totalDiskSize]] isEqualToString:@"0 B"]) {
+                return;
             }
+            
+            [SVProgressHUD show];
+            @weakify(self);
+            [[SDImageCache sharedImageCache] clearDiskOnCompletion:^{
+                [SVProgressHUD dismiss];
+                @strongify(self);
+                [self.tableView reloadData];
+            }];
+        } else if (indexPath.row == 2) {
+            if ([self.fileAppCreatdTrashFolderSize isEqualToString:@"0 B"]) {
+                return;
+            }
+            
+            [SVProgressHUD show];
+            @weakify(self);
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [GYFileManager removeFilePath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
+                [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
+                
+                dispatch_main_async_safe(^{
+                    [SVProgressHUD dismiss];
+                    @strongify(self);
+                    [self.tableView.mj_header beginRefreshing];
+                });
+            });
         }
     } else {
 
