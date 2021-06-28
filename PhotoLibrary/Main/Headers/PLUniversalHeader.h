@@ -35,11 +35,13 @@ static CGFloat const PLPhotoBottomScrollViewHeight = 192.f;
 static CGFloat const PLPhotoBottomScrollViewCellViewSpacingH = 5.0f;
 static NSInteger const PLPhotoBottomScrollViewPreloadCountPerSide = 20; // bottomScrollView前后预加载的数量
 
-static NSString * const PLPhotoFilterStepFolder2 = @"2、文件页粗筛";
-static NSString * const PLPhotoFilterStepFolder3 = @"3、图片页粗筛";
-static NSString * const PLPhotoFilterStepFolder4 = @"4、图片页细筛";
-static NSString * const PLPhotoFilterStepFolder5 = @"5、分离：混合、编辑、其他";
-static NSString * const PLPhotoFilterStepFolder7 = @"7、和已筛选的图片去重";
+static NSString * const PLPhotoFilterStepFolder1 = @"1、文件页粗筛";
+static NSString * const PLPhotoFilterStepFolder2 = @"2、PhotoSweeper 去重";
+static NSString * const PLPhotoFilterStepFolder3 = @"3、文件页粗筛";
+static NSString * const PLPhotoFilterStepFolder4 = @"4、图片页粗筛";
+static NSString * const PLPhotoFilterStepFolder5 = @"5、图片页细筛";
+static NSString * const PLPhotoFilterStepFolder6 = @"6、分离：混合、编辑、其他";
+static NSString * const PLPhotoFilterStepFolder8 = @"8、和已筛选的图片去重";
 
 
 #define screenWidth (MAX(kScreenWidth, kScreenHeight))

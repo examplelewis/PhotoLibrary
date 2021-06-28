@@ -36,6 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Tools
 + (CGSize)imageSizeOfFilePath:(NSString *)filePath;
 + (NSString *)nonConflictFilePathForFilePath:(NSString *)filePath;
++ (NSString *)nonStepContentPathFromContentPath:(NSString *)contentPath;
 
 @end
 
