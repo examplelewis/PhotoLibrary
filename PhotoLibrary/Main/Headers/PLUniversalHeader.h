@@ -37,7 +37,7 @@ static NSInteger const PLPhotoBottomScrollViewPreloadCountPerSide = 20; // botto
 
 static NSString * const PLPhotoFilterStepFolder1 = @"1、文件页粗筛";
 static NSString * const PLPhotoFilterStepFolder2 = @"2、PhotoSweeper 去重";
-static NSString * const PLPhotoFilterStepFolder3 = @"3、文件页粗筛";
+static NSString * const PLPhotoFilterStepFolder3 = @"3、文件页细筛";
 static NSString * const PLPhotoFilterStepFolder4 = @"4、图片页粗筛";
 static NSString * const PLPhotoFilterStepFolder5 = @"5、图片页细筛";
 static NSString * const PLPhotoFilterStepFolder6 = @"6、分离：混合、编辑、其他";
