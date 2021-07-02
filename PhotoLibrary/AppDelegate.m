@@ -25,7 +25,7 @@
     // 删除“文件”App的生成的.Trash文件
     [GYFileManager removeFilePath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
     // 创建必须的文件夹
-    [PLUniversalManager createFolders];
+    [PLUniversalManager createNeededFolders];
     
     [SVProgressHUD setMinimumDismissTimeInterval:1.0f];
     [SVProgressHUD setMaximumDismissTimeInterval:1.0f];

@@ -19,7 +19,11 @@
 
 @property (nonatomic, strong) NSArray<NSString *> *folders;
 @property (nonatomic, strong) NSArray<NSString *> *folderContentCounts;
+
+@property (nonatomic, copy) NSString *sdWebImageCacheFolderSize; // SDWebImage创建的缓存文件夹大小
 @property (nonatomic, copy) NSString *fileAppCreatdTrashFolderSize; // 由“文件”App创建的.Trash文件夹的大小
+@property (nonatomic, copy) NSString *documentsFolderSize; // SandBox文稿文件夹的大小
+
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong) UISwitch *jumpSwitch;
@@ -59,7 +63,10 @@
     // Data
     ignoreFolders = @[@"~~Test", @"~~废纸篓", @"~~混合作品", @"~~编辑作品", @"~~其他作品"];
     self.folders = @[];
+    
+    self.sdWebImageCacheFolderSize = @"0 B";
     self.fileAppCreatdTrashFolderSize = @"0 B";
+    self.documentsFolderSize = @"0 B";
     
     // UI
 #if TARGET_IPHONE_SIMULATOR
@@ -105,22 +112,26 @@
         self.folderContentCounts = [self.folderContentCounts arrayByAddingObject:[NSString stringWithFormat:@"%ld / %ld", foldersCount, filesCount]];
     }
     
+    self.sdWebImageCacheFolderSize = [GYFileManager sizeDescriptionFromSize:[[SDImageCache sharedImageCache] totalDiskSize]];
     if ([GYFileManager fileExistsAtPath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath]) {
         self.fileAppCreatdTrashFolderSize = [GYFileManager folderSizeDescriptionAtPath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
     }
+    self.documentsFolderSize = [PLUniversalManager neededFoldersSizeDescription];
     
     [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    return 4;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
         return self.folders.count;
     } else if (section == 1) {
         return 3;
+    } else if (section == 2) {
+        return 1;
     } else {
         return 3;
     }
@@ -145,7 +156,7 @@
         }
         cell.accessoryView = nil;
         cell.detailTextLabel.text = nil;
-    } else {
+    } else if (indexPath.section == 2) {
         if (indexPath.row == 0) {
             cell.textLabel.text = @"直接查看图片";
             if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
@@ -158,14 +169,20 @@
                 cell.accessoryView = nil;
                 cell.detailTextLabel.text = nil;
             }
-        } else if (indexPath.row == 1) {
-            cell.textLabel.text = @"清空硬盘上的图片缓存";
+        }
+    } else {
+        if (indexPath.row == 0) {
+            cell.textLabel.text = @"清空SDWebImage的图片缓存";
             cell.accessoryView = nil;
-            cell.detailTextLabel.text = [GYFileManager sizeDescriptionFromSize:[[SDImageCache sharedImageCache] totalDiskSize]];
-        } else if (indexPath.row == 2) {
+            cell.detailTextLabel.text = self.sdWebImageCacheFolderSize;
+        } else if (indexPath.row == 1) {
             cell.textLabel.text = @"清空“文件”App创建的.Trash文件夹";
             cell.accessoryView = nil;
             cell.detailTextLabel.text = self.fileAppCreatdTrashFolderSize;
+        } else if (indexPath.row == 2) {
+            cell.textLabel.text = @"清空所有文件";
+            cell.accessoryView = nil;
+            cell.detailTextLabel.text = self.documentsFolderSize;
         } else {
             cell.textLabel.text = @"";
             cell.accessoryView = nil;
@@ -200,39 +217,85 @@
     } else if (indexPath.section == 2) {
         if (indexPath.row == 0) {
             // do nothing...
-        } else if (indexPath.row == 1) {
-            if ([[GYFileManager sizeDescriptionFromSize:[[SDImageCache sharedImageCache] totalDiskSize]] isEqualToString:@"0 B"]) {
-                return;
-            }
-            
-            [SVProgressHUD show];
-            @weakify(self);
-            [[SDImageCache sharedImageCache] clearDiskOnCompletion:^{
-                [SVProgressHUD dismiss];
-                @strongify(self);
-                [self.tableView reloadData];
-            }];
-        } else if (indexPath.row == 2) {
-            if ([self.fileAppCreatdTrashFolderSize isEqualToString:@"0 B"]) {
-                return;
-            }
-            
-            [SVProgressHUD show];
-            @weakify(self);
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                [GYFileManager removeFilePath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
-                [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
-                
-                dispatch_main_async_safe(^{
-                    [SVProgressHUD dismiss];
-                    @strongify(self);
-                    [self.tableView.mj_header beginRefreshing];
-                });
-            });
         }
     } else {
-
+        if (indexPath.row == 0) {
+            [self cleanSDWebImageCahce];
+        } else if (indexPath.row == 1) {
+            [self cleanFileAppCreatedTrashFolder];
+        } else if (indexPath.row == 2) {
+            [self cleanDocumentsFolder];
+        }
     }
+}
+
+#pragma mark - Ops
+- (void)cleanSDWebImageCahce {
+    if ([self.sdWebImageCacheFolderSize isEqualToString:@"0 B"]) {
+        return;
+    }
+    
+    [SVProgressHUD show];
+    @weakify(self);
+    [[SDImageCache sharedImageCache] clearDiskOnCompletion:^{
+        [SVProgressHUD dismiss];
+        
+        @strongify(self);
+        [self.tableView.mj_header beginRefreshing];
+    }];
+}
+- (void)cleanFileAppCreatedTrashFolder {
+    if ([self.fileAppCreatdTrashFolderSize isEqualToString:@"0 B"]) {
+        return;
+    }
+    
+    [SVProgressHUD show];
+    @weakify(self);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [GYFileManager removeFilePath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
+        [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
+        
+        dispatch_main_async_safe(^{
+            [SVProgressHUD dismiss];
+            
+            @strongify(self);
+            [self.tableView.mj_header beginRefreshing];
+        });
+    });
+}
+- (void)cleanDocumentsFolder {
+    if ([self.documentsFolderSize isEqualToString:@"0 B"]) {
+        return;
+    }
+    
+    UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"是否清理所有文件夹" message:@"此操作不可恢复" preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *cancelAA = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    @weakify(self);
+    UIAlertAction *confirmAA = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        @strongify(self);
+        [self _cleanDocumentsFolder];
+    }];
+    
+    [ac addAction:cancelAA];
+    [ac addAction:confirmAA];
+    
+    [self presentViewController:ac animated:YES completion:nil];
+}
+- (void)_cleanDocumentsFolder {
+    [SVProgressHUD show];
+    @weakify(self);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [PLUniversalManager removeNeededFolders];
+        [PLUniversalManager createNeededFolders];
+        
+        dispatch_main_async_safe(^{
+            [SVProgressHUD dismiss];
+            
+            @strongify(self);
+            [self.tableView.mj_header beginRefreshing];
+        });
+    });
 }
 
 #pragma mark - Action

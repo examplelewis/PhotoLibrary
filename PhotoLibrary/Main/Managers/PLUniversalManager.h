@@ -24,7 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)defaultManager;
 
 #pragma mark - File Ops
-+ (void)createFolders;
++ (void)createNeededFolders;
++ (void)removeNeededFolders;
++ (NSString *)neededFoldersSizeDescription;
 - (void)trashContentsAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion;
 - (void)restoreContentsAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion;
 - (void)deleteContentsAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion;

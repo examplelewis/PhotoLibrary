@@ -48,7 +48,7 @@
 }
 
 #pragma mark - File Ops
-+ (void)createFolders {
++ (void)createNeededFolders {
     // 创建废纸篓文件夹
     [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].trashFolderPath];
     
@@ -71,6 +71,58 @@
     [GYFileManager createFolderAtPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder5]];
     [GYFileManager createFolderAtPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder6]];
     [GYFileManager createFolderAtPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder8]];
+}
++ (void)removeNeededFolders {
+    // 删除废纸篓文件夹
+    [GYFileManager removeFilePath:[GYSettingManager defaultManager].trashFolderPath];
+    
+    // 删除混合作品文件夹
+    [GYFileManager removeFilePath:[GYSettingManager defaultManager].mixWorksFolderPath];
+    
+    // 删除编辑作品文件夹及其子文件夹
+    [GYFileManager removeFilePath:[GYSettingManager defaultManager].editWorksFolderPath];
+    [GYFileManager removeFilePath:[GYSettingManager defaultManager].editWorksEditFolderPath];
+    [GYFileManager removeFilePath:[GYSettingManager defaultManager].editWorksOriginFolderPath];
+    
+    // 删除其他作品文件夹
+    [GYFileManager removeFilePath:[GYSettingManager defaultManager].otherWorksFolderPath];
+    
+    // 删除不同步骤对应的文件夹
+    [GYFileManager removeFilePath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder1]];
+    [GYFileManager removeFilePath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder2]];
+    [GYFileManager removeFilePath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder3]];
+    [GYFileManager removeFilePath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder4]];
+    [GYFileManager removeFilePath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder5]];
+    [GYFileManager removeFilePath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder6]];
+    [GYFileManager removeFilePath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder8]];
+}
++ (NSString *)neededFoldersSizeDescription {
+    unsigned long long fodlersSize = 0;
+    
+    // 计算废纸篓文件夹大小
+    fodlersSize += [GYFileManager folderSizeAtPath:[GYSettingManager defaultManager].trashFolderPath];
+    
+    // 计算混合作品文件夹大小
+    fodlersSize += [GYFileManager folderSizeAtPath:[GYSettingManager defaultManager].mixWorksFolderPath];
+    
+    // 计算编辑作品文件夹及其子文件夹大小
+    fodlersSize += [GYFileManager folderSizeAtPath:[GYSettingManager defaultManager].editWorksFolderPath];
+    fodlersSize += [GYFileManager folderSizeAtPath:[GYSettingManager defaultManager].editWorksEditFolderPath];
+    fodlersSize += [GYFileManager folderSizeAtPath:[GYSettingManager defaultManager].editWorksOriginFolderPath];
+    
+    // 计算其他作品文件夹大小
+    fodlersSize += [GYFileManager folderSizeAtPath:[GYSettingManager defaultManager].otherWorksFolderPath];
+    
+    // 计算不同步骤对应的文件夹大小
+    fodlersSize += [GYFileManager folderSizeAtPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder1]];
+    fodlersSize += [GYFileManager folderSizeAtPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder2]];
+    fodlersSize += [GYFileManager folderSizeAtPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder3]];
+    fodlersSize += [GYFileManager folderSizeAtPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder4]];
+    fodlersSize += [GYFileManager folderSizeAtPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder5]];
+    fodlersSize += [GYFileManager folderSizeAtPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder6]];
+    fodlersSize += [GYFileManager folderSizeAtPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:PLPhotoFilterStepFolder8]];
+    
+    return [GYFileManager sizeDescriptionFromSize:fodlersSize];
 }
 - (void)trashContentsAtPaths:(NSArray<NSString *> *)contentPaths completion:(nullable void(^)(void))completion {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
