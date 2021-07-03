@@ -7,6 +7,16 @@
 
 #import "PLContentViewModel.h"
 
+@interface PLContentViewModel ()
+
+@property (nonatomic, copy) NSArray<NSString *> *folders;
+@property (nonatomic, copy) NSArray<NSString *> *files;
+@property (nonatomic, strong) NSMutableArray<NSString *> *selects;
+
+@property (nonatomic, assign) BOOL operatingFiles; // 是否正在进行文件操作
+
+@end
+
 @implementation PLContentViewModel
 
 #pragma mark - Lifecycle
@@ -66,7 +76,42 @@
     }
 }
 
+#pragma mark - Select Items
+- (BOOL)isSelectedAtItemPath:(NSString *)itemPath {
+    return [self.selects indexOfObject:itemPath] != NSNotFound;
+}
+- (void)removeAllSelectItems {
+    [self.selects removeAllObjects];
+}
+- (void)selectAllItems:(BOOL)selectAll {
+    [self.selects removeAllObjects];
+    if (selectAll) {
+        [self.selects addObjectsFromArray:self.folders];
+        [self.selects addObjectsFromArray:self.files];
+    }
+}
+- (void)addSelectItem:(NSString *)itemPath {
+    [self.selects addObject:itemPath];
+}
+- (void)removeSelectItem:(NSString *)itemPath {
+    [self.selects removeObject:itemPath];
+}
 
+#pragma mark - Path
+- (NSString *)folderPathAtIndex:(NSInteger)index {
+    if (index >= self.folders.count) {
+        return nil;
+    }
+    
+    return self.folders[index];
+}
+- (NSString *)filePathAtIndex:(NSInteger)index {
+    if (index >= self.files.count) {
+        return nil;
+    }
+    
+    return self.files[index];
+}
 
 #pragma mark - Move SelectItems
 - (void)moveSelectItemsToMixWorks {
@@ -145,6 +190,20 @@
         [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"已将%ld个项目移动到废纸篓", self.selects.count]];
         [self refreshAfterOperatingFiles];
     }];
+}
+
+#pragma mark - Getter
+- (NSInteger)foldersCount {
+    _foldersCount = self.folders.count;
+    return _foldersCount;
+}
+- (NSInteger)filesCount {
+    _filesCount = self.files.count;
+    return _filesCount;
+}
+- (NSInteger)selectsCount {
+    _selectsCount = self.selects.count;
+    return _selectsCount;
 }
 
 @end

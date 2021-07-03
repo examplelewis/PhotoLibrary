@@ -13,18 +13,28 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy, readonly) NSString *folderPath;
 
-@property (nonatomic, copy) NSArray<NSString *> *folders;
-@property (nonatomic, copy) NSArray<NSString *> *files;
-@property (nonatomic, assign) BOOL bothFoldersAndFiles;
-@property (nonatomic, strong) NSMutableArray<NSString *> *selects;
+@property (nonatomic, assign) NSInteger foldersCount;
+@property (nonatomic, assign) NSInteger filesCount;
+@property (nonatomic, assign) NSInteger selectsCount;
 
-@property (nonatomic, assign) BOOL operatingFiles;
+@property (nonatomic, assign) BOOL bothFoldersAndFiles;
 
 - (instancetype)initWithFolderPath:(NSString *)folderPath;
 
 - (void)refreshItems;
 
 - (void)cleanSDWebImageCache;
+
+#pragma mark - Select Items
+- (BOOL)isSelectedAtItemPath:(NSString *)itemPath;
+- (void)removeAllSelectItems;
+- (void)selectAllItems:(BOOL)selectAll;
+- (void)addSelectItem:(NSString *)itemPath;
+- (void)removeSelectItem:(NSString *)itemPath;
+
+#pragma mark - Path
+- (nullable NSString *)folderPathAtIndex:(NSInteger)index;
+- (nullable NSString *)filePathAtIndex:(NSInteger)index;
 
 #pragma mark - Move SelectItems
 - (void)moveSelectItemsToMixWorks;

@@ -57,7 +57,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    if (self.viewModel.folders.count == 0 && self.viewModel.files.count == 0) {
+    if (self.viewModel.foldersCount == 0 && self.viewModel.filesCount == 0) {
         [self.collectionView.mj_header beginRefreshing];
     } else {
         if (self.refreshFilesWhenViewDidAppear) {
@@ -76,13 +76,13 @@
 
 #pragma mark - Configure
 - (void)setupTitle {
-    if (self.viewModel.folders.count + self.viewModel.files.count == 0) {
+    if (self.viewModel.foldersCount + self.viewModel.filesCount == 0) {
         self.title = self.folderPath.lastPathComponent;
     } else {
         if (self.cellType == PLContentCollectionViewCellTypeNormal) {
-            self.title = [NSString stringWithFormat:@"%@(%ld)", self.folderPath.lastPathComponent, self.viewModel.folders.count + self.viewModel.files.count];
+            self.title = [NSString stringWithFormat:@"%@(%ld)", self.folderPath.lastPathComponent, self.viewModel.foldersCount + self.viewModel.filesCount];
         } else {
-            self.title = [NSString stringWithFormat:@"%@(%ld)(%ld)", self.folderPath.lastPathComponent, self.viewModel.folders.count + self.viewModel.files.count, self.viewModel.selects.count];
+            self.title = [NSString stringWithFormat:@"%@(%ld)(%ld)", self.folderPath.lastPathComponent, self.viewModel.foldersCount + self.viewModel.filesCount, self.viewModel.selectsCount];
         }
     }
 }
@@ -139,7 +139,7 @@
     }
 }
 - (void)setupAllBBI {
-    BOOL selectAll = (self.viewModel.selects.count == (self.viewModel.folders.count + self.viewModel.files.count)) && self.viewModel.selects.count != 0; // 如果没有文件(夹)，就不算全选
+    BOOL selectAll = (self.viewModel.selectsCount == (self.viewModel.foldersCount + self.viewModel.filesCount)) && self.viewModel.selectsCount != 0; // 如果没有文件(夹)，就不算全选
     self.allBBI = [[UIBarButtonItem alloc] initWithTitle:selectAll ? @"取消全选" : @"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
 }
 - (void)setupCollectionViewFlowLayout {
@@ -187,9 +187,9 @@
     
     [self setupTitle];
     
-    [self.collectionView.mj_header endRefreshing];
-    
     [self.collectionView reloadData];
+    
+    [self.collectionView.mj_header endRefreshing];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -199,15 +199,15 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     if (self.viewModel.bothFoldersAndFiles) {
         if (section == 0) {
-            return self.viewModel.folders.count;
+            return self.viewModel.foldersCount;
         } else {
-            return self.viewModel.files.count;
+            return self.viewModel.filesCount;
         }
     } else {
-        if (self.viewModel.folders.count > 0) {
-            return self.viewModel.folders.count;
-        } else if (self.viewModel.files.count > 0) {
-            return self.viewModel.files.count;
+        if (self.viewModel.foldersCount > 0) {
+            return self.viewModel.foldersCount;
+        } else if (self.viewModel.filesCount > 0) {
+            return self.viewModel.filesCount;
         } else {
             return 0;
         }
@@ -218,15 +218,15 @@
     
     if (self.viewModel.bothFoldersAndFiles) {
         if (indexPath.section == 0) {
-            cell.contentPath = self.viewModel.folders[indexPath.row];
+            cell.contentPath = [self.viewModel folderPathAtIndex:indexPath.row];
         } else {
-            cell.contentPath = self.viewModel.files[indexPath.row];
+            cell.contentPath = [self.viewModel filePathAtIndex:indexPath.row];
         }
     } else {
-        if (self.viewModel.folders.count > 0) {
-            cell.contentPath = self.viewModel.folders[indexPath.row];
-        } else if (self.viewModel.files.count > 0) {
-            cell.contentPath = self.viewModel.files[indexPath.row];
+        if (self.viewModel.foldersCount > 0) {
+            cell.contentPath = [self.viewModel folderPathAtIndex:indexPath.row];
+        } else if (self.viewModel.filesCount > 0) {
+            cell.contentPath = [self.viewModel filePathAtIndex:indexPath.row];
         } else {
             return [UICollectionViewCell new];
         }
@@ -235,8 +235,7 @@
     if (self.cellType == PLContentCollectionViewCellTypeNormal) {
         cell.cellType = PLContentCollectionViewCellTypeNormal;
     } else {
-        BOOL selected = [self.viewModel.selects indexOfObject:cell.contentPath] != NSNotFound;
-        cell.cellType = selected ? PLContentCollectionViewCellTypeEditSelect : PLContentCollectionViewCellTypeEdit;
+        cell.cellType = [self.viewModel isSelectedAtItemPath:cell.contentPath] ? PLContentCollectionViewCellTypeEditSelect : PLContentCollectionViewCellTypeEdit;
     }
 
     return cell;
@@ -251,9 +250,9 @@
                 headerView.header = @"文件";
             }
         } else {
-            if (self.viewModel.folders.count > 0) {
+            if (self.viewModel.foldersCount > 0) {
                 headerView.header = @"文件夹";
-            } else if (self.viewModel.files.count > 0) {
+            } else if (self.viewModel.filesCount > 0) {
                 headerView.header = @"文件";
             } else {
                 headerView.header = @"未知错误";
@@ -273,7 +272,7 @@
     PLContentCollectionViewCell *cell = (PLContentCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     if (cell.cellType == PLContentCollectionViewCellTypeNormal) {
         if (cell.isFolder) {
-            PLNavigationType type = [PLNavigationManager navigateToContentAtFolderPath:self.viewModel.folders[indexPath.row]];
+            PLNavigationType type = [PLNavigationManager navigateToContentAtFolderPath:[self.viewModel folderPathAtIndex:indexPath.row]];
             self.refreshFilesWhenViewDidAppear = type == PLNavigationTypePhoto; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
         } else {
             if (self.folderType == PLContentFolderTypeNormal) {
@@ -284,11 +283,10 @@
             }
         }
     } else {
-        BOOL selected = [self.viewModel.selects indexOfObject:cell.contentPath] != NSNotFound;
-        if (selected) {
-            [self.viewModel.selects removeObject:cell.contentPath];
+        if ([self.viewModel isSelectedAtItemPath:cell.contentPath]) {
+            [self.viewModel removeSelectItem:cell.contentPath];
         } else {
-            [self.viewModel.selects addObject:cell.contentPath];
+            [self.viewModel addSelectItem:cell.contentPath];
         }
         
         [self setupTitle];
@@ -304,7 +302,7 @@
     if (self.viewModel.bothFoldersAndFiles && indexPath.section == 0) {
         return self.folderItemSize;
     }
-    if (!self.viewModel.bothFoldersAndFiles && self.viewModel.files.count == 0) {
+    if (!self.viewModel.bothFoldersAndFiles && self.viewModel.filesCount == 0) {
         return self.folderItemSize;
     }
     
@@ -320,7 +318,7 @@
     return self.flowLayout.minimumInteritemSpacing;
 }
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    if (self.viewModel.files.count == 0 && self.viewModel.folders.count == 0) {
+    if (self.viewModel.filesCount == 0 && self.viewModel.foldersCount == 0) {
         return CGSizeMake(kScreenWidth, 0);
     } else {
         return self.flowLayout.headerReferenceSize;
@@ -347,7 +345,7 @@
         self.cellType = PLContentCollectionViewCellTypeNormal;
     }
     
-    [self.viewModel.selects removeAllObjects];
+    [self.viewModel removeAllSelectItems];
     [self.collectionView reloadData];
     
     [self setupTitle];
@@ -357,19 +355,16 @@
     [self.viewModel moveSelectItemsToTrash];
 }
 - (void)allBarButtonItemDidPress:(UIBarButtonItem *)sender {
-    [self.viewModel.selects removeAllObjects];
-    if ([self.allBBI.title isEqualToString:@"全选"]) {
-        [self.viewModel.selects addObjectsFromArray:self.viewModel.folders];
-        [self.viewModel.selects addObjectsFromArray:self.viewModel.files];
-    }
+    BOOL selectAll = [self.allBBI.title isEqualToString:@"全选"];
+    
+    [self.viewModel selectAllItems:selectAll];
     [self.collectionView reloadData];
     
-    if ([self.allBBI.title isEqualToString:@"全选"]) {
+    if (selectAll) {
         self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"取消全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
     } else {
         self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
     }
-    
     [self setupTitle];
     [self setupNavigationBarItems];
 }
