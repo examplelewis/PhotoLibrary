@@ -14,7 +14,7 @@
 #import "PLContentCollectionHeaderReusableView.h"
 #import "PLPhotoViewController.h"
 #import "PLOperationMenu.h"
-#import "PLContentViewModel.h"
+#import "PLContentView.h"
 
 @interface PLContentViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PLOperationMenuDelegate, PLContentViewModelDelegate>
 
@@ -31,6 +31,7 @@
 @property (nonatomic, assign) CGSize folderItemSize;
 @property (nonatomic, strong) UICollectionView *collectionView;
 
+@property (nonatomic, strong) PLContentView *contentView;
 @property (nonatomic, strong) PLContentViewModel *viewModel;
 
 @property (nonatomic, assign) BOOL selectingMode;
