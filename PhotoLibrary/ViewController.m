@@ -131,9 +131,9 @@
     } else if (section == 1) {
         return 3;
     } else if (section == 2) {
-        return 1;
-    } else {
         return 3;
+    } else {
+        return 1;
     }
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -158,20 +158,6 @@
         cell.detailTextLabel.text = nil;
     } else if (indexPath.section == 2) {
         if (indexPath.row == 0) {
-            cell.textLabel.text = @"直接查看图片";
-            if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-                cell.accessoryView = self.jumpSwitch;
-                cell.detailTextLabel.text = nil;
-            } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-                cell.accessoryView = nil;
-                cell.detailTextLabel.text = @"是";
-            } else {
-                cell.accessoryView = nil;
-                cell.detailTextLabel.text = nil;
-            }
-        }
-    } else {
-        if (indexPath.row == 0) {
             cell.textLabel.text = @"清空SDWebImage的图片缓存";
             cell.accessoryView = nil;
             cell.detailTextLabel.text = self.sdWebImageCacheFolderSize;
@@ -187,6 +173,20 @@
             cell.textLabel.text = @"";
             cell.accessoryView = nil;
             cell.detailTextLabel.text = nil;
+        }
+    } else {
+        if (indexPath.row == 0) {
+            cell.textLabel.text = @"直接查看图片";
+            if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+                cell.accessoryView = self.jumpSwitch;
+                cell.detailTextLabel.text = nil;
+            } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+                cell.accessoryView = nil;
+                cell.detailTextLabel.text = @"是";
+            } else {
+                cell.accessoryView = nil;
+                cell.detailTextLabel.text = nil;
+            }
         }
     }
     
@@ -216,15 +216,15 @@
         }
     } else if (indexPath.section == 2) {
         if (indexPath.row == 0) {
-            // do nothing...
-        }
-    } else {
-        if (indexPath.row == 0) {
             [self cleanSDWebImageCahce];
         } else if (indexPath.row == 1) {
             [self cleanFileAppCreatedTrashFolder];
         } else if (indexPath.row == 2) {
             [self cleanDocumentsFolder];
+        }
+    } else {
+        if (indexPath.row == 0) {
+            // do nothing...
         }
     }
 }
