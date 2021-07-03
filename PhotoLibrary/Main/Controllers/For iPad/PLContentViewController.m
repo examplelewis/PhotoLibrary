@@ -7,16 +7,12 @@
 
 #import "PLContentViewController.h"
 
-#import <MJRefresh.h>
 #import <StepSlider.h>
 
-#import "PLContentCollectionViewCell.h"
-#import "PLContentCollectionHeaderReusableView.h"
-#import "PLPhotoViewController.h"
 #import "PLOperationMenu.h"
 #import "PLContentView.h"
 
-@interface PLContentViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PLOperationMenuDelegate, PLContentViewModelDelegate>
+@interface PLContentViewController () <PLOperationMenuDelegate, PLContentViewDelegate, PLContentViewModelDelegate>
 
 @property (nonatomic, strong) UIBarButtonItem *editBBI;
 @property (nonatomic, strong) UIBarButtonItem *allBBI;
@@ -27,16 +23,9 @@
 
 @property (nonatomic, strong) PLOperationMenu *operationMenu;
 
-@property (nonatomic, strong) UICollectionViewFlowLayout *flowLayout;
-@property (nonatomic, assign) CGSize folderItemSize;
-@property (nonatomic, strong) UICollectionView *collectionView;
-
 @property (nonatomic, strong) PLContentView *contentView;
-@property (nonatomic, strong) PLContentViewModel *viewModel;
 
 @property (nonatomic, assign) BOOL selectingMode;
-
-@property (nonatomic, assign) BOOL refreshFilesWhenViewDidAppear; // 当前Controller被展示时，是否刷新数据。只有跳转到PLPhotoViewController后返回才需要刷新
 
 @end
 
@@ -47,7 +36,6 @@
     [super viewDidLoad];
     
     [self setupTitle];
-    [self setupNotifications];
     [self setupUIAndData];
 }
 - (void)viewWillAppear:(BOOL)animated {
@@ -58,46 +46,29 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    if (self.viewModel.foldersCount == 0 && self.viewModel.filesCount == 0) {
-        [self.collectionView.mj_header beginRefreshing];
-    } else {
-        if (self.refreshFilesWhenViewDidAppear) {
-            self.refreshFilesWhenViewDidAppear = NO;
-            
-            [self refreshFiles];
-        }
-    }
-}
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    // 退出页面时清除内存中的图片
-    [self.viewModel cleanSDWebImageCache];
+    [self.contentView refreshWhenViewDidAppear];
 }
 
 #pragma mark - Configure
 - (void)setupTitle {
-    if (self.viewModel.foldersCount + self.viewModel.filesCount == 0) {
+    if (self.contentView.viewModel.foldersCount + self.contentView.viewModel.filesCount == 0) {
         self.title = self.folderPath.lastPathComponent;
     } else {
         if (!self.selectingMode) {
-            self.title = [NSString stringWithFormat:@"%@(%ld)", self.folderPath.lastPathComponent, self.viewModel.foldersCount + self.viewModel.filesCount];
+            self.title = [NSString stringWithFormat:@"%@(%ld)", self.folderPath.lastPathComponent, self.contentView.viewModel.foldersCount + self.contentView.viewModel.filesCount];
         } else {
-            self.title = [NSString stringWithFormat:@"%@(%ld)(%ld)", self.folderPath.lastPathComponent, self.viewModel.foldersCount + self.viewModel.filesCount, self.viewModel.selectsCount];
+            self.title = [NSString stringWithFormat:@"%@(%ld)(%ld)", self.folderPath.lastPathComponent, self.contentView.viewModel.foldersCount + self.contentView.viewModel.filesCount, self.contentView.viewModel.selectsCount];
         }
     }
 }
-- (void)setupNotifications {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(columnPerRowSliderValueChanged:) name:PLColumnPerRowSliderValueChanged object:nil];
-}
+
 - (void)setupUIAndData {
     // Data
     self.selectingMode = NO;
     
     // UI
     [self setupNavigationBar];
-    [self setupCollectionViewFlowLayout];
-    [self setupCollectionView];
+    [self setupContentView];
 }
 - (void)setupNavigationBar {
     self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editBarButtonItemDidPress:)];
@@ -133,197 +104,21 @@
     [self setupNavigationBarItems];
 }
 - (void)setupNavigationBarItems {
-    if (self.viewModel.folderType == PLContentFolderTypeNormal) {
+    if (self.contentView.viewModel.folderType == PLContentFolderTypeNormal) {
         self.navigationItem.rightBarButtonItems = @[self.editBBI, self.allBBI, self.trashBBI, self.menuBBI, self.jumpSwitchBBI, self.sliderBBI];
     } else {
         self.navigationItem.rightBarButtonItems = @[];
     }
 }
 - (void)setupAllBBI {
-    BOOL selectAll = (self.viewModel.selectsCount == (self.viewModel.foldersCount + self.viewModel.filesCount)) && self.viewModel.selectsCount != 0; // 如果没有文件(夹)，就不算全选
+    BOOL selectAll = (self.contentView.viewModel.selectsCount == (self.contentView.viewModel.foldersCount + self.contentView.viewModel.filesCount)) && self.contentView.viewModel.selectsCount != 0; // 如果没有文件(夹)，就不算全选
     self.allBBI = [[UIBarButtonItem alloc] initWithTitle:selectAll ? @"取消全选" : @"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
 }
-- (void)setupCollectionViewFlowLayout {
-    self.flowLayout = [UICollectionViewFlowLayout new];
-    self.flowLayout.minimumInteritemSpacing = [PLUniversalManager defaultManager].rowColumnSpacing;
-    self.flowLayout.minimumLineSpacing = [PLUniversalManager defaultManager].rowColumnSpacing;
-    
-    CGFloat itemWidth = (screenWidth - ([PLUniversalManager defaultManager].columnsPerRow + 1) * [PLUniversalManager defaultManager].rowColumnSpacing) / [PLUniversalManager defaultManager].columnsPerRow;
-    self.flowLayout.itemSize = CGSizeMake(floorf(itemWidth), floorf(itemWidth));
-    
-    self.flowLayout.headerReferenceSize = CGSizeMake(kScreenWidth, 44);
-    self.flowLayout.sectionInset = [PLUniversalManager defaultManager].flowLayoutSectionInset; // 设置每个分区的 上左下右 的内边距
-    self.flowLayout.sectionFootersPinToVisibleBounds = YES; // 设置分区的头视图和尾视图 是否始终固定在屏幕上边和下边
-    
-    self.flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
-    
-    // Folder Item Size
-    CGFloat folderItemWidth = (screenWidth - (PLFolderColumnsPerRow + 1) * [PLUniversalManager defaultManager].rowColumnSpacing) / PLFolderColumnsPerRow;
-    self.folderItemSize = CGSizeMake(floorf(folderItemWidth), floorf(folderItemWidth));
-}
-- (void)setupCollectionView {
-    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:self.flowLayout];
-    self.collectionView.backgroundColor = [UIColor whiteColor];
-    self.collectionView.dataSource = self;
-    self.collectionView.delegate = self;
-    
-    [self.collectionView registerNib:[UINib nibWithNibName:@"PLContentCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"PLContentCell"];
-    [self.collectionView registerNib:[UINib nibWithNibName:@"PLContentCollectionHeaderReusableView" bundle:nil] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"PLContentHeaderView"];
-    
-    @weakify(self);
-    self.collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        @strongify(self);
-        [self refreshFiles];
-    }];
-    
-    [self.view addSubview:self.collectionView];
-    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+- (void)setupContentView {
+    [self.view addSubview:self.contentView];
+    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.leading.bottom.trailing.equalTo(self.view);
     }];
-}
-
-#pragma mark - Refresh
-- (void)refreshFiles {
-    [self.viewModel refreshItems];
-    
-    [self setupTitle];
-    
-    [self.collectionView reloadData];
-    
-    [self.collectionView.mj_header endRefreshing];
-}
-
-#pragma mark - UICollectionViewDataSource
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return self.viewModel.bothFoldersAndFiles ? 2 : 1;
-}
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if (self.viewModel.bothFoldersAndFiles) {
-        if (section == 0) {
-            return self.viewModel.foldersCount;
-        } else {
-            return self.viewModel.filesCount;
-        }
-    } else {
-        if (self.viewModel.foldersCount > 0) {
-            return self.viewModel.foldersCount;
-        } else if (self.viewModel.filesCount > 0) {
-            return self.viewModel.filesCount;
-        } else {
-            return 0;
-        }
-    }
-}
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    PLContentCollectionViewCell *cell = (PLContentCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"PLContentCell" forIndexPath:indexPath];
-    
-    if (self.viewModel.bothFoldersAndFiles) {
-        if (indexPath.section == 0) {
-            cell.contentPath = [self.viewModel folderPathAtIndex:indexPath.row];
-        } else {
-            cell.contentPath = [self.viewModel filePathAtIndex:indexPath.row];
-        }
-    } else {
-        if (self.viewModel.foldersCount > 0) {
-            cell.contentPath = [self.viewModel folderPathAtIndex:indexPath.row];
-        } else if (self.viewModel.filesCount > 0) {
-            cell.contentPath = [self.viewModel filePathAtIndex:indexPath.row];
-        } else {
-            return [UICollectionViewCell new];
-        }
-    }
-    
-    if (!self.selectingMode) {
-        cell.cellType = PLContentCollectionViewCellTypeNormal;
-    } else {
-        cell.cellType = [self.viewModel isSelectedAtItemPath:cell.contentPath] ? PLContentCollectionViewCellTypeEditSelect : PLContentCollectionViewCellTypeEdit;
-    }
-
-    return cell;
-}
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
-        PLContentCollectionHeaderReusableView *headerView = (PLContentCollectionHeaderReusableView *)[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"PLContentHeaderView" forIndexPath:indexPath];
-        if (self.viewModel.bothFoldersAndFiles) {
-            if (indexPath.section == 0) {
-                headerView.header = @"文件夹";
-            } else {
-                headerView.header = @"文件";
-            }
-        } else {
-            if (self.viewModel.foldersCount > 0) {
-                headerView.header = @"文件夹";
-            } else if (self.viewModel.filesCount > 0) {
-                headerView.header = @"文件";
-            } else {
-                headerView.header = @"未知错误";
-            }
-        }
-        
-        return headerView;
-    }
-    
-    return nil;
-}
-
-#pragma mark - UICollectionViewDelegate
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-    
-    PLContentCollectionViewCell *cell = (PLContentCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    if (cell.cellType == PLContentCollectionViewCellTypeNormal) {
-        if (cell.isFolder) {
-            PLNavigationType type = [PLNavigationManager navigateToContentAtFolderPath:[self.viewModel folderPathAtIndex:indexPath.row]];
-            self.refreshFilesWhenViewDidAppear = type == PLNavigationTypePhoto; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
-        } else {
-            if (self.viewModel.folderType == PLContentFolderTypeNormal) {
-                PLNavigationType type = [PLNavigationManager navigateToPhotoAtFolderPath:self.folderPath index:indexPath.row];
-                self.refreshFilesWhenViewDidAppear = type == PLNavigationTypePhoto; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
-            } else if (self.viewModel.folderType == PLContentFolderTypeEditWorks) {
-                
-            }
-        }
-    } else {
-        if ([self.viewModel isSelectedAtItemPath:cell.contentPath]) {
-            [self.viewModel removeSelectItem:cell.contentPath];
-        } else {
-            [self.viewModel addSelectItem:cell.contentPath];
-        }
-        
-        [self setupTitle];
-        [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
-        
-        [self setupAllBBI];
-        [self setupNavigationBarItems];
-    }
-}
-
-#pragma mark - UICollectionViewDelegateFlowLayout
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.viewModel.bothFoldersAndFiles && indexPath.section == 0) {
-        return self.folderItemSize;
-    }
-    if (!self.viewModel.bothFoldersAndFiles && self.viewModel.filesCount == 0) {
-        return self.folderItemSize;
-    }
-    
-    return self.flowLayout.itemSize;
-}
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
-    return self.flowLayout.sectionInset;
-}
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return self.flowLayout.minimumLineSpacing;
-}
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    return self.flowLayout.minimumInteritemSpacing;
-}
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    if (self.viewModel.filesCount == 0 && self.viewModel.foldersCount == 0) {
-        return CGSizeMake(kScreenWidth, 0);
-    } else {
-        return self.flowLayout.headerReferenceSize;
-    }
 }
 
 #pragma mark - Actions
@@ -346,20 +141,20 @@
         self.selectingMode = NO;
     }
     
-    [self.viewModel removeAllSelectItems];
-    [self.collectionView reloadData];
+    [self.contentView.viewModel removeAllSelectItems];
+    [self.contentView reloadCollectionView];
     
     [self setupTitle];
     [self setupNavigationBarItems];
 }
 - (void)trashBarButtonItemDidPress:(UIBarButtonItem *)sender {
-    [self.viewModel moveSelectItemsToTrash];
+    [self.contentView.viewModel moveSelectItemsToTrash];
 }
 - (void)allBarButtonItemDidPress:(UIBarButtonItem *)sender {
     BOOL selectAll = [self.allBBI.title isEqualToString:@"全选"];
     
-    [self.viewModel selectAllItems:selectAll];
-    [self.collectionView reloadData];
+    [self.contentView.viewModel selectAllItems:selectAll];
+    [self.contentView reloadCollectionView];
     
     if (selectAll) {
         self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"取消全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
@@ -373,8 +168,8 @@
     [PLUniversalManager defaultManager].columnsPerRow = sender.index + 4;
     
     // 更新flowLayout后刷新collectionView
-    [self setupCollectionViewFlowLayout];
-    [self.collectionView reloadData];
+    [self.contentView setupCollectionViewFlowLayout];
+    [self.contentView reloadCollectionView];
 }
 - (void)jumpSwitchValueChanged:(UISwitch *)sender {
     [PLUniversalManager defaultManager].directlyJumpPhoto = ![PLUniversalManager defaultManager].directlyJumpPhoto;
@@ -383,16 +178,26 @@
 #pragma mark - PLOperationMenuDelegate
 - (void)operationMenu:(PLOperationMenu *)menu didTapAction:(PLOperationMenuAction)action {
     if (action & PLOperationMenuActionMoveToMix) {
-        [self.viewModel moveSelectItemsToMixWorks];
+        [self.contentView.viewModel moveSelectItemsToMixWorks];
     }
     
     if (action & PLOperationMenuActionMoveToEdit) {
-        [self.viewModel moveSelectItemsToEditWorks];
+        [self.contentView.viewModel moveSelectItemsToEditWorks];
     }
     
     if (action & PLOperationMenuActionMoveToOther) {
-        [self.viewModel moveSelectItemsToOtherWorks];
+        [self.contentView.viewModel moveSelectItemsToOtherWorks];
     }
+}
+
+#pragma mark - PLContentViewDelegate
+- (void)didFinishRefreshingItemsInContentView:(PLContentView *)contentView {
+    [self setupTitle];
+}
+- (void)contentView:(PLContentView *)contentView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self setupTitle];
+    [self setupAllBBI];
+    [self setupNavigationBarItems];
 }
 
 #pragma mark - PLContentViewModelDelegate
@@ -401,7 +206,7 @@
     dispatch_main_async_safe(^{
         @strongify(self);
         
-        [self.collectionView reloadData];
+        [self.contentView reloadCollectionView];
 
         [self setupTitle];
         [self setupAllBBI];
@@ -409,21 +214,22 @@
     });
 }
 
-#pragma mark - Notifications
-- (void)columnPerRowSliderValueChanged:(NSNotification *)sender {
-    // 更新flowLayout后刷新collectionView
-    [self setupCollectionViewFlowLayout];
-    [self.collectionView reloadData];
-}
-
 #pragma mark - Getter
-- (PLContentViewModel *)viewModel {
-    if (!_viewModel) {
-        _viewModel = [[PLContentViewModel alloc] initWithFolderPath:self.folderPath];
-        _viewModel.delegate = self;
+- (PLContentView *)contentView {
+    if (!_contentView) {
+        _contentView = [[PLContentView alloc] initWithFolderPath:self.folderPath];
+        _contentView.delegate = self;
+        _contentView.viewModel.delegate = self;
     }
     
-    return _viewModel;
+    return _contentView;
+}
+
+#pragma mark - Setter
+- (void)setSelectingMode:(BOOL)selectingMode {
+    _selectingMode = selectingMode;
+    
+    self.contentView.selectingMode = selectingMode;
 }
 
 @end
