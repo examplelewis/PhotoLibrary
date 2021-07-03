@@ -25,8 +25,9 @@
 @property (nonatomic, strong) UIBarButtonItem *sliderBBI;
 @property (nonatomic, strong) UIBarButtonItem *jumpSwitchBBI; // 是否直接跳转到图片页
 
-@property (nonatomic, strong) UICollectionViewFlowLayout *flowLayout;
 @property (nonatomic, strong) PLOperationMenu *operationMenu;
+
+@property (nonatomic, strong) UICollectionViewFlowLayout *flowLayout;
 @property (nonatomic, assign) CGSize folderItemSize;
 @property (nonatomic, strong) UICollectionView *collectionView;
 
@@ -34,7 +35,7 @@
 
 @property (nonatomic, assign) BOOL selectingMode;
 
-@property(nonatomic, assign) BOOL refreshFilesWhenViewDidAppear; // 当前Controller被展示时，是否刷新数据。只有跳转到PLPhotoViewController后返回才需要刷新
+@property (nonatomic, assign) BOOL refreshFilesWhenViewDidAppear; // 当前Controller被展示时，是否刷新数据。只有跳转到PLPhotoViewController后返回才需要刷新
 
 @end
 
