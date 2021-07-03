@@ -7,8 +7,9 @@
 
 #import "PLPhotoPhoneViewController.h"
 #import "PLPhotoMainCellView.h"
+#import "PLOperationMenu.h"
 
-@interface PLPhotoPhoneViewController () {
+@interface PLPhotoPhoneViewController () <PLOperationMenuDelegate> {
     CGFloat scrollViewHeight;
 }
 
@@ -18,6 +19,7 @@
 
 @property (nonatomic, strong) NSMutableArray<PLPhotoMainCellView *> *cellViews;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (nonatomic, strong) PLOperationMenu *operationMenu;
 
 @end
 
@@ -70,25 +72,9 @@
     UIBarButtonItem *restoreBBI = [[UIBarButtonItem alloc] initWithTitle:@"撤销" style:UIBarButtonItemStylePlain target:self action:@selector(restoreBarButtonItemPressed:)];
     UIBarButtonItem *infoBBI = [[UIBarButtonItem alloc] initWithTitle:@"信息" style:UIBarButtonItemStylePlain target:self action:@selector(infoBarButtonItemPressed:)];
     
-    @weakify(self);
-    UIAction *jumpToAction = [UIAction actionWithTitle:@"跳转至" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-        @strongify(self);
-        [self jumpToPage];
-    }];
-    UIAction *mixWorksAction = [UIAction actionWithTitle:@"移动到混合作品" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-        @strongify(self);
-        [self moveToWorks:PLWorksTypeMixWorks];
-    }];
-    UIAction *editWorksAction = [UIAction actionWithTitle:@"移动到编辑作品" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-        @strongify(self);
-        [self moveToWorks:PLWorksTypeEditWorks];
-    }];
-    UIAction *otherAction = [UIAction actionWithTitle:@"移动到其他作品" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-        @strongify(self);
-        [self moveToWorks:PLWorksTypeOtherWorks];
-    }];
-    UIMenu *menu = [UIMenu menuWithTitle:@"" children:@[jumpToAction, mixWorksAction, editWorksAction, otherAction]];
-    UIBarButtonItem *menuBBI = [[UIBarButtonItem alloc] initWithTitle:@"操作" menu:menu];
+    self.operationMenu = [[PLOperationMenu alloc] initWithAction:PLOperationMenuActionMoveToTypes | PLOperationMenuActionJumpTo];
+    self.operationMenu.delegate = self;
+    UIBarButtonItem *menuBBI = [[UIBarButtonItem alloc] initWithTitle:@"操作" menu:self.operationMenu.menu];
     
     self.navigationItem.rightBarButtonItems = @[deleteBBI, restoreBBI, infoBBI, menuBBI];
 }
@@ -266,6 +252,17 @@
     [self scrollViewScrollToIndex:index];
 }
 
+#pragma mark - PLOperationMenuDelegate
+- (void)operationMenu:(PLOperationMenu *)menu didTapAction:(PLOperationMenuAction)action {
+    if (action & PLOperationMenuActionJumpTo) {
+        [self jumpToPage];
+    }
+    
+    if (action & PLOperationMenuActionMoveToTypes) {
+        [self moveToWorks:action];
+    }
+}
+
 #pragma mark - UIMenu Ops
 - (void)jumpToPage {
     UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"提示" message:@"请输入跳转的 index" preferredStyle:UIAlertControllerStyleAlert];
@@ -299,24 +296,24 @@
 
     [self presentViewController:ac animated:true completion:nil];
 }
-- (void)moveToWorks:(PLWorksType)worksType {
+- (void)moveToWorks:(PLOperationMenuAction)action {
     if (self.fileModels.count == 0) {
         return;
     }
     
     NSInteger index = roundf(self.scrollView.contentOffset.x / kScreenWidth); // 需要移动的index
     PLPhotoFileModel *model = self.fileModels[index];
-    if (worksType == PLWorksTypeEditWorks && [model.filePath.pathExtension.lowercaseString isEqualToString:@"gif"]) {
+    if ((action & PLOperationMenuActionMoveToEdit) && [model.filePath.pathExtension.lowercaseString isEqualToString:@"gif"]) {
         [SVProgressHUD showInfoWithStatus:@"GIF图片不可编辑!"];
         return;
     }
     
     [self.moveModels addObject:model];
-    if (worksType == PLWorksTypeMixWorks) {
+    if (action & PLOperationMenuActionMoveToMix) {
         [self.moveModels.lastObject moveToMixWorks]; // 文件操作
-    } else if (worksType == PLWorksTypeEditWorks) {
+    } else if (action & PLOperationMenuActionMoveToEdit) {
         [self.moveModels.lastObject moveToEditWorks]; // 文件操作
-    } else if (worksType == PLWorksTypeOtherWorks) {
+    } else if (action & PLOperationMenuActionMoveToOther) {
         [self.moveModels.lastObject moveToOtherWorks]; // 文件操作
     }
     [self.fileModels removeObjectAtIndex:index];

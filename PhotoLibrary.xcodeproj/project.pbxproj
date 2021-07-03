@@ -17,6 +17,7 @@
 		AC262505265812AA00939375 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AC262504265812AA00939375 /* main.m */; };
 		AC26250F265812AB00939375 /* PhotoLibraryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC26250E265812AB00939375 /* PhotoLibraryTests.m */; };
 		AC26251A265812AB00939375 /* PhotoLibraryUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC262519265812AB00939375 /* PhotoLibraryUITests.m */; };
+		AC73E6D6268FFB8200191D66 /* PLOperationMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = AC73E6D5268FFB8200191D66 /* PLOperationMenu.m */; };
 		ACA33A44266B5E40002E7F67 /* PLNavigationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA33A43266B5E40002E7F67 /* PLNavigationManager.m */; };
 		ACA6667A26623E7700338972 /* PLPhotoFileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA6667926623E7700338972 /* PLPhotoFileModel.m */; };
 		ACA666802662594400338972 /* PLPhotoBottomCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA6667F2662594400338972 /* PLPhotoBottomCellView.m */; };
@@ -90,6 +91,8 @@
 		AC262519265812AB00939375 /* PhotoLibraryUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoLibraryUITests.m; sourceTree = "<group>"; };
 		AC26251B265812AB00939375 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AC26270D26581CD900939375 /* PhotoLibrary-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PhotoLibrary-Prefix.pch"; sourceTree = "<group>"; };
+		AC73E6D4268FFB8200191D66 /* PLOperationMenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLOperationMenu.h; sourceTree = "<group>"; };
+		AC73E6D5268FFB8200191D66 /* PLOperationMenu.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLOperationMenu.m; sourceTree = "<group>"; };
 		ACA33A42266B5E40002E7F67 /* PLNavigationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLNavigationManager.h; sourceTree = "<group>"; };
 		ACA33A43266B5E40002E7F67 /* PLNavigationManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLNavigationManager.m; sourceTree = "<group>"; };
 		ACA6667826623E7700338972 /* PLPhotoFileModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLPhotoFileModel.h; sourceTree = "<group>"; };
@@ -281,6 +284,8 @@
 			children = (
 				ACA6667826623E7700338972 /* PLPhotoFileModel.h */,
 				ACA6667926623E7700338972 /* PLPhotoFileModel.m */,
+				AC73E6D4268FFB8200191D66 /* PLOperationMenu.h */,
+				AC73E6D5268FFB8200191D66 /* PLOperationMenu.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -680,6 +685,7 @@
 				AC2624FA265812A900939375 /* ViewController.m in Sources */,
 				ACEBB7A326588A07005778FB /* NSError+GYAdd.m in Sources */,
 				AC2624F4265812A900939375 /* AppDelegate.m in Sources */,
+				AC73E6D6268FFB8200191D66 /* PLOperationMenu.m in Sources */,
 				ACA666802662594400338972 /* PLPhotoBottomCellView.m in Sources */,
 				ACF759A22663AEA80005322B /* PLContentPhoneViewController.m in Sources */,
 				ACEBB7A426588A07005778FB /* NSArray+GYAdd.m in Sources */,

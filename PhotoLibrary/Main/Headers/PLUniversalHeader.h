@@ -15,12 +15,6 @@ typedef NS_ENUM(NSUInteger, PLContentFolderType) {
     PLContentFolderTypeEditWorks,
 };
 
-typedef NS_ENUM(NSUInteger, PLWorksType) {
-    PLWorksTypeMixWorks,
-    PLWorksTypeEditWorks,
-    PLWorksTypeOtherWorks,
-};
-
 
 static CGFloat const PLSafeAreaBottom = 20.0f;
 static CGFloat const PLNorchPhoneSafeAreaTop = 44.0f;

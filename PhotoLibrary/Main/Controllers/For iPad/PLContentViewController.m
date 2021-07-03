@@ -13,8 +13,9 @@
 #import "PLContentCollectionViewCell.h"
 #import "PLContentCollectionHeaderReusableView.h"
 #import "PLPhotoViewController.h"
+#import "PLOperationMenu.h"
 
-@interface PLContentViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
+@interface PLContentViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PLOperationMenuDelegate>
 
 @property (nonatomic, strong) UIBarButtonItem *editBBI;
 @property (nonatomic, strong) UIBarButtonItem *allBBI;
@@ -24,6 +25,7 @@
 @property (nonatomic, strong) UIBarButtonItem *jumpSwitchBBI; // 是否直接跳转到图片页
 
 @property (nonatomic, strong) UICollectionViewFlowLayout *flowLayout;
+@property (nonatomic, strong) PLOperationMenu *operationMenu;
 @property (nonatomic, assign) CGSize folderItemSize;
 @property (nonatomic, strong) UICollectionView *collectionView;
 
@@ -117,21 +119,9 @@
     self.trashBBI = [[UIBarButtonItem alloc] initWithTitle:@"删除" style:UIBarButtonItemStylePlain target:self action:@selector(trashBarButtonItemDidPress:)];
     self.trashBBI.enabled = NO;
     
-    @weakify(self);
-    UIAction *mixWorksAction = [UIAction actionWithTitle:@"移动到混合作品" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-        @strongify(self);
-        [self moveToMixWorks];
-    }];
-    UIAction *editWorksAction = [UIAction actionWithTitle:@"移动到编辑作品" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-        @strongify(self);
-        [self moveToEditWorks];
-    }];
-    UIAction *otherAction = [UIAction actionWithTitle:@"移动到其他作品" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-        @strongify(self);
-        [self moveToOtherWorks];
-    }];
-    UIMenu *menu = [UIMenu menuWithTitle:@"" children:@[mixWorksAction, editWorksAction, otherAction]];
-    self.menuBBI = [[UIBarButtonItem alloc] initWithTitle:@"操作" menu:menu];
+    self.operationMenu = [[PLOperationMenu alloc] initWithAction:PLOperationMenuActionMoveToTypes];
+    self.operationMenu.delegate = self;
+    self.menuBBI = [[UIBarButtonItem alloc] initWithTitle:@"操作" menu:self.operationMenu.menu];
     self.menuBBI.enabled = NO;
     
     UIView *jumpSwitchView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 55, 44)];
@@ -451,6 +441,21 @@
 }
 - (void)jumpSwitchValueChanged:(UISwitch *)sender {
     [PLUniversalManager defaultManager].directlyJumpPhoto = ![PLUniversalManager defaultManager].directlyJumpPhoto;
+}
+
+#pragma mark - PLOperationMenuDelegate
+- (void)operationMenu:(PLOperationMenu *)menu didTapAction:(PLOperationMenuAction)action {
+    if (action & PLOperationMenuActionMoveToMix) {
+        [self moveToMixWorks];
+    }
+    
+    if (action & PLOperationMenuActionMoveToEdit) {
+        [self moveToEditWorks];
+    }
+    
+    if (action & PLOperationMenuActionMoveToOther) {
+        [self moveToOtherWorks];
+    }
 }
 
 #pragma mark - UIMenu Ops
