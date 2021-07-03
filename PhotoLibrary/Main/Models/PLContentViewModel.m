@@ -69,11 +69,20 @@
     });
 }
 
-
-- (void)cleanSDWebImageCache {
-    for (NSInteger i = 0; i < self.files.count; i++) {
-        [[SDImageCache sharedImageCache] removeImageFromMemoryForKey:self.files[i]];
+#pragma mark - Path
+- (NSString *)folderPathAtIndex:(NSInteger)index {
+    if (index >= self.folders.count) {
+        return nil;
     }
+    
+    return self.folders[index];
+}
+- (NSString *)filePathAtIndex:(NSInteger)index {
+    if (index >= self.files.count) {
+        return nil;
+    }
+    
+    return self.files[index];
 }
 
 #pragma mark - Select Items
@@ -97,23 +106,7 @@
     [self.selects removeObject:itemPath];
 }
 
-#pragma mark - Path
-- (NSString *)folderPathAtIndex:(NSInteger)index {
-    if (index >= self.folders.count) {
-        return nil;
-    }
-    
-    return self.folders[index];
-}
-- (NSString *)filePathAtIndex:(NSInteger)index {
-    if (index >= self.files.count) {
-        return nil;
-    }
-    
-    return self.files[index];
-}
-
-#pragma mark - Move SelectItems
+#pragma mark - Move Select Items
 - (void)moveSelectItemsToMixWorks {
     if (self.operatingFiles) {
         return;
@@ -190,6 +183,13 @@
         [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"已将%ld个项目移动到废纸篓", self.selects.count]];
         [self refreshAfterOperatingFiles];
     }];
+}
+
+#pragma mark - Tools
+- (void)cleanSDWebImageCache {
+    for (NSInteger i = 0; i < self.files.count; i++) {
+        [[SDImageCache sharedImageCache] removeImageFromMemoryForKey:self.files[i]];
+    }
 }
 
 #pragma mark - Getter

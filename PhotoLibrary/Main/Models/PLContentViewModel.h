@@ -16,14 +16,17 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger foldersCount;
 @property (nonatomic, assign) NSInteger filesCount;
 @property (nonatomic, assign) NSInteger selectsCount;
-
 @property (nonatomic, assign) BOOL bothFoldersAndFiles;
 
+#pragma mark - Lifecycle
 - (instancetype)initWithFolderPath:(NSString *)folderPath;
 
+#pragma mark - Refreshing
 - (void)refreshItems;
 
-- (void)cleanSDWebImageCache;
+#pragma mark - Path
+- (nullable NSString *)folderPathAtIndex:(NSInteger)index;
+- (nullable NSString *)filePathAtIndex:(NSInteger)index;
 
 #pragma mark - Select Items
 - (BOOL)isSelectedAtItemPath:(NSString *)itemPath;
@@ -32,15 +35,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)addSelectItem:(NSString *)itemPath;
 - (void)removeSelectItem:(NSString *)itemPath;
 
-#pragma mark - Path
-- (nullable NSString *)folderPathAtIndex:(NSInteger)index;
-- (nullable NSString *)filePathAtIndex:(NSInteger)index;
-
-#pragma mark - Move SelectItems
+#pragma mark - Move Select Items
 - (void)moveSelectItemsToMixWorks;
 - (void)moveSelectItemsToEditWorks;
 - (void)moveSelectItemsToOtherWorks;
 - (void)moveSelectItemsToTrash;
+
+#pragma mark - Tools
+- (void)cleanSDWebImageCache;
 
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;
