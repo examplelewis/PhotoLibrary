@@ -116,11 +116,6 @@
 #pragma mark - Refresh
 - (void)refreshFiles {
     [self.viewModel refreshItems];
-//    NSArray *imageFiles = [GYFileManager filePathsInFolder:self.folderPath extensions:[GYSettingManager defaultManager].mimeImageTypes];
-//    if (imageFiles.count > 0) {
-//        self.files = @[@"DefaultImage"];
-//    }
-//    self.bothFoldersAndFiles = (self.folders.count > 0 && self.files.count > 0);
     
     [self setupTitle];
     
@@ -211,7 +206,7 @@
         PLNavigationType type = [PLNavigationManager navigateToContentAtFolderPath:[self.viewModel folderPathAtIndex:indexPath.row]];
         self.refreshFilesWhenViewDidAppear = type == PLNavigationTypePhoto; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
     } else {
-        PLNavigationType type = [PLNavigationManager navigateToPhotoAtFolderPath:self.folderPath index:0];
+        PLNavigationType type = [PLNavigationManager navigateToPhotoAtFolderPath:self.folderPath index:indexPath.row];
         self.refreshFilesWhenViewDidAppear = type == PLNavigationTypePhoto; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
     }
 }
