@@ -18,13 +18,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PLContentViewModel : NSObject
 
-@property (nonatomic, copy, readonly) NSString *folderPath;
-@property (nonatomic, weak) id<PLContentViewModelDelegate> delegate;
+@property (nonatomic, assign, readonly) PLContentFolderType folderType;
 
 @property (nonatomic, assign) NSInteger foldersCount;
 @property (nonatomic, assign) NSInteger filesCount;
 @property (nonatomic, assign) NSInteger selectsCount;
 @property (nonatomic, assign) BOOL bothFoldersAndFiles;
+
+@property (nonatomic, weak) id<PLContentViewModelDelegate> delegate;
 
 #pragma mark - Lifecycle
 - (instancetype)initWithFolderPath:(NSString *)folderPath;

@@ -32,8 +32,6 @@
 
 @property (nonatomic, strong) PLContentViewModel *viewModel;
 
-@property (nonatomic, assign) PLContentFolderType folderType;
-
 @property (nonatomic, assign) BOOL selectingMode;
 
 @property(nonatomic, assign) BOOL refreshFilesWhenViewDidAppear; // 当前Controller被展示时，是否刷新数据。只有跳转到PLPhotoViewController后返回才需要刷新
@@ -133,7 +131,7 @@
     [self setupNavigationBarItems];
 }
 - (void)setupNavigationBarItems {
-    if (self.folderType == PLContentFolderTypeNormal) {
+    if (self.viewModel.folderType == PLContentFolderTypeNormal) {
         self.navigationItem.rightBarButtonItems = @[self.editBBI, self.allBBI, self.trashBBI, self.menuBBI, self.jumpSwitchBBI, self.sliderBBI];
     } else {
         self.navigationItem.rightBarButtonItems = @[];
@@ -276,10 +274,10 @@
             PLNavigationType type = [PLNavigationManager navigateToContentAtFolderPath:[self.viewModel folderPathAtIndex:indexPath.row]];
             self.refreshFilesWhenViewDidAppear = type == PLNavigationTypePhoto; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
         } else {
-            if (self.folderType == PLContentFolderTypeNormal) {
+            if (self.viewModel.folderType == PLContentFolderTypeNormal) {
                 PLNavigationType type = [PLNavigationManager navigateToPhotoAtFolderPath:self.folderPath index:indexPath.row];
                 self.refreshFilesWhenViewDidAppear = type == PLNavigationTypePhoto; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
-            } else if (self.folderType == PLContentFolderTypeEditWorks) {
+            } else if (self.viewModel.folderType == PLContentFolderTypeEditWorks) {
                 
             }
         }
@@ -424,21 +422,6 @@
     }
     
     return _viewModel;
-}
-
-#pragma mark - Setter
-- (void)setFolderPath:(NSString *)folderPath {
-    _folderPath = folderPath.copy;
-    
-    if ([folderPath hasPrefix:[GYSettingManager defaultManager].trashFolderPath]) {
-        self.folderType = PLContentFolderTypeTrash;
-    } else if ([folderPath hasPrefix:[GYSettingManager defaultManager].mixWorksFolderPath]) {
-        self.folderType = PLContentFolderTypeMixWorks;
-    } else if ([folderPath hasPrefix:[GYSettingManager defaultManager].editWorksFolderPath]) {
-        self.folderType = PLContentFolderTypeEditWorks;
-    } else {
-        self.folderType = PLContentFolderTypeNormal;
-    }
 }
 
 @end

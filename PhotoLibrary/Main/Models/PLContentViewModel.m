@@ -9,6 +9,8 @@
 
 @interface PLContentViewModel ()
 
+@property (nonatomic, copy) NSString *folderPath;
+
 @property (nonatomic, copy) NSArray<NSString *> *folders;
 @property (nonatomic, copy) NSArray<NSString *> *files;
 @property (nonatomic, strong) NSMutableArray<NSString *> *selects;
@@ -23,7 +25,7 @@
 - (instancetype)initWithFolderPath:(NSString *)folderPath {
     self = [super init];
     if (self) {
-        _folderPath = folderPath.copy;
+        self.folderPath = folderPath.copy;
         
         self.folders = @[];
         self.files = @[];
@@ -197,6 +199,21 @@
 - (NSInteger)selectsCount {
     _selectsCount = self.selects.count;
     return _selectsCount;
+}
+
+#pragma mark - Setter
+- (void)setFolderPath:(NSString *)folderPath {
+    _folderPath = folderPath.copy;
+    
+    if ([folderPath hasPrefix:[GYSettingManager defaultManager].trashFolderPath]) {
+        _folderType = PLContentFolderTypeTrash;
+    } else if ([folderPath hasPrefix:[GYSettingManager defaultManager].mixWorksFolderPath]) {
+        _folderType = PLContentFolderTypeMixWorks;
+    } else if ([folderPath hasPrefix:[GYSettingManager defaultManager].editWorksFolderPath]) {
+        _folderType = PLContentFolderTypeEditWorks;
+    } else {
+        _folderType = PLContentFolderTypeNormal;
+    }
 }
 
 @end
