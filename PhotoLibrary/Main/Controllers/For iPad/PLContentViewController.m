@@ -16,7 +16,7 @@
 #import "PLOperationMenu.h"
 #import "PLContentViewModel.h"
 
-@interface PLContentViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PLOperationMenuDelegate>
+@interface PLContentViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PLOperationMenuDelegate, PLContentViewModelDelegate>
 
 @property (nonatomic, strong) UIBarButtonItem *editBBI;
 @property (nonatomic, strong) UIBarButtonItem *allBBI;
@@ -394,6 +394,20 @@
     }
 }
 
+#pragma mark - PLContentViewModelDelegate
+- (void)viewModelDidFinishOperatingFiles {
+    @weakify(self);
+    dispatch_main_async_safe(^{
+        @strongify(self);
+        
+        [self.collectionView reloadData];
+
+        [self setupTitle];
+        [self setupAllBBI];
+        [self setupNavigationBarItems];
+    });
+}
+
 #pragma mark - Notifications
 - (void)columnPerRowSliderValueChanged:(NSNotification *)sender {
     // 更新flowLayout后刷新collectionView
@@ -405,6 +419,7 @@
 - (PLContentViewModel *)viewModel {
     if (!_viewModel) {
         _viewModel = [[PLContentViewModel alloc] initWithFolderPath:self.folderPath];
+        _viewModel.delegate = self;
     }
     
     return _viewModel;

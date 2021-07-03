@@ -9,9 +9,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class PLContentViewModel;
+@protocol PLContentViewModelDelegate <NSObject>
+
+- (void)viewModelDidFinishOperatingFiles;
+
+@end
+
 @interface PLContentViewModel : NSObject
 
 @property (nonatomic, copy, readonly) NSString *folderPath;
+@property (nonatomic, weak) id<PLContentViewModelDelegate> delegate;
 
 @property (nonatomic, assign) NSInteger foldersCount;
 @property (nonatomic, assign) NSInteger filesCount;

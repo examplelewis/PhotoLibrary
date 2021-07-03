@@ -57,16 +57,9 @@
     
     self.operatingFiles = NO;
     
-    @weakify(self);
-    dispatch_main_async_safe(^{
-        @strongify(self);
-        
-//        [self.collectionView reloadData];
-//
-//        [self setupTitle];
-//        [self setupAllBBI];
-//        [self setupNavigationBarItems];
-    });
+    if ([self.delegate respondsToSelector:@selector(viewModelDidFinishOperatingFiles)]) {
+        [self.delegate viewModelDidFinishOperatingFiles];
+    }
 }
 
 #pragma mark - Path
