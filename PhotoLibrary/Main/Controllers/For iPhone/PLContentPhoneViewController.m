@@ -22,7 +22,7 @@
 
 @property (nonatomic, strong) PLContentViewModel *viewModel;
 
-@property (nonatomic, assign) PLContentCollectionViewCellType cellType;
+@property (nonatomic, assign) BOOL selectingMode;
 
 @property (nonatomic, assign) BOOL refreshFilesWhenViewDidAppear; // 当前Controller被展示时，是否刷新数据。只有跳转到PLPhotoViewController后返回才需要刷新
 
@@ -66,7 +66,7 @@
 }
 - (void)setupUIAndData {
     // Data
-    self.cellType = PLContentCollectionViewCellTypeNormal;
+    self.selectingMode = NO;
     
     // UI
     [self setupCollectionViewFlowLayout];
@@ -164,7 +164,7 @@
         }
     }
     
-    if (self.cellType == PLContentCollectionViewCellTypeNormal) {
+    if (!self.selectingMode) {
         cell.cellType = PLContentCollectionViewCellTypeNormal;
     } else {
         cell.cellType = [self.viewModel isSelectedAtItemPath:cell.contentPath] ? PLContentCollectionViewCellTypeEditSelect : PLContentCollectionViewCellTypeEdit;

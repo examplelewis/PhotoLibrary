@@ -33,7 +33,8 @@
 @property (nonatomic, strong) PLContentViewModel *viewModel;
 
 @property (nonatomic, assign) PLContentFolderType folderType;
-@property (nonatomic, assign) PLContentCollectionViewCellType cellType;
+
+@property (nonatomic, assign) BOOL selectingMode;
 
 @property(nonatomic, assign) BOOL refreshFilesWhenViewDidAppear; // 当前Controller被展示时，是否刷新数据。只有跳转到PLPhotoViewController后返回才需要刷新
 
@@ -79,7 +80,7 @@
     if (self.viewModel.foldersCount + self.viewModel.filesCount == 0) {
         self.title = self.folderPath.lastPathComponent;
     } else {
-        if (self.cellType == PLContentCollectionViewCellTypeNormal) {
+        if (!self.selectingMode) {
             self.title = [NSString stringWithFormat:@"%@(%ld)", self.folderPath.lastPathComponent, self.viewModel.foldersCount + self.viewModel.filesCount];
         } else {
             self.title = [NSString stringWithFormat:@"%@(%ld)(%ld)", self.folderPath.lastPathComponent, self.viewModel.foldersCount + self.viewModel.filesCount, self.viewModel.selectsCount];
@@ -91,7 +92,7 @@
 }
 - (void)setupUIAndData {
     // Data
-    self.cellType = PLContentCollectionViewCellTypeNormal;
+    self.selectingMode = NO;
     
     // UI
     [self setupNavigationBar];
@@ -232,7 +233,7 @@
         }
     }
     
-    if (self.cellType == PLContentCollectionViewCellTypeNormal) {
+    if (!self.selectingMode) {
         cell.cellType = PLContentCollectionViewCellTypeNormal;
     } else {
         cell.cellType = [self.viewModel isSelectedAtItemPath:cell.contentPath] ? PLContentCollectionViewCellTypeEditSelect : PLContentCollectionViewCellTypeEdit;
@@ -327,14 +328,14 @@
 
 #pragma mark - Actions
 - (void)editBarButtonItemDidPress:(UIBarButtonItem *)sender {
-    if (self.cellType == PLContentCollectionViewCellTypeNormal) {
+    if (!self.selectingMode) {
         self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(editBarButtonItemDidPress:)];
         self.trashBBI.enabled = YES;
         self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
         self.allBBI.enabled = YES;
         self.menuBBI.enabled = YES;
         
-        self.cellType = PLContentCollectionViewCellTypeEdit;
+        self.selectingMode = YES;
     } else {
         self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editBarButtonItemDidPress:)];
         self.trashBBI.enabled = NO;
@@ -342,7 +343,7 @@
         self.allBBI.enabled = NO;
         self.menuBBI.enabled = NO;
         
-        self.cellType = PLContentCollectionViewCellTypeNormal;
+        self.selectingMode = NO;
     }
     
     [self.viewModel removeAllSelectItems];
