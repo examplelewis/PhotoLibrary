@@ -14,6 +14,7 @@
 #import "PLContentCollectionHeaderReusableView.h"
 #import "PLPhotoViewController.h"
 #import "PLOperationMenu.h"
+#import "PLContentViewModel.h"
 
 @interface PLContentViewController () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PLOperationMenuDelegate>
 
@@ -29,15 +30,10 @@
 @property (nonatomic, assign) CGSize folderItemSize;
 @property (nonatomic, strong) UICollectionView *collectionView;
 
-@property (nonatomic, copy) NSArray<NSString *> *folders;
-@property (nonatomic, copy) NSArray<NSString *> *files;
+@property (nonatomic, strong) PLContentViewModel *viewModel;
 
-@property (nonatomic, assign) BOOL bothFoldersAndFiles;
 @property (nonatomic, assign) PLContentFolderType folderType;
 @property (nonatomic, assign) PLContentCollectionViewCellType cellType;
-
-@property (nonatomic, strong) NSMutableArray<NSString *> *selects;
-@property (nonatomic, assign) BOOL opreatingFiles;
 
 @property(nonatomic, assign) BOOL refreshFilesWhenViewDidAppear; // 当前Controller被展示时，是否刷新数据。只有跳转到PLPhotoViewController后返回才需要刷新
 
@@ -61,7 +57,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    if (self.folders.count == 0 && self.files.count == 0) {
+    if (self.viewModel.folders.count == 0 && self.viewModel.files.count == 0) {
         [self.collectionView.mj_header beginRefreshing];
     } else {
         if (self.refreshFilesWhenViewDidAppear) {
@@ -75,20 +71,18 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     // 退出页面时清除内存中的图片
-    for (NSInteger i = 0; i < self.files.count; i++) {
-        [[SDImageCache sharedImageCache] removeImageFromMemoryForKey:self.files[i]];
-    }
+    [self.viewModel cleanSDWebImageCache];
 }
 
 #pragma mark - Configure
 - (void)setupTitle {
-    if (self.folders.count + self.files.count == 0) {
+    if (self.viewModel.folders.count + self.viewModel.files.count == 0) {
         self.title = self.folderPath.lastPathComponent;
     } else {
         if (self.cellType == PLContentCollectionViewCellTypeNormal) {
-            self.title = [NSString stringWithFormat:@"%@(%ld)", self.folderPath.lastPathComponent, self.folders.count + self.files.count];
+            self.title = [NSString stringWithFormat:@"%@(%ld)", self.folderPath.lastPathComponent, self.viewModel.folders.count + self.viewModel.files.count];
         } else {
-            self.title = [NSString stringWithFormat:@"%@(%ld)(%ld)", self.folderPath.lastPathComponent, self.folders.count + self.files.count, self.selects.count];
+            self.title = [NSString stringWithFormat:@"%@(%ld)(%ld)", self.folderPath.lastPathComponent, self.viewModel.folders.count + self.viewModel.files.count, self.viewModel.selects.count];
         }
     }
 }
@@ -97,13 +91,7 @@
 }
 - (void)setupUIAndData {
     // Data
-    self.folders = @[];
-    self.files = @[];
-    self.bothFoldersAndFiles = NO;
-    
     self.cellType = PLContentCollectionViewCellTypeNormal;
-    
-    self.selects = [NSMutableArray array];
     
     // UI
     [self setupNavigationBar];
@@ -151,7 +139,7 @@
     }
 }
 - (void)setupAllBBI {
-    BOOL selectAll = (self.selects.count == (self.folders.count + self.files.count)) && self.selects.count != 0; // 如果没有文件(夹)，就不算全选
+    BOOL selectAll = (self.viewModel.selects.count == (self.viewModel.folders.count + self.viewModel.files.count)) && self.viewModel.selects.count != 0; // 如果没有文件(夹)，就不算全选
     self.allBBI = [[UIBarButtonItem alloc] initWithTitle:selectAll ? @"取消全选" : @"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
 }
 - (void)setupCollectionViewFlowLayout {
@@ -195,11 +183,7 @@
 
 #pragma mark - Refresh
 - (void)refreshFiles {
-    self.folders = [GYFileManager folderPathsInFolder:self.folderPath];
-    self.folders = [self.folders sortedArrayUsingDescriptors:@[[PLUniversalManager fileAscendingSortDescriptorWithKey:@"self"]]];
-    self.files = [GYFileManager filePathsInFolder:self.folderPath extensions:[GYSettingManager defaultManager].mimeImageTypes];
-    self.files = [self.files sortedArrayUsingDescriptors:@[[PLUniversalManager fileAscendingSortDescriptorWithKey:@"self"]]];
-    self.bothFoldersAndFiles = (self.folders.count > 0 && self.files.count > 0);
+    [self.viewModel refreshItems];
     
     [self setupTitle];
     
@@ -207,51 +191,23 @@
     
     [self.collectionView reloadData];
 }
-- (void)refreshAfterOperatingFiles {
-    @weakify(self);
-    
-    NSMutableArray *folders = [self.folders mutableCopy];
-    [folders removeObjectsInArray:self.selects];
-    self.folders = folders.copy;
-    
-    NSMutableArray *files = [self.files mutableCopy];
-    [files removeObjectsInArray:self.selects];
-    self.files = files.copy;
-    
-    dispatch_main_async_safe(^{
-        @strongify(self);
-        [self.collectionView reloadData];
-        
-        [self setupTitle];
-        [self setupNavigationBarItems];
-    });
-    
-    self.opreatingFiles = NO;
-    [self.selects removeAllObjects];
-    
-    dispatch_main_async_safe(^{
-        @strongify(self);
-        [self setupAllBBI];
-        [self setupNavigationBarItems];
-    });
-}
 
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return self.bothFoldersAndFiles ? 2 : 1;
+    return self.viewModel.bothFoldersAndFiles ? 2 : 1;
 }
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if (self.bothFoldersAndFiles) {
+    if (self.viewModel.bothFoldersAndFiles) {
         if (section == 0) {
-            return self.folders.count;
+            return self.viewModel.folders.count;
         } else {
-            return self.files.count;
+            return self.viewModel.files.count;
         }
     } else {
-        if (self.folders.count > 0) {
-            return self.folders.count;
-        } else if (self.files.count > 0) {
-            return self.files.count;
+        if (self.viewModel.folders.count > 0) {
+            return self.viewModel.folders.count;
+        } else if (self.viewModel.files.count > 0) {
+            return self.viewModel.files.count;
         } else {
             return 0;
         }
@@ -260,17 +216,17 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     PLContentCollectionViewCell *cell = (PLContentCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"PLContentCell" forIndexPath:indexPath];
     
-    if (self.bothFoldersAndFiles) {
+    if (self.viewModel.bothFoldersAndFiles) {
         if (indexPath.section == 0) {
-            cell.contentPath = self.folders[indexPath.row];
+            cell.contentPath = self.viewModel.folders[indexPath.row];
         } else {
-            cell.contentPath = self.files[indexPath.row];
+            cell.contentPath = self.viewModel.files[indexPath.row];
         }
     } else {
-        if (self.folders.count > 0) {
-            cell.contentPath = self.folders[indexPath.row];
-        } else if (self.files.count > 0) {
-            cell.contentPath = self.files[indexPath.row];
+        if (self.viewModel.folders.count > 0) {
+            cell.contentPath = self.viewModel.folders[indexPath.row];
+        } else if (self.viewModel.files.count > 0) {
+            cell.contentPath = self.viewModel.files[indexPath.row];
         } else {
             return [UICollectionViewCell new];
         }
@@ -279,7 +235,7 @@
     if (self.cellType == PLContentCollectionViewCellTypeNormal) {
         cell.cellType = PLContentCollectionViewCellTypeNormal;
     } else {
-        BOOL selected = [self.selects indexOfObject:cell.contentPath] != NSNotFound;
+        BOOL selected = [self.viewModel.selects indexOfObject:cell.contentPath] != NSNotFound;
         cell.cellType = selected ? PLContentCollectionViewCellTypeEditSelect : PLContentCollectionViewCellTypeEdit;
     }
 
@@ -288,16 +244,16 @@
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         PLContentCollectionHeaderReusableView *headerView = (PLContentCollectionHeaderReusableView *)[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"PLContentHeaderView" forIndexPath:indexPath];
-        if (self.bothFoldersAndFiles) {
+        if (self.viewModel.bothFoldersAndFiles) {
             if (indexPath.section == 0) {
                 headerView.header = @"文件夹";
             } else {
                 headerView.header = @"文件";
             }
         } else {
-            if (self.folders.count > 0) {
+            if (self.viewModel.folders.count > 0) {
                 headerView.header = @"文件夹";
-            } else if (self.files.count > 0) {
+            } else if (self.viewModel.files.count > 0) {
                 headerView.header = @"文件";
             } else {
                 headerView.header = @"未知错误";
@@ -317,7 +273,7 @@
     PLContentCollectionViewCell *cell = (PLContentCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     if (cell.cellType == PLContentCollectionViewCellTypeNormal) {
         if (cell.isFolder) {
-            PLNavigationType type = [PLNavigationManager navigateToContentAtFolderPath:self.folders[indexPath.row]];
+            PLNavigationType type = [PLNavigationManager navigateToContentAtFolderPath:self.viewModel.folders[indexPath.row]];
             self.refreshFilesWhenViewDidAppear = type == PLNavigationTypePhoto; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
         } else {
             if (self.folderType == PLContentFolderTypeNormal) {
@@ -328,11 +284,11 @@
             }
         }
     } else {
-        BOOL selected = [self.selects indexOfObject:cell.contentPath] != NSNotFound;
+        BOOL selected = [self.viewModel.selects indexOfObject:cell.contentPath] != NSNotFound;
         if (selected) {
-            [self.selects removeObject:cell.contentPath];
+            [self.viewModel.selects removeObject:cell.contentPath];
         } else {
-            [self.selects addObject:cell.contentPath];
+            [self.viewModel.selects addObject:cell.contentPath];
         }
         
         [self setupTitle];
@@ -345,10 +301,10 @@
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.bothFoldersAndFiles && indexPath.section == 0) {
+    if (self.viewModel.bothFoldersAndFiles && indexPath.section == 0) {
         return self.folderItemSize;
     }
-    if (!self.bothFoldersAndFiles && self.files.count == 0) {
+    if (!self.viewModel.bothFoldersAndFiles && self.viewModel.files.count == 0) {
         return self.folderItemSize;
     }
     
@@ -364,7 +320,7 @@
     return self.flowLayout.minimumInteritemSpacing;
 }
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    if (self.files.count == 0 && self.folders.count == 0) {
+    if (self.viewModel.files.count == 0 && self.viewModel.folders.count == 0) {
         return CGSizeMake(kScreenWidth, 0);
     } else {
         return self.flowLayout.headerReferenceSize;
@@ -391,35 +347,20 @@
         self.cellType = PLContentCollectionViewCellTypeNormal;
     }
     
-    [self.selects removeAllObjects];
+    [self.viewModel.selects removeAllObjects];
     [self.collectionView reloadData];
     
     [self setupTitle];
     [self setupNavigationBarItems];
 }
 - (void)trashBarButtonItemDidPress:(UIBarButtonItem *)sender {
-    if (self.opreatingFiles) {
-        return;
-    }
-    if (self.selects.count == 0) {
-        return;
-    }
-    
-    [SVProgressHUD show];
-    self.opreatingFiles = YES;
-    @weakify(self);
-    [[PLUniversalManager defaultManager] trashContentsAtPaths:self.selects completion:^{
-        @strongify(self);
-        
-        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"已将%ld个项目移动到废纸篓", self.selects.count]];
-        [self refreshAfterOperatingFiles];
-    }];
+    [self.viewModel moveSelectItemsToTrash];
 }
 - (void)allBarButtonItemDidPress:(UIBarButtonItem *)sender {
-    [self.selects removeAllObjects];
+    [self.viewModel.selects removeAllObjects];
     if ([self.allBBI.title isEqualToString:@"全选"]) {
-        [self.selects addObjectsFromArray:self.folders];
-        [self.selects addObjectsFromArray:self.files];
+        [self.viewModel.selects addObjectsFromArray:self.viewModel.folders];
+        [self.viewModel.selects addObjectsFromArray:self.viewModel.files];
     }
     [self.collectionView reloadData];
     
@@ -446,77 +387,16 @@
 #pragma mark - PLOperationMenuDelegate
 - (void)operationMenu:(PLOperationMenu *)menu didTapAction:(PLOperationMenuAction)action {
     if (action & PLOperationMenuActionMoveToMix) {
-        [self moveToMixWorks];
+        [self.viewModel moveSelectItemsToMixWorks];
     }
     
     if (action & PLOperationMenuActionMoveToEdit) {
-        [self moveToEditWorks];
+        [self.viewModel moveSelectItemsToEditWorks];
     }
     
     if (action & PLOperationMenuActionMoveToOther) {
-        [self moveToOtherWorks];
+        [self.viewModel moveSelectItemsToOtherWorks];
     }
-}
-
-#pragma mark - UIMenu Ops
-- (void)moveToMixWorks {
-    if (self.opreatingFiles) {
-        return;
-    }
-    if (self.selects.count == 0) {
-        return;
-    }
-    
-    [SVProgressHUD show];
-    self.opreatingFiles = YES;
-    @weakify(self);
-    [[PLUniversalManager defaultManager] moveContentsToMixWorksAtPaths:self.selects completion:^{
-        @strongify(self);
-        
-        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"已将%ld个项目移动到混合作品", self.selects.count]];
-        [self refreshAfterOperatingFiles];
-    }];
-}
-- (void)moveToEditWorks {
-    if (self.opreatingFiles) {
-        return;
-    }
-    if (self.selects.count == 0) {
-        return;
-    }
-    
-    // Gif图片不可编辑
-    [self.selects filterUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSString * _Nullable filePath, NSDictionary<NSString *,id> * _Nullable bindings) {
-        return ![filePath.pathExtension.lowercaseString isEqualToString:@"gif"];
-    }]];
-    
-    [SVProgressHUD show];
-    self.opreatingFiles = YES;
-    @weakify(self);
-    [[PLUniversalManager defaultManager] moveContentsToEditWorksAtPaths:self.selects completion:^{
-        @strongify(self);
-        
-        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"已将%ld个项目移动到编辑作品", self.selects.count]];
-        [self refreshAfterOperatingFiles];
-    }];
-}
-- (void)moveToOtherWorks {
-    if (self.opreatingFiles) {
-        return;
-    }
-    if (self.selects.count == 0) {
-        return;
-    }
-    
-    [SVProgressHUD show];
-    self.opreatingFiles = YES;
-    @weakify(self);
-    [[PLUniversalManager defaultManager] moveContentsToOtherWorksAtPaths:self.selects completion:^{
-        @strongify(self);
-        
-        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"已将%ld个项目移动到其他作品", self.selects.count]];
-        [self refreshAfterOperatingFiles];
-    }];
 }
 
 #pragma mark - Notifications
@@ -524,6 +404,15 @@
     // 更新flowLayout后刷新collectionView
     [self setupCollectionViewFlowLayout];
     [self.collectionView reloadData];
+}
+
+#pragma mark - Getter
+- (PLContentViewModel *)viewModel {
+    if (!_viewModel) {
+        _viewModel = [[PLContentViewModel alloc] initWithFolderPath:self.folderPath];
+    }
+    
+    return _viewModel;
 }
 
 #pragma mark - Setter
