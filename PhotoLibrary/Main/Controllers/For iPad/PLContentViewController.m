@@ -103,11 +103,8 @@
     [self setupNavigationBarItems];
 }
 - (void)setupNavigationBarItems {
-    if (self.contentView.viewModel.folderType == PLContentFolderTypeNormal) {
-        self.navigationItem.rightBarButtonItems = @[self.editBBI, self.allBBI, self.trashBBI, self.menuBBI, self.jumpSwitchBBI, self.sliderBBI];
-    } else {
-        self.navigationItem.rightBarButtonItems = @[];
-    }
+    BOOL needShowBBIs = (self.contentView.viewModel.folderType == PLContentFolderTypeNormal);
+    self.navigationItem.rightBarButtonItems = needShowBBIs ? @[self.editBBI, self.allBBI, self.trashBBI, self.menuBBI, self.jumpSwitchBBI, self.sliderBBI] : @[];
 }
 - (void)setupAllBBI {
     BOOL selectAll = (self.contentView.viewModel.selectsCount == (self.contentView.viewModel.foldersCount + self.contentView.viewModel.filesCount)) && self.contentView.viewModel.selectsCount != 0; // 如果没有文件(夹)，就不算全选
