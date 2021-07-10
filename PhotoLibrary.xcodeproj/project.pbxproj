@@ -288,17 +288,41 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		ACA6667726623E5E00338972 /* Models */ = {
+		AC3C16962699A84A004A260E /* Content */ = {
 			isa = PBXGroup;
 			children = (
-				ACA6667826623E7700338972 /* PLPhotoFileModel.h */,
-				ACA6667926623E7700338972 /* PLPhotoFileModel.m */,
-				AC73E6D4268FFB8200191D66 /* PLOperationMenu.h */,
-				AC73E6D5268FFB8200191D66 /* PLOperationMenu.m */,
 				AC3C1687269994EF004A260E /* PLContentModel.h */,
 				AC3C1688269994EF004A260E /* PLContentModel.m */,
 				AC3F672226903A81000BF2E7 /* PLContentViewModel.h */,
 				AC3F672326903A81000BF2E7 /* PLContentViewModel.m */,
+			);
+			path = Content;
+			sourceTree = "<group>";
+		};
+		AC3C169A2699A855004A260E /* Photo */ = {
+			isa = PBXGroup;
+			children = (
+				ACA6667826623E7700338972 /* PLPhotoFileModel.h */,
+				ACA6667926623E7700338972 /* PLPhotoFileModel.m */,
+			);
+			path = Photo;
+			sourceTree = "<group>";
+		};
+		AC3C169E2699A861004A260E /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				AC73E6D4268FFB8200191D66 /* PLOperationMenu.h */,
+				AC73E6D5268FFB8200191D66 /* PLOperationMenu.m */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		ACA6667726623E5E00338972 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AC3C16962699A84A004A260E /* Content */,
+				AC3C169A2699A855004A260E /* Photo */,
+				AC3C169E2699A861004A260E /* Navigation */,
 			);
 			path = Models;
 			sourceTree = "<group>";
