@@ -7,8 +7,6 @@
 
 #import "PLContentPhoneViewController.h"
 
-#import "PLPhotoPhoneViewController.h"
-
 #import "PLContentView.h"
 
 @interface PLContentPhoneViewController () <PLContentViewDelegate>
