@@ -13,8 +13,6 @@
 
 @property (nonatomic, strong) PLContentView *contentView;
 
-@property (nonatomic, assign) BOOL selectingMode;
-
 @end
 
 @implementation PLContentPhoneViewController
@@ -46,9 +44,6 @@
     }
 }
 - (void)setupUIAndData {
-    // Data
-    self.selectingMode = NO;
-    
     // UI
     [self setupContentView];
 }
@@ -63,14 +58,6 @@
 - (void)didFinishRefreshingItemsInContentView:(PLContentView *)contentView {
     [self setupTitle];
 }
-- (void)contentView:(PLContentView *)contentView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.contentView.selectingMode) {
-        [self setupTitle];
-    }
-}
-- (void)contentViewModelDidFinishOperatingFiles:(PLContentView *)contentView {
-    [self setupTitle];
-}
 
 #pragma mark - Getter
 - (PLContentView *)contentView {
@@ -80,13 +67,6 @@
     }
     
     return _contentView;
-}
-
-#pragma mark - Setter
-- (void)setSelectingMode:(BOOL)selectingMode {
-    _selectingMode = selectingMode;
-    
-    self.contentView.selectingMode = selectingMode;
 }
 
 @end
