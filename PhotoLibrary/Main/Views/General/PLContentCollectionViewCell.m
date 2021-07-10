@@ -11,11 +11,8 @@
 
 @property (strong, nonatomic) IBOutlet UIImageView *imageView;
 @property (strong, nonatomic) IBOutlet UILabel *nameLabel;
-@property (strong, nonatomic) IBOutlet UIImageView *selectImageView;
 @property (strong, nonatomic) IBOutlet UIImageView *folderImageView;
 @property (strong, nonatomic) IBOutlet UILabel *fileCountLabel;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *selectImageViewWidthConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *selectImageViewHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *fileCountLabelCenterYConstraint;
 
 @end
@@ -25,6 +22,9 @@
 #pragma mark - Lifecycle
 - (void)awakeFromNib {
     [super awakeFromNib];
+    
+    self.layer.borderColor = [UIColor clearColor].CGColor;
+    self.layer.borderWidth = 4.0f;
     
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         self.fileCountLabelCenterYConstraint.constant = 25.0f;
@@ -62,19 +62,11 @@
         self.fileCountLabel.text = [NSString stringWithFormat:@"%ld / %ld", [GYFileManager folderPathsInFolder:contentPath].count, [GYFileManager filePathsInFolder:contentPath].count];
         self.fileCountLabel.hidden = NO;
         self.imageView.hidden = YES;
-        
-        CGFloat selectImageViewSize = 44.0 - (PLFolderColumnsPerRow - 4) * 4;
-        self.selectImageViewWidthConstraint.constant = selectImageViewSize;
-        self.selectImageViewHeightConstraint.constant = selectImageViewSize;
     } else {
         self.folderImageView.hidden = YES;
         self.nameLabel.hidden = YES;
         self.fileCountLabel.hidden = YES;
         self.imageView.hidden = NO;
-        
-        CGFloat selectImageViewSize = 44.0 - ([PLUniversalManager defaultManager].columnsPerRow - 4) * 4;
-        self.selectImageViewWidthConstraint.constant = selectImageViewSize;
-        self.selectImageViewHeightConstraint.constant = selectImageViewSize;
         
         UIImage *memoryImage = [[SDImageCache sharedImageCache] imageFromMemoryCacheForKey:contentPath];
         if (memoryImage) {
@@ -126,8 +118,7 @@
     }
     _cellType = cellType;
     
-    self.selectImageView.hidden = cellType == PLContentCollectionViewCellTypeNormal;
-    self.selectImageView.image = cellType == PLContentCollectionViewCellTypeEdit ? [UIImage imageNamed:@"SelectedOff"] : [UIImage imageNamed:@"SelectedOn"];
+    self.layer.borderColor = (cellType == PLContentCollectionViewCellTypeEditSelect) ? [UIColor colorWithHexString:@"#F7D450"].CGColor : [UIColor clearColor].CGColor;
 }
 
 @end
