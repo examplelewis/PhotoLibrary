@@ -61,7 +61,6 @@
         }
     }
 }
-
 - (void)setupUIAndData {
     // Data
     self.selectingMode = NO;
@@ -195,13 +194,13 @@
     [self setupTitle];
 }
 - (void)contentView:(PLContentView *)contentView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    [self setupTitle];
-    [self setupAllBBI];
-    [self setupNavigationBarItems];
+    if (self.contentView.selectingMode) {
+        [self setupTitle];
+        [self setupAllBBI];
+        [self setupNavigationBarItems];
+    }
 }
 - (void)contentViewModelDidFinishOperatingFiles:(PLContentView *)contentView {
-    [self.contentView reloadCollectionView];
-
     [self setupTitle];
     [self setupAllBBI];
     [self setupNavigationBarItems];

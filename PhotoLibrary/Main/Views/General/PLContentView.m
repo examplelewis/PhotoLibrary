@@ -211,10 +211,10 @@
         }
         
         [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
-        
-        if ([self.delegate respondsToSelector:@selector(contentView:didSelectItemAtIndexPath:)]) {
-            [self.delegate contentView:self didSelectItemAtIndexPath:indexPath];
-        }
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(contentView:didSelectItemAtIndexPath:)]) {
+        [self.delegate contentView:self didSelectItemAtIndexPath:indexPath];
     }
 }
 
@@ -251,6 +251,8 @@
     @weakify(self);
     dispatch_main_async_safe(^{
         @strongify(self);
+        
+        [self.collectionView reloadData];
         
         if ([self.delegate respondsToSelector:@selector(contentViewModelDidFinishOperatingFiles:)]) {
             [self.delegate contentViewModelDidFinishOperatingFiles:self];
