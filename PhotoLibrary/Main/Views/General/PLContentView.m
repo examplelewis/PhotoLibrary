@@ -12,7 +12,7 @@
 #import "PLContentCollectionViewCell.h"
 #import "PLContentCollectionHeaderReusableView.h"
 
-@interface PLContentView () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
+@interface PLContentView () <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PLContentViewModelDelegate>
 
 @property (nonatomic, copy) NSString *folderPath;
 
@@ -88,7 +88,7 @@
     @weakify(self);
     self.collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         @strongify(self);
-        [self refreshItems];
+        [self.viewModel refreshItems];
     }];
     
     [self addSubview:self.collectionView];
@@ -98,16 +98,6 @@
 }
 
 #pragma mark - Refresh
-- (void)refreshItems {
-    [self.viewModel refreshItems];
-    
-    if ([self.delegate respondsToSelector:@selector(didFinishRefreshingItemsInContentView:)]) {
-        [self.delegate didFinishRefreshingItemsInContentView:self];
-    }
-    
-    [self.collectionView reloadData];
-    [self.collectionView.mj_header endRefreshing];
-}
 - (void)refreshWhenViewDidAppear {
     if (self.viewModel.foldersCount == 0 && self.viewModel.filesCount == 0) {
         [self.collectionView.mj_header beginRefreshing];
@@ -115,7 +105,7 @@
         if (self.refreshFilesWhenViewDidAppear) {
             self.refreshFilesWhenViewDidAppear = NO;
             
-            [self refreshItems];
+            [self.viewModel refreshItems];
         }
     }
 }
@@ -149,15 +139,15 @@
     
     if (self.viewModel.bothFoldersAndFiles) {
         if (indexPath.section == 0) {
-            cell.contentPath = [self.viewModel folderPathAtIndex:indexPath.row];
+            cell.model = [self.viewModel folderModelAtIndex:indexPath.row];
         } else {
-            cell.contentPath = [self.viewModel filePathAtIndex:indexPath.row];
+            cell.model = [self.viewModel fileModelAtIndex:indexPath.row];
         }
     } else {
         if (self.viewModel.foldersCount > 0) {
-            cell.contentPath = [self.viewModel folderPathAtIndex:indexPath.row];
+            cell.model = [self.viewModel folderModelAtIndex:indexPath.row];
         } else if (self.viewModel.filesCount > 0) {
-            cell.contentPath = [self.viewModel filePathAtIndex:indexPath.row];
+            cell.model = [self.viewModel fileModelAtIndex:indexPath.row];
         } else {
             return [UICollectionViewCell new];
         }
@@ -166,7 +156,7 @@
     if (!self.selectingMode) {
         cell.cellType = PLContentCollectionViewCellTypeNormal;
     } else {
-        cell.cellType = [self.viewModel isSelectedAtItemPath:cell.contentPath] ? PLContentCollectionViewCellTypeEditSelect : PLContentCollectionViewCellTypeEdit;
+        cell.cellType = [self.viewModel isSelectedForModel:cell.model] ? PLContentCollectionViewCellTypeEditSelect : PLContentCollectionViewCellTypeEdit;
     }
 
     return cell;
@@ -202,8 +192,8 @@
     
     PLContentCollectionViewCell *cell = (PLContentCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     if (cell.cellType == PLContentCollectionViewCellTypeNormal) {
-        if (cell.isFolder) {
-            PLNavigationType type = [PLNavigationManager navigateToContentAtFolderPath:[self.viewModel folderPathAtIndex:indexPath.row]];
+        if (cell.model.isFolder) {
+            PLNavigationType type = [PLNavigationManager navigateToContentAtFolderPath:[self.viewModel folderModelAtIndex:indexPath.row].itemPath];
             self.refreshFilesWhenViewDidAppear = type == PLNavigationTypePhoto; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
         } else {
             if (self.viewModel.folderType == PLContentFolderTypeNormal) {
@@ -214,10 +204,10 @@
             }
         }
     } else {
-        if ([self.viewModel isSelectedAtItemPath:cell.contentPath]) {
-            [self.viewModel removeSelectItem:cell.contentPath];
+        if ([self.viewModel isSelectedForModel:cell.model]) {
+            [self.viewModel removeSelectItem:cell.model];
         } else {
-            [self.viewModel addSelectItem:cell.contentPath];
+            [self.viewModel addSelectItem:cell.model];
         }
         
         [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
@@ -256,6 +246,31 @@
     }
 }
 
+#pragma mark - PLContentViewModelDelegate
+- (void)viewModelDidFinishOperatingFiles {
+    @weakify(self);
+    dispatch_main_async_safe(^{
+        @strongify(self);
+        
+        if ([self.delegate respondsToSelector:@selector(contentViewModelDidFinishOperatingFiles:)]) {
+            [self.delegate contentViewModelDidFinishOperatingFiles:self];
+        }
+    });
+}
+- (void)viewModelDidFinishRefreshingItems {
+    @weakify(self);
+    dispatch_main_async_safe(^{
+        @strongify(self);
+        
+        if ([self.delegate respondsToSelector:@selector(didFinishRefreshingItemsInContentView:)]) {
+            [self.delegate didFinishRefreshingItemsInContentView:self];
+        }
+        
+        [self.collectionView reloadData];
+        [self.collectionView.mj_header endRefreshing];
+    });
+}
+
 #pragma mark - Notifications
 - (void)columnPerRowSliderValueChanged:(NSNotification *)sender {
     // 更新flowLayout后刷新collectionView
@@ -267,6 +282,7 @@
 - (PLContentViewModel *)viewModel {
     if (!_viewModel) {
         _viewModel = [[PLContentViewModel alloc] initWithFolderPath:self.folderPath];
+        _viewModel.delegate = self;
     }
     
     return _viewModel;

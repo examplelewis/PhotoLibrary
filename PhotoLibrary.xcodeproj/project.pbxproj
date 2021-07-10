@@ -17,6 +17,7 @@
 		AC262505265812AA00939375 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AC262504265812AA00939375 /* main.m */; };
 		AC26250F265812AB00939375 /* PhotoLibraryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC26250E265812AB00939375 /* PhotoLibraryTests.m */; };
 		AC26251A265812AB00939375 /* PhotoLibraryUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC262519265812AB00939375 /* PhotoLibraryUITests.m */; };
+		AC3C1689269994EF004A260E /* PLContentModel.m in Sources */ = {isa = PBXBuildFile; fileRef = AC3C1688269994EF004A260E /* PLContentModel.m */; };
 		AC3F672426903A81000BF2E7 /* PLContentViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = AC3F672326903A81000BF2E7 /* PLContentViewModel.m */; };
 		AC3F672A2690541F000BF2E7 /* PLContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = AC3F67292690541F000BF2E7 /* PLContentView.m */; };
 		AC73E6D6268FFB8200191D66 /* PLOperationMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = AC73E6D5268FFB8200191D66 /* PLOperationMenu.m */; };
@@ -93,6 +94,8 @@
 		AC262519265812AB00939375 /* PhotoLibraryUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoLibraryUITests.m; sourceTree = "<group>"; };
 		AC26251B265812AB00939375 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AC26270D26581CD900939375 /* PhotoLibrary-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PhotoLibrary-Prefix.pch"; sourceTree = "<group>"; };
+		AC3C1687269994EF004A260E /* PLContentModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLContentModel.h; sourceTree = "<group>"; };
+		AC3C1688269994EF004A260E /* PLContentModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLContentModel.m; sourceTree = "<group>"; };
 		AC3F672226903A81000BF2E7 /* PLContentViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLContentViewModel.h; sourceTree = "<group>"; };
 		AC3F672326903A81000BF2E7 /* PLContentViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLContentViewModel.m; sourceTree = "<group>"; };
 		AC3F67282690541F000BF2E7 /* PLContentView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLContentView.h; sourceTree = "<group>"; };
@@ -292,6 +295,8 @@
 				ACA6667926623E7700338972 /* PLPhotoFileModel.m */,
 				AC73E6D4268FFB8200191D66 /* PLOperationMenu.h */,
 				AC73E6D5268FFB8200191D66 /* PLOperationMenu.m */,
+				AC3C1687269994EF004A260E /* PLContentModel.h */,
+				AC3C1688269994EF004A260E /* PLContentModel.m */,
 				AC3F672226903A81000BF2E7 /* PLContentViewModel.h */,
 				AC3F672326903A81000BF2E7 /* PLContentViewModel.m */,
 			);
@@ -705,6 +710,7 @@
 				ACEBB7A226588A07005778FB /* UIColor+GYAdd.m in Sources */,
 				ACEBB79B26588A07005778FB /* GYUtilityManager.m in Sources */,
 				ACF21AB926690C2D00AEF2CE /* PLViewController.m in Sources */,
+				AC3C1689269994EF004A260E /* PLContentModel.m in Sources */,
 				ACEBB79A26588A07005778FB /* GYLogManager.m in Sources */,
 				ACDF2273265FE00000608CD0 /* PLPhotoViewController.m in Sources */,
 				ACEBB79C26588A07005778FB /* GYExceptionManager.m in Sources */,

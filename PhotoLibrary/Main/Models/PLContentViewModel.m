@@ -7,13 +7,15 @@
 
 #import "PLContentViewModel.h"
 
+#import "PLContentModel.h"
+
 @interface PLContentViewModel ()
 
 @property (nonatomic, copy) NSString *folderPath;
 
-@property (nonatomic, copy) NSArray<NSString *> *folders;
-@property (nonatomic, copy) NSArray<NSString *> *files;
-@property (nonatomic, strong) NSMutableArray<NSString *> *selects;
+@property (nonatomic, copy) NSArray<PLContentModel *> *folders;
+@property (nonatomic, copy) NSArray<PLContentModel *> *files;
+@property (nonatomic, strong) NSMutableArray<PLContentModel *> *selects;
 
 @property (nonatomic, assign) BOOL operatingFiles; // 是否正在进行文件操作
 
@@ -40,10 +42,30 @@
 
 #pragma mark - Refreshing
 - (void)refreshItems {
-    self.folders = [GYFileManager folderPathsInFolder:self.folderPath];
-    self.folders = [self.folders sortedArrayUsingDescriptors:@[[PLUniversalManager fileAscendingSortDescriptorWithKey:@"self"]]];
-    self.files = [GYFileManager filePathsInFolder:self.folderPath extensions:[GYSettingManager defaultManager].mimeImageTypes];
-    self.files = [self.files sortedArrayUsingDescriptors:@[[PLUniversalManager fileAscendingSortDescriptorWithKey:@"self"]]];
+    @weakify(self);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        @strongify(self);
+        
+        [self _refreshItems];
+        
+        if ([self.delegate respondsToSelector:@selector(viewModelDidFinishRefreshingItems)]) {
+            [self.delegate viewModelDidFinishRefreshingItems];
+        }
+    });
+}
+- (void)_refreshItems {
+    NSArray *folderPaths = [GYFileManager folderPathsInFolder:self.folderPath];
+    folderPaths = [folderPaths sortedArrayUsingDescriptors:@[[PLUniversalManager fileAscendingSortDescriptorWithKey:@"self"]]];
+    self.folders = [folderPaths bk_map:^PLContentModel *(NSString *folderPath) {
+        return [PLContentModel contentModelFromItemPath:folderPath];
+    }];
+    
+    NSArray *filePaths = [GYFileManager filePathsInFolder:self.folderPath extensions:[GYSettingManager defaultManager].mimeImageTypes];
+    filePaths = [filePaths sortedArrayUsingDescriptors:@[[PLUniversalManager fileAscendingSortDescriptorWithKey:@"self"]]];
+    self.files = [filePaths bk_map:^PLContentModel *(NSString *filePath) {
+        return [PLContentModel contentModelFromItemPath:filePath];
+    }];
+    
     self.bothFoldersAndFiles = (self.folders.count > 0 && self.files.count > 0);
 }
 - (void)refreshAfterOperatingFiles {
@@ -64,15 +86,15 @@
     }
 }
 
-#pragma mark - Path
-- (NSString *)folderPathAtIndex:(NSInteger)index {
+#pragma mark - Model
+- (PLContentModel *)folderModelAtIndex:(NSInteger)index {
     if (index >= self.folders.count) {
         return nil;
     }
     
     return self.folders[index];
 }
-- (NSString *)filePathAtIndex:(NSInteger)index {
+- (PLContentModel *)fileModelAtIndex:(NSInteger)index {
     if (index >= self.files.count) {
         return nil;
     }
@@ -81,8 +103,8 @@
 }
 
 #pragma mark - Select Items
-- (BOOL)isSelectedAtItemPath:(NSString *)itemPath {
-    return [self.selects indexOfObject:itemPath] != NSNotFound;
+- (BOOL)isSelectedForModel:(PLContentModel *)model {
+    return [self.selects indexOfObject:model] != NSNotFound;
 }
 - (void)removeAllSelectItems {
     [self.selects removeAllObjects];
@@ -94,11 +116,11 @@
         [self.selects addObjectsFromArray:self.files];
     }
 }
-- (void)addSelectItem:(NSString *)itemPath {
-    [self.selects addObject:itemPath];
+- (void)addSelectItem:(PLContentModel *)model {
+    [self.selects addObject:model];
 }
-- (void)removeSelectItem:(NSString *)itemPath {
-    [self.selects removeObject:itemPath];
+- (void)removeSelectItem:(PLContentModel *)model {
+    [self.selects removeObject:model];
 }
 
 #pragma mark - Move Select Items
@@ -113,7 +135,7 @@
     [SVProgressHUD show];
     self.operatingFiles = YES;
     @weakify(self);
-    [[PLUniversalManager defaultManager] moveContentsToMixWorksAtPaths:self.selects completion:^{
+    [[PLUniversalManager defaultManager] moveContentsToMixWorksAtPaths:[self.selects valueForKey:@"itemPath"] completion:^{
         @strongify(self);
         
         [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"已将%ld个项目移动到混合作品", self.selects.count]];
@@ -136,7 +158,7 @@
     [SVProgressHUD show];
     self.operatingFiles = YES;
     @weakify(self);
-    [[PLUniversalManager defaultManager] moveContentsToEditWorksAtPaths:self.selects completion:^{
+    [[PLUniversalManager defaultManager] moveContentsToEditWorksAtPaths:[self.selects valueForKey:@"itemPath"] completion:^{
         @strongify(self);
         
         [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"已将%ld个项目移动到编辑作品", self.selects.count]];
@@ -154,7 +176,7 @@
     [SVProgressHUD show];
     self.operatingFiles = YES;
     @weakify(self);
-    [[PLUniversalManager defaultManager] moveContentsToOtherWorksAtPaths:self.selects completion:^{
+    [[PLUniversalManager defaultManager] moveContentsToOtherWorksAtPaths:[self.selects valueForKey:@"itemPath"] completion:^{
         @strongify(self);
         
         [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"已将%ld个项目移动到其他作品", self.selects.count]];
@@ -172,7 +194,7 @@
     [SVProgressHUD show];
     self.operatingFiles = YES;
     @weakify(self);
-    [[PLUniversalManager defaultManager] trashContentsAtPaths:self.selects completion:^{
+    [[PLUniversalManager defaultManager] trashContentsAtPaths:[self.selects valueForKey:@"itemPath"] completion:^{
         @strongify(self);
         
         [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"已将%ld个项目移动到废纸篓", self.selects.count]];
@@ -183,7 +205,7 @@
 #pragma mark - Tools
 - (void)cleanSDWebImageCache {
     for (NSInteger i = 0; i < self.files.count; i++) {
-        [[SDImageCache sharedImageCache] removeImageFromMemoryForKey:self.files[i]];
+        [[SDImageCache sharedImageCache] removeImageFromMemoryForKey:self.files[i].itemPath];
     }
 }
 

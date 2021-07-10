@@ -36,39 +36,21 @@
 }
 
 #pragma mark - Setter
-- (void)setContentPath:(NSString *)contentPath {
-    _contentPath = [contentPath copy];
+- (void)setModel:(PLContentModel *)model {
+    _model = model;
     
-    if ([contentPath isEqualToString:@"DefaultImage"]) {
-        _isFolder = NO;
-        self.cellType = PLContentCollectionViewCellTypeNormal;
-        
-        self.folderImageView.hidden = YES;
-        self.nameLabel.hidden = NO;
-        self.nameLabel.text = @"轻点进入图片页";
-        
-        self.imageView.image = [UIImage imageNamed:@"DefaultImage"];
-        
-        return;
-    }
-    
-    _isFolder = [GYFileManager contentIsFolderAtPath:contentPath];
     self.cellType = PLContentCollectionViewCellTypeNormal;
     
-    if (self.isFolder) {
-        self.folderImageView.hidden = NO;
-        self.nameLabel.hidden = NO;
-        self.nameLabel.text = contentPath.lastPathComponent;
-        self.fileCountLabel.text = [NSString stringWithFormat:@"%ld / %ld", [GYFileManager folderPathsInFolder:contentPath].count, [GYFileManager filePathsInFolder:contentPath].count];
-        self.fileCountLabel.hidden = NO;
-        self.imageView.hidden = YES;
+    self.folderImageView.hidden = !model.isFolder;
+    self.nameLabel.hidden = !model.isFolder;
+    self.fileCountLabel.hidden = !model.isFolder;
+    self.imageView.hidden = model.isFolder;
+    
+    if (model.isFolder) {
+        self.nameLabel.text = model.itemPath.lastPathComponent;
+        self.fileCountLabel.text = [NSString stringWithFormat:@"%ld / %ld", model.foldersCount, model.filesCount];
     } else {
-        self.folderImageView.hidden = YES;
-        self.nameLabel.hidden = YES;
-        self.fileCountLabel.hidden = YES;
-        self.imageView.hidden = NO;
-        
-        UIImage *memoryImage = [[SDImageCache sharedImageCache] imageFromMemoryCacheForKey:contentPath];
+        UIImage *memoryImage = [[SDImageCache sharedImageCache] imageFromMemoryCacheForKey:model.itemPath];
         if (memoryImage) {
             self.imageView.image = memoryImage;
         } else {
@@ -77,14 +59,14 @@
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 @strongify(self);
                 
-                if ([[SDImageCache sharedImageCache] diskImageDataExistsWithKey:contentPath]) {
+                if ([[SDImageCache sharedImageCache] diskImageDataExistsWithKey:model.itemPath]) {
                     dispatch_main_async_safe(^{
-                        self.imageView.image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:contentPath];
+                        self.imageView.image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:model.itemPath];
                     });
                 } else {
-                    NSData *data = [[NSData alloc] initWithContentsOfFile:contentPath];
+                    NSData *data = [[NSData alloc] initWithContentsOfFile:model.itemPath];
                     UIImage *image = nil;
-                    if ([contentPath.pathExtension.lowercaseString isEqualToString:@"gif"]) {
+                    if ([model.itemPath.pathExtension.lowercaseString isEqualToString:@"gif"]) {
                         image = [UIImage sd_imageWithGIFData:data];
                     } else {
                         image = [UIImage imageWithData:data];
@@ -101,7 +83,7 @@
                             }
                         }
                     }
-                    [[SDImageCache sharedImageCache] storeImage:image forKey:contentPath completion:nil];
+                    [[SDImageCache sharedImageCache] storeImage:image forKey:model.itemPath completion:nil];
                     
                     dispatch_main_async_safe(^{
                         @strongify(self);
@@ -112,6 +94,7 @@
         }
     }
 }
+
 - (void)setCellType:(PLContentCollectionViewCellType)cellType {
     if (_cellType == cellType) {
         return;

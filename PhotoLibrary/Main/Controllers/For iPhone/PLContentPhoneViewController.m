@@ -150,15 +150,15 @@
     
     if (self.viewModel.bothFoldersAndFiles) {
         if (indexPath.section == 0) {
-            cell.contentPath = [self.viewModel folderPathAtIndex:indexPath.row];
+            cell.model = [self.viewModel folderModelAtIndex:indexPath.row];
         } else {
-            cell.contentPath = [self.viewModel filePathAtIndex:indexPath.row];
+            cell.model = [self.viewModel fileModelAtIndex:indexPath.row];
         }
     } else {
         if (self.viewModel.foldersCount > 0) {
-            cell.contentPath = [self.viewModel folderPathAtIndex:indexPath.row];
+            cell.model = [self.viewModel folderModelAtIndex:indexPath.row];
         } else if (self.viewModel.filesCount > 0) {
-            cell.contentPath = [self.viewModel filePathAtIndex:indexPath.row];
+            cell.model = [self.viewModel fileModelAtIndex:indexPath.row];
         } else {
             return [UICollectionViewCell new];
         }
@@ -167,7 +167,7 @@
     if (!self.selectingMode) {
         cell.cellType = PLContentCollectionViewCellTypeNormal;
     } else {
-        cell.cellType = [self.viewModel isSelectedAtItemPath:cell.contentPath] ? PLContentCollectionViewCellTypeEditSelect : PLContentCollectionViewCellTypeEdit;
+        cell.cellType = [self.viewModel isSelectedForModel:cell.model] ? PLContentCollectionViewCellTypeEditSelect : PLContentCollectionViewCellTypeEdit;
     }
 
     return cell;
@@ -202,8 +202,8 @@
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     
     PLContentCollectionViewCell *cell = (PLContentCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    if (cell.isFolder) {
-        PLNavigationType type = [PLNavigationManager navigateToContentAtFolderPath:[self.viewModel folderPathAtIndex:indexPath.row]];
+    if (cell.model.isFolder) {
+        PLNavigationType type = [PLNavigationManager navigateToContentAtFolderPath:[self.viewModel folderModelAtIndex:indexPath.row].itemPath];
         self.refreshFilesWhenViewDidAppear = type == PLNavigationTypePhoto; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
     } else {
         PLNavigationType type = [PLNavigationManager navigateToPhotoAtFolderPath:self.folderPath index:indexPath.row];

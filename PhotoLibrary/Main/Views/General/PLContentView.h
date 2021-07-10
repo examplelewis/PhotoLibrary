@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)didFinishRefreshingItemsInContentView:(PLContentView *)contentView;
 // 选择了某个项目之后的回调，这个时候应该刷新VC的Title和NavigationBar
 - (void)contentView:(PLContentView *)contentView didSelectItemAtIndexPath:(NSIndexPath *)indexPath;
+// viewModel完成文件操作的回调
+- (void)contentViewModelDidFinishOperatingFiles:(PLContentView *)contentView;
 
 @end
 

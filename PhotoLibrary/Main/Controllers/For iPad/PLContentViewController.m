@@ -12,7 +12,7 @@
 #import "PLOperationMenu.h"
 #import "PLContentView.h"
 
-@interface PLContentViewController () <PLOperationMenuDelegate, PLContentViewDelegate, PLContentViewModelDelegate>
+@interface PLContentViewController () <PLOperationMenuDelegate, PLContentViewDelegate>
 
 @property (nonatomic, strong) UIBarButtonItem *editBBI;
 @property (nonatomic, strong) UIBarButtonItem *allBBI;
@@ -199,19 +199,12 @@
     [self setupAllBBI];
     [self setupNavigationBarItems];
 }
+- (void)contentViewModelDidFinishOperatingFiles:(PLContentView *)contentView {
+    [self.contentView reloadCollectionView];
 
-#pragma mark - PLContentViewModelDelegate
-- (void)viewModelDidFinishOperatingFiles {
-    @weakify(self);
-    dispatch_main_async_safe(^{
-        @strongify(self);
-        
-        [self.contentView reloadCollectionView];
-
-        [self setupTitle];
-        [self setupAllBBI];
-        [self setupNavigationBarItems];
-    });
+    [self setupTitle];
+    [self setupAllBBI];
+    [self setupNavigationBarItems];
 }
 
 #pragma mark - Getter
@@ -219,7 +212,6 @@
     if (!_contentView) {
         _contentView = [[PLContentView alloc] initWithFolderPath:self.folderPath];
         _contentView.delegate = self;
-        _contentView.viewModel.delegate = self;
     }
     
     return _contentView;

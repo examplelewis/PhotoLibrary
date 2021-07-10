@@ -9,9 +9,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class PLContentModel;
 @class PLContentViewModel;
+
 @protocol PLContentViewModelDelegate <NSObject>
 
+- (void)viewModelDidFinishRefreshingItems;
 - (void)viewModelDidFinishOperatingFiles;
 
 @end
@@ -33,16 +36,16 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Refreshing
 - (void)refreshItems;
 
-#pragma mark - Path
-- (nullable NSString *)folderPathAtIndex:(NSInteger)index;
-- (nullable NSString *)filePathAtIndex:(NSInteger)index;
+#pragma mark - Model
+- (nullable PLContentModel *)folderModelAtIndex:(NSInteger)index;
+- (nullable PLContentModel *)fileModelAtIndex:(NSInteger)index;
 
 #pragma mark - Select Items
-- (BOOL)isSelectedAtItemPath:(NSString *)itemPath;
+- (BOOL)isSelectedForModel:(PLContentModel *)model;
 - (void)removeAllSelectItems;
 - (void)selectAllItems:(BOOL)selectAll;
-- (void)addSelectItem:(NSString *)itemPath;
-- (void)removeSelectItem:(NSString *)itemPath;
+- (void)addSelectItem:(PLContentModel *)model;
+- (void)removeSelectItem:(PLContentModel *)model;
 
 #pragma mark - Move Select Items
 - (void)moveSelectItemsToMixWorks;
