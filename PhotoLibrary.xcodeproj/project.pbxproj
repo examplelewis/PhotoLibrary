@@ -306,8 +306,8 @@
 		ACE211D12659F67400FF52EC /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				ACF759A62663C3750005322B /* General */,
-				ACF759A72663C3840005322B /* For iPad */,
+				ACF759A62663C3750005322B /* Content */,
+				ACF759A72663C3840005322B /* Photo */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -483,7 +483,7 @@
 			path = "For iPhone";
 			sourceTree = "<group>";
 		};
-		ACF759A62663C3750005322B /* General */ = {
+		ACF759A62663C3750005322B /* Content */ = {
 			isa = PBXGroup;
 			children = (
 				AC3F67282690541F000BF2E7 /* PLContentView.h */,
@@ -494,19 +494,19 @@
 				ACE03AC7265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.h */,
 				ACE03AC8265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.m */,
 				ACE03AC9265A9CCC00BDC5AA /* PLContentCollectionHeaderReusableView.xib */,
-				ACC29E7726612D96001E7B78 /* PLPhotoMainCellView.h */,
-				ACC29E7826612D96001E7B78 /* PLPhotoMainCellView.m */,
 			);
-			path = General;
+			path = Content;
 			sourceTree = "<group>";
 		};
-		ACF759A72663C3840005322B /* For iPad */ = {
+		ACF759A72663C3840005322B /* Photo */ = {
 			isa = PBXGroup;
 			children = (
+				ACC29E7726612D96001E7B78 /* PLPhotoMainCellView.h */,
+				ACC29E7826612D96001E7B78 /* PLPhotoMainCellView.m */,
 				ACA6667E2662594400338972 /* PLPhotoBottomCellView.h */,
 				ACA6667F2662594400338972 /* PLPhotoBottomCellView.m */,
 			);
-			path = "For iPad";
+			path = Photo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
