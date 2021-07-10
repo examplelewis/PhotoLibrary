@@ -7,21 +7,13 @@
 
 #import "PLContentViewController.h"
 
-#import <StepSlider.h>
+#import "PLNavigationItems.h"
 
-#import "PLOperationMenu.h"
 #import "PLContentView.h"
 
-@interface PLContentViewController () <PLOperationMenuDelegate, PLContentViewDelegate>
+@interface PLContentViewController () <PLOperationMenuDelegate, PLContentViewDelegate, PLNavigationItemsDatasource, PLNavigationItemsDelegate>
 
-@property (nonatomic, strong) UIBarButtonItem *editBBI;
-@property (nonatomic, strong) UIBarButtonItem *allBBI;
-@property (nonatomic, strong) UIBarButtonItem *trashBBI;
-@property (nonatomic, strong) UIBarButtonItem *menuBBI;
-@property (nonatomic, strong) UIBarButtonItem *sliderBBI;
-@property (nonatomic, strong) UIBarButtonItem *jumpSwitchBBI; // 是否直接跳转到图片页
-
-@property (nonatomic, strong) PLOperationMenu *operationMenu;
+@property (nonatomic, strong) PLNavigationItems *navigationItems;
 
 @property (nonatomic, strong) PLContentView *contentView;
 
@@ -70,45 +62,12 @@
     [self setupContentView];
 }
 - (void)setupNavigationBar {
-    self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editBarButtonItemDidPress:)];
-    
-    self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
-    self.allBBI.enabled = NO;
-    
-    self.trashBBI = [[UIBarButtonItem alloc] initWithTitle:@"删除" style:UIBarButtonItemStylePlain target:self action:@selector(trashBarButtonItemDidPress:)];
-    self.trashBBI.enabled = NO;
-    
-    self.operationMenu = [[PLOperationMenu alloc] initWithAction:PLOperationMenuActionMoveToTypes];
-    self.operationMenu.delegate = self;
-    self.menuBBI = [[UIBarButtonItem alloc] initWithTitle:@"操作" menu:self.operationMenu.menu];
-    self.menuBBI.enabled = NO;
-    
-    UIView *jumpSwitchView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 55, 44)];
-    UISwitch *jumpSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(0, 6.5, 47, 31)];
-    jumpSwitch.tag = 100;
-    jumpSwitch.on = [PLUniversalManager defaultManager].directlyJumpPhoto;
-    [jumpSwitch addTarget:self action:@selector(jumpSwitchValueChanged:) forControlEvents:UIControlEventValueChanged];
-    [jumpSwitchView addSubview:jumpSwitch];
-    self.jumpSwitchBBI = [[UIBarButtonItem alloc] initWithCustomView:jumpSwitchView];
-    
-    UIView *sliderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 270, 44)];
-    StepSlider *slider = [[StepSlider alloc] initWithFrame:CGRectMake(0, 9, 270, 26)];
-    slider.tag = 100;
-    slider.maxCount = 6;
-    slider.index = [PLUniversalManager defaultManager].columnsPerRow - 4;
-    [slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
-    [sliderView addSubview:slider];
-    self.sliderBBI = [[UIBarButtonItem alloc] initWithCustomView:sliderView];
-    
-    [self setupNavigationBarItems];
-}
-- (void)setupNavigationBarItems {
     BOOL needShowBBIs = (self.contentView.viewModel.folderType == PLContentFolderTypeNormal);
-    self.navigationItem.rightBarButtonItems = needShowBBIs ? @[self.editBBI, self.allBBI, self.trashBBI, self.menuBBI, self.jumpSwitchBBI, self.sliderBBI] : @[];
+    self.navigationItem.rightBarButtonItems = needShowBBIs ? self.navigationItems.barButtonItems : @[];
 }
 - (void)setupAllBBI {
     BOOL selectAll = (self.contentView.viewModel.selectsCount == (self.contentView.viewModel.foldersCount + self.contentView.viewModel.filesCount)) && self.contentView.viewModel.selectsCount != 0; // 如果没有文件(夹)，就不算全选
-    self.allBBI = [[UIBarButtonItem alloc] initWithTitle:selectAll ? @"取消全选" : @"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
+    [self.navigationItems updateAllBarButtonItemTitle:selectAll ? @"取消全选" : @"全选"];
 }
 - (void)setupContentView {
     [self.view addSubview:self.contentView];
@@ -117,58 +76,38 @@
     }];
 }
 
-#pragma mark - Actions
-- (void)editBarButtonItemDidPress:(UIBarButtonItem *)sender {
-    if (!self.selectingMode) {
-        self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(editBarButtonItemDidPress:)];
-        self.trashBBI.enabled = YES;
-        self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
-        self.allBBI.enabled = YES;
-        self.menuBBI.enabled = YES;
-        
-        self.selectingMode = YES;
-    } else {
-        self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editBarButtonItemDidPress:)];
-        self.trashBBI.enabled = NO;
-        self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
-        self.allBBI.enabled = NO;
-        self.menuBBI.enabled = NO;
-        
-        self.selectingMode = NO;
-    }
+#pragma mark - PLNavigationItemsDatasource
+- (PLOperationMenuAction)menuActionForForNavigationItems:(PLNavigationItems *)navigationItems {
+    return PLOperationMenuActionMoveToTypes;
+}
+- (BOOL)selectingModeForNavigationItems:(PLNavigationItems *)navigationItems {
+    return self.selectingMode;
+}
+
+#pragma mark - PLNavigationItemsDelegate
+- (void)navigationItems:(PLNavigationItems *)navigationItems didTapEditBarButtonItem:(UIBarButtonItem *)item {
+    self.selectingMode = !self.selectingMode;
     
     [self.contentView.viewModel removeAllSelectItems];
     [self.contentView reloadCollectionView];
     
     [self setupTitle];
-    [self setupNavigationBarItems];
+    [self setupNavigationBar];
 }
-- (void)trashBarButtonItemDidPress:(UIBarButtonItem *)sender {
-    [self.contentView.viewModel moveSelectItemsToTrash];
-}
-- (void)allBarButtonItemDidPress:(UIBarButtonItem *)sender {
-    BOOL selectAll = [self.allBBI.title isEqualToString:@"全选"];
-    
+- (void)navigationItems:(PLNavigationItems *)navigationItems didTapSelectAllBarButtonItem:(UIBarButtonItem *)item selectAll:(BOOL)selectAll {
     [self.contentView.viewModel selectAllItems:selectAll];
     [self.contentView reloadCollectionView];
     
-    if (selectAll) {
-        self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"取消全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
-    } else {
-        self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
-    }
     [self setupTitle];
-    [self setupNavigationBarItems];
+    [self setupNavigationBar];
 }
-- (void)sliderValueChanged:(StepSlider *)sender {
-    [PLUniversalManager defaultManager].columnsPerRow = sender.index + 4;
-    
+- (void)navigationItems:(PLNavigationItems *)navigationItems didTapTrashBarButtonItem:(UIBarButtonItem *)item {
+    [self.contentView.viewModel moveSelectItemsToTrash];
+}
+- (void)navigationItems:(PLNavigationItems *)navigationItems didChangeSliderValue:(StepSlider *)sender {
     // 更新flowLayout后刷新collectionView
     [self.contentView setupCollectionViewFlowLayout];
     [self.contentView reloadCollectionView];
-}
-- (void)jumpSwitchValueChanged:(UISwitch *)sender {
-    [PLUniversalManager defaultManager].directlyJumpPhoto = ![PLUniversalManager defaultManager].directlyJumpPhoto;
 }
 
 #pragma mark - PLOperationMenuDelegate
@@ -194,16 +133,28 @@
     if (self.contentView.selectingMode) {
         [self setupTitle];
         [self setupAllBBI];
-        [self setupNavigationBarItems];
+        [self setupNavigationBar];
     }
 }
 - (void)contentViewModelDidFinishOperatingFiles:(PLContentView *)contentView {
     [self setupTitle];
     [self setupAllBBI];
-    [self setupNavigationBarItems];
+    [self setupNavigationBar];
 }
 
 #pragma mark - Getter
+- (PLNavigationItems *)navigationItems {
+    if (!_navigationItems) {
+        _navigationItems = [PLNavigationItems itemsFromActions:PLNavigationActionContentIPAD];
+        _navigationItems.dataSource = self;
+        _navigationItems.delegate = self;
+        _navigationItems.menuDelegate = self;
+        
+        [_navigationItems setupNavigationItems];
+    }
+    
+    return _navigationItems;
+}
 - (PLContentView *)contentView {
     if (!_contentView) {
         _contentView = [[PLContentView alloc] initWithFolderPath:self.folderPath];
