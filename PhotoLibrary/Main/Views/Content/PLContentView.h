@@ -22,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)contentView:(PLContentView *)contentView didSelectItemAtIndexPath:(NSIndexPath *)indexPath;
 // viewModel完成文件操作的回调
 - (void)contentViewModelDidFinishOperatingFiles:(PLContentView *)contentView;
+// viewModel内部切换了shiftMode
+- (void)contentViewModelDidSwitchShiftMode:(PLContentView *)contentView;
 
 @end
 

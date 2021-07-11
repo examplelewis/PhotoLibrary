@@ -69,6 +69,9 @@
     BOOL selectAll = (self.contentView.viewModel.selectsCount == (self.contentView.viewModel.foldersCount + self.contentView.viewModel.filesCount)) && self.contentView.viewModel.selectsCount != 0; // 如果没有文件(夹)，就不算全选
     [self.navigationItems updateAllBarButtonItemTitle:selectAll ? @"取消全选" : @"全选"];
 }
+- (void)setupShiftBBI {
+    [self.navigationItems updateShiftBarButtonItemTitle:self.contentView.viewModel.shiftMode ? @"SHIFT" : @"shift"];
+}
 - (void)setupContentView {
     [self.view addSubview:self.contentView];
     [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -78,7 +81,7 @@
 
 #pragma mark - PLNavigationItemsDatasource
 - (PLOperationMenuAction)menuActionForForNavigationItems:(PLNavigationItems *)navigationItems {
-    return PLOperationMenuActionMoveToTypes | PLOperationMenuActionShift;
+    return PLOperationMenuActionMoveToTypes;
 }
 - (BOOL)selectingModeForNavigationItems:(PLNavigationItems *)navigationItems {
     return self.selectingMode;
@@ -99,6 +102,12 @@
     [self.contentView reloadCollectionView];
     
     [self setupTitle];
+    [self setupNavigationBar];
+}
+- (void)navigationItems:(PLNavigationItems *)navigationItems didTapShiftBarButtonItem:(UIBarButtonItem *)item shiftMode:(BOOL)shiftMode {
+    self.contentView.viewModel.shiftMode = shiftMode;
+    [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"已%@SHIFT模式", self.contentView.viewModel.shiftMode ? @"打开" : @"关闭"]];
+    
     [self setupNavigationBar];
 }
 - (void)navigationItems:(PLNavigationItems *)navigationItems didTapTrashBarButtonItem:(UIBarButtonItem *)item {
@@ -123,10 +132,6 @@
     if (action & PLOperationMenuActionMoveToOther) {
         [self.contentView.viewModel moveSelectItemsToOtherWorks];
     }
-    
-    if (action & PLOperationMenuActionShift) {
-        
-    }
 }
 
 #pragma mark - PLContentViewDelegate
@@ -143,6 +148,12 @@
 - (void)contentViewModelDidFinishOperatingFiles:(PLContentView *)contentView {
     [self setupTitle];
     [self setupAllBBI];
+    [self setupNavigationBar];
+}
+- (void)contentViewModelDidSwitchShiftMode:(PLContentView *)contentView {
+    [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"已%@SHIFT模式", self.contentView.viewModel.shiftMode ? @"打开" : @"关闭"]];
+    
+    [self setupShiftBBI];
     [self setupNavigationBar];
 }
 

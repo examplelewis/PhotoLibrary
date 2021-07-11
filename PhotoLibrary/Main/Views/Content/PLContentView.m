@@ -204,13 +204,18 @@
             }
         }
     } else {
-        if ([self.viewModel isSelectedForModel:cell.model]) {
-            [self.viewModel removeSelectItem:cell.model];
+        if (self.viewModel.shiftMode) {
+            [self.viewModel shiftModeTapIndexPath:indexPath withModel:cell.model];
+            [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
         } else {
-            [self.viewModel addSelectItem:cell.model];
+            if ([self.viewModel isSelectedForModel:cell.model]) {
+                [self.viewModel removeSelectItem:cell.model];
+            } else {
+                [self.viewModel addSelectItem:cell.model];
+            }
+            
+            [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
         }
-        
-        [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
     }
     
     if ([self.delegate respondsToSelector:@selector(contentView:didSelectItemAtIndexPath:)]) {
@@ -271,6 +276,13 @@
         [self.collectionView reloadData];
         [self.collectionView.mj_header endRefreshing];
     });
+}
+- (void)viewModelDidSwitchShiftMode {
+    [self.collectionView reloadData];
+    
+    if ([self.delegate respondsToSelector:@selector(contentViewModelDidSwitchShiftMode:)]) {
+        [self.delegate contentViewModelDidSwitchShiftMode:self];
+    }
 }
 
 #pragma mark - Notifications

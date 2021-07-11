@@ -19,6 +19,8 @@
 
 @property (nonatomic, assign) BOOL operatingFiles; // 是否正在进行文件操作
 
+@property (nonatomic, strong) NSIndexPath *shiftModeStartIndexPath;
+
 @end
 
 @implementation PLContentViewModel
@@ -117,9 +119,17 @@
     }
 }
 - (void)addSelectItem:(PLContentModel *)model {
+    if ([self isSelectedForModel:model]) {
+        return;
+    }
+    
     [self.selects addObject:model];
 }
 - (void)removeSelectItem:(PLContentModel *)model {
+    if (![self isSelectedForModel:model]) {
+        return;
+    }
+    
     [self.selects removeObject:model];
 }
 
@@ -202,6 +212,73 @@
     }];
 }
 
+#pragma mark - Shift Mode
+- (void)shiftModeTapIndexPath:(NSIndexPath *)indexPath withModel:(nonnull PLContentModel *)model {
+    if (!self.shiftModeStartIndexPath) {
+        [self addSelectItem:model];
+        self.shiftModeStartIndexPath = indexPath;
+        
+        return;
+    }
+    
+    if (self.shiftModeStartIndexPath.section != indexPath.section) {
+        [SVProgressHUD showInfoWithStatus:@"不支持跨Section的Shift选择"];
+        return;
+    }
+    
+    if (self.shiftModeStartIndexPath.row == indexPath.row) {
+        [self removeSelectItem:model];
+        self.shiftModeStartIndexPath = nil;
+        
+        [self _switchShiftMode];
+        
+        return;
+    }
+    
+    NSInteger shiftStart = MIN(self.shiftModeStartIndexPath.row, indexPath.row);
+    NSInteger shiftEnd = MAX(self.shiftModeStartIndexPath.row, indexPath.row);
+    BOOL allSelected = [self _isAllSelectedInShiftModeBetween:shiftStart and:shiftEnd isFolder:model.isFolder];
+    [self _processModelsFrom:shiftStart to:shiftEnd allSelectd:allSelected];
+    [self _switchShiftMode];
+}
+- (BOOL)_isAllSelectedInShiftModeBetween:(NSInteger)start and:(NSInteger)end isFolder:(BOOL)isFolder {
+    BOOL allSelected = YES;
+    for (NSInteger i = start; i <= end; i++) {
+        PLContentModel *model = self.files[i];
+        if (isFolder) {
+            model = self.folders[i];
+        }
+        
+        if (![self isSelectedForModel:model]) {
+            allSelected = NO;
+            break;
+        }
+    }
+    
+    return allSelected;
+}
+- (void)_processModelsFrom:(NSInteger)shiftStart to:(NSInteger)shiftEnd allSelectd:(BOOL)allSelected {
+    for (NSInteger i = shiftStart; i <= shiftEnd; i++) {
+        PLContentModel *model = self.files[i];
+        if (model.isFolder) {
+            model = self.folders[i];
+        }
+        
+        if (allSelected) {
+            [self removeSelectItem:model];
+        } else {
+            [self addSelectItem:model];
+        }
+    }
+}
+- (void)_switchShiftMode {
+    self.shiftMode = !self.shiftMode;
+    
+    if ([self.delegate respondsToSelector:@selector(viewModelDidSwitchShiftMode)]) {
+        [self.delegate viewModelDidSwitchShiftMode];
+    }
+}
+
 #pragma mark - Tools
 - (void)cleanSDWebImageCache {
     for (NSInteger i = 0; i < self.files.count; i++) {
@@ -235,6 +312,17 @@
         _folderType = PLContentFolderTypeEditWorks;
     } else {
         _folderType = PLContentFolderTypeNormal;
+    }
+}
+- (void)setShiftMode:(BOOL)shiftMode {
+    if (_shiftMode == shiftMode) {
+        return;
+    }
+    
+    _shiftMode = shiftMode;
+    
+    if (!shiftMode) {
+        self.shiftModeStartIndexPath = nil;
     }
 }
 
