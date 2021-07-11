@@ -13,7 +13,9 @@
 #import "PLPhotoViewController.h"
 #import "PLPhotoPhoneViewController.h"
 
-@interface ViewController () <UITableViewDataSource, UITableViewDelegate> {
+#import "PLTapManager.h"
+
+@interface ViewController () <UITableViewDataSource, UITableViewDelegate, PLTapManagerDelegate> {
     NSArray *ignoreFolders;
 }
 
@@ -27,6 +29,8 @@
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong) UISwitch *jumpSwitch;
+
+@property (nonatomic, strong) PLTapManager *cleanTapManager;
 
 @end
 
@@ -67,6 +71,9 @@
     self.sdWebImageCacheFolderSize = @"0 B";
     self.fileAppCreatdTrashFolderSize = @"0 B";
     self.documentsFolderSize = @"0 B";
+    
+    self.cleanTapManager = [[PLTapManager alloc] initWithTapModel:[PLTapModel tapModelWithCount:3 timeInterval:0.5 eventName:@"点击" actionName:@"清空所有文件"]];
+    self.cleanTapManager.delegate = self;
     
     // UI
 #if TARGET_IPHONE_SIMULATOR
@@ -220,7 +227,7 @@
         } else if (indexPath.row == 1) {
             [self cleanFileAppCreatedTrashFolder];
         } else if (indexPath.row == 2) {
-            [self cleanDocumentsFolder];
+            [self.cleanTapManager triggerTap];
         }
     } else {
         if (indexPath.row == 0) {
@@ -263,7 +270,7 @@
         });
     });
 }
-- (void)cleanDocumentsFolder {
+- (void)showCleanDocumentsFolderAlert {
     if ([self.documentsFolderSize isEqualToString:@"0 B"]) {
         return;
     }
@@ -296,6 +303,13 @@
             [self.tableView.mj_header beginRefreshing];
         });
     });
+}
+
+#pragma mark - PLTapManagerDelegate
+- (void)tapManager:(PLTapManager *)tapManager didTriggerTapActionWithTapModel:(PLTapModel *)tapModel {
+    if (tapManager == self.cleanTapManager) {
+        [self showCleanDocumentsFolderAlert];
+    }
 }
 
 #pragma mark - Action
