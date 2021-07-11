@@ -11,6 +11,7 @@
 
 @property (nonatomic, strong) UIBarButtonItem *editBBI;
 @property (nonatomic, strong) UIBarButtonItem *allBBI;
+@property (nonatomic, strong) UIBarButtonItem *shiftBBI;
 @property (nonatomic, strong) UIBarButtonItem *trashBBI;
 @property (nonatomic, strong) UIBarButtonItem *menuBBI;
 @property (nonatomic, strong) UIBarButtonItem *sliderBBI;
@@ -47,6 +48,11 @@
     if (self.actions & PLNavigationActionSelectAll) {
         self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
         self.allBBI.enabled = NO;
+    }
+    
+    if (self.actions & PLNavigationActionShift) {
+        self.shiftBBI = [[UIBarButtonItem alloc] initWithTitle:@"shift" style:UIBarButtonItemStylePlain target:self action:@selector(shiftBarButtonItemDidPress:)];
+        self.shiftBBI.enabled = NO;
     }
     
     if (self.actions & PLNavigationActionTrash) {
@@ -93,6 +99,11 @@
         self.allBBI = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
     }
 }
+- (void)updateShiftBarButtonItemTitle:(NSString *)title {
+    if (self.shiftBBI) {
+        self.shiftBBI = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStylePlain target:self action:@selector(shiftBarButtonItemDidPress:)];
+    }
+}
 
 #pragma mark - Actions
 - (void)editBarButtonItemDidPress:(UIBarButtonItem *)sender {
@@ -105,12 +116,16 @@
     UIBarButtonSystemItem editSystemItem = selectingMode ? UIBarButtonSystemItemEdit : UIBarButtonSystemItemCancel;
     self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:editSystemItem target:self action:@selector(editBarButtonItemDidPress:)];
     
-    // trash
-    self.trashBBI.enabled = !selectingMode;
-    
     // all
     self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
     self.allBBI.enabled = !selectingMode;
+    
+    // shift
+    self.shiftBBI = [[UIBarButtonItem alloc] initWithTitle:@"shift" style:UIBarButtonItemStylePlain target:self action:@selector(shiftBarButtonItemDidPress:)];
+    self.shiftBBI.enabled = !selectingMode;
+    
+    // trash
+    self.trashBBI.enabled = !selectingMode;
     
     // menu
     self.menuBBI.enabled = !selectingMode;
@@ -119,19 +134,25 @@
         [self.delegate navigationItems:self didTapEditBarButtonItem:sender];
     }
 }
-- (void)trashBarButtonItemDidPress:(UIBarButtonItem *)sender {
-    if ([self.delegate respondsToSelector:@selector(navigationItems:didTapTrashBarButtonItem:)]) {
-        [self.delegate navigationItems:self didTapTrashBarButtonItem:sender];
-    }
-}
 - (void)allBarButtonItemDidPress:(UIBarButtonItem *)sender {
     BOOL selectAll = [self.allBBI.title isEqualToString:@"全选"];
-    
-    NSString *allTitle = selectAll ? @"取消全选" : @"全选";
-    self.allBBI = [[UIBarButtonItem alloc] initWithTitle:allTitle style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
+    [self updateAllBarButtonItemTitle:selectAll ? @"取消全选" : @"全选"];
     
     if ([self.delegate respondsToSelector:@selector(navigationItems:didTapSelectAllBarButtonItem:selectAll:)]) {
         [self.delegate navigationItems:self didTapSelectAllBarButtonItem:sender selectAll:selectAll];
+    }
+}
+- (void)shiftBarButtonItemDidPress:(UIBarButtonItem *)sender {
+    BOOL shiftMode = [self.shiftBBI.title isEqualToString:@"shift"];
+    [self updateShiftBarButtonItemTitle:shiftMode ? @"SHIFT" : @"shift"];
+    
+    if ([self.delegate respondsToSelector:@selector(navigationItems:didTapShiftBarButtonItem:shiftMode:)]) {
+        [self.delegate navigationItems:self didTapShiftBarButtonItem:sender shiftMode:shiftMode];
+    }
+}
+- (void)trashBarButtonItemDidPress:(UIBarButtonItem *)sender {
+    if ([self.delegate respondsToSelector:@selector(navigationItems:didTapTrashBarButtonItem:)]) {
+        [self.delegate navigationItems:self didTapTrashBarButtonItem:sender];
     }
 }
 - (void)sliderValueChanged:(StepSlider *)sender {
@@ -154,6 +175,9 @@
     }
     if (self.allBBI) {
         _barButtonItems = [_barButtonItems arrayByAddingObject:self.allBBI];
+    }
+    if (self.shiftBBI) {
+        _barButtonItems = [_barButtonItems arrayByAddingObject:self.shiftBBI];
     }
     if (self.trashBBI) {
         _barButtonItems = [_barButtonItems arrayByAddingObject:self.trashBBI];
