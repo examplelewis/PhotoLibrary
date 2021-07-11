@@ -1,15 +1,15 @@
 //
-//  PLTapManager.m
+//  GYMultipleTapActionManager.m
 //  PhotoLibrary
 //
 //  Created by 龚宇 on 2021/7/11.
 //
 
-#import "PLTapManager.h"
+#import "GYMultipleTapActionManager.h"
 
 static NSTimeInterval const kMaxTimeInterval = 3.0f;
 
-@interface PLTapModel ()
+@interface GYMultipleTapAction ()
 
 @property (nonatomic, assign) NSInteger count;
 @property (nonatomic, assign) NSTimeInterval timeInterval;
@@ -18,11 +18,11 @@ static NSTimeInterval const kMaxTimeInterval = 3.0f;
 
 @end
 
-@implementation PLTapModel
+@implementation GYMultipleTapAction
 
 #pragma mark - Lifecycle
-+ (instancetype)tapModelWithCount:(NSInteger)count timeInterval:(NSTimeInterval)timeInterval eventName:(NSString *)eventName actionName:(NSString *)actionName {
-    return [[PLTapModel alloc] initWithCount:count timeInterval:timeInterval eventName:eventName actionName:actionName];
++ (instancetype)tapActionWithCount:(NSInteger)count timeInterval:(NSTimeInterval)timeInterval eventName:(NSString *)eventName actionName:(NSString *)actionName {
+    return [[GYMultipleTapAction alloc] initWithCount:count timeInterval:timeInterval eventName:eventName actionName:actionName];
 }
 - (instancetype)initWithCount:(NSInteger)count timeInterval:(NSTimeInterval)timeInterval eventName:(NSString *)eventName actionName:(NSString *)actionName {
     self = [super init];
@@ -42,21 +42,21 @@ static NSTimeInterval const kMaxTimeInterval = 3.0f;
 
 @end
 
-@interface PLTapManager ()
+@interface GYMultipleTapActionManager ()
 
-@property (nonatomic, strong) PLTapModel *tapModel;
+@property (nonatomic, strong) GYMultipleTapAction *tapAction;
 
 @property (nonatomic, strong) NSMutableArray<NSDate *> *tapDates;
 
 @end
 
-@implementation PLTapManager
+@implementation GYMultipleTapActionManager
 
 #pragma mark - Lifecycle
-- (instancetype)initWithTapModel:(PLTapModel *)tapModel {
+- (instancetype)initWithTapAction:(GYMultipleTapAction *)tapAction {
     self = [super init];
     if (self) {
-        self.tapModel = tapModel;
+        self.tapAction = tapAction;
         self.tapDates = [NSMutableArray array];
     }
     
@@ -64,7 +64,7 @@ static NSTimeInterval const kMaxTimeInterval = 3.0f;
 }
 
 - (void)triggerTap {
-    if (self.tapDates.count == self.tapModel.count - 1) {
+    if (self.tapDates.count == self.tapAction.count - 1) {
         [self _reset];
         [self _triggerAction];
         return;
@@ -77,7 +77,7 @@ static NSTimeInterval const kMaxTimeInterval = 3.0f;
     }
     
     NSTimeInterval timeInterval = [currentDate timeIntervalSinceDate:self.tapDates.lastObject];
-    if (timeInterval <= self.tapModel.timeInterval) {
+    if (timeInterval <= self.tapAction.timeInterval) {
         [self.tapDates addObject:currentDate];
         return;
     }
@@ -91,12 +91,12 @@ static NSTimeInterval const kMaxTimeInterval = 3.0f;
     [self.tapDates removeAllObjects];
 }
 - (void)_showInfo {
-    [SVProgressHUD showInfoWithStatus:self.tapModel.description];
+    [SVProgressHUD showInfoWithStatus:self.tapAction.description];
 }
 
 - (void)_triggerAction {
-    if ([self.delegate respondsToSelector:@selector(tapManager:didTriggerTapActionWithTapModel:)]) {
-        [self.delegate tapManager:self didTriggerTapActionWithTapModel:self.tapModel];
+    if ([self.delegate respondsToSelector:@selector(tapManager:didTriggerTapActiondidTriggerTapAction:)]) {
+        [self.delegate tapManager:self didTriggerTapAction:self.tapAction];
     }
 }
 

@@ -22,7 +22,7 @@
 		AC3F672426903A81000BF2E7 /* PLContentViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = AC3F672326903A81000BF2E7 /* PLContentViewModel.m */; };
 		AC3F672A2690541F000BF2E7 /* PLContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = AC3F67292690541F000BF2E7 /* PLContentView.m */; };
 		AC73E6D6268FFB8200191D66 /* PLOperationMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = AC73E6D5268FFB8200191D66 /* PLOperationMenu.m */; };
-		AC761D3D269AD73900508AB3 /* PLTapManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AC761D3C269AD73900508AB3 /* PLTapManager.m */; };
+		AC761D3D269AD73900508AB3 /* GYMultipleTapActionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AC761D3C269AD73900508AB3 /* GYMultipleTapActionManager.m */; };
 		ACA33A44266B5E40002E7F67 /* PLNavigationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA33A43266B5E40002E7F67 /* PLNavigationManager.m */; };
 		ACA6667A26623E7700338972 /* PLPhotoFileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA6667926623E7700338972 /* PLPhotoFileModel.m */; };
 		ACA666802662594400338972 /* PLPhotoBottomCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA6667F2662594400338972 /* PLPhotoBottomCellView.m */; };
@@ -106,8 +106,8 @@
 		AC3F67292690541F000BF2E7 /* PLContentView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLContentView.m; sourceTree = "<group>"; };
 		AC73E6D4268FFB8200191D66 /* PLOperationMenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLOperationMenu.h; sourceTree = "<group>"; };
 		AC73E6D5268FFB8200191D66 /* PLOperationMenu.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLOperationMenu.m; sourceTree = "<group>"; };
-		AC761D3B269AD73900508AB3 /* PLTapManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLTapManager.h; sourceTree = "<group>"; };
-		AC761D3C269AD73900508AB3 /* PLTapManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLTapManager.m; sourceTree = "<group>"; };
+		AC761D3B269AD73900508AB3 /* GYMultipleTapActionManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GYMultipleTapActionManager.h; sourceTree = "<group>"; };
+		AC761D3C269AD73900508AB3 /* GYMultipleTapActionManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GYMultipleTapActionManager.m; sourceTree = "<group>"; };
 		ACA33A42266B5E40002E7F67 /* PLNavigationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLNavigationManager.h; sourceTree = "<group>"; };
 		ACA33A43266B5E40002E7F67 /* PLNavigationManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLNavigationManager.m; sourceTree = "<group>"; };
 		ACA6667826623E7700338972 /* PLPhotoFileModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLPhotoFileModel.h; sourceTree = "<group>"; };
@@ -373,8 +373,8 @@
 				ACEA4B03265BF2FD00D141D4 /* PLUniversalManager.m */,
 				ACA33A42266B5E40002E7F67 /* PLNavigationManager.h */,
 				ACA33A43266B5E40002E7F67 /* PLNavigationManager.m */,
-				AC761D3B269AD73900508AB3 /* PLTapManager.h */,
-				AC761D3C269AD73900508AB3 /* PLTapManager.m */,
+				AC761D3B269AD73900508AB3 /* GYMultipleTapActionManager.h */,
+				AC761D3C269AD73900508AB3 /* GYMultipleTapActionManager.m */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -745,7 +745,7 @@
 				ACEBB7A226588A07005778FB /* UIColor+GYAdd.m in Sources */,
 				ACEBB79B26588A07005778FB /* GYUtilityManager.m in Sources */,
 				ACF21AB926690C2D00AEF2CE /* PLViewController.m in Sources */,
-				AC761D3D269AD73900508AB3 /* PLTapManager.m in Sources */,
+				AC761D3D269AD73900508AB3 /* GYMultipleTapActionManager.m in Sources */,
 				AC3C1689269994EF004A260E /* PLContentModel.m in Sources */,
 				ACEBB79A26588A07005778FB /* GYLogManager.m in Sources */,
 				ACDF2273265FE00000608CD0 /* PLPhotoViewController.m in Sources */,
