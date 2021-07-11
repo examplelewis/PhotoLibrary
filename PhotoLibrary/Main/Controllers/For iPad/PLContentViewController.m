@@ -78,7 +78,7 @@
 
 #pragma mark - PLNavigationItemsDatasource
 - (PLOperationMenuAction)menuActionForForNavigationItems:(PLNavigationItems *)navigationItems {
-    return PLOperationMenuActionMoveToTypes;
+    return PLOperationMenuActionMoveToTypes | PLOperationMenuActionShift;
 }
 - (BOOL)selectingModeForNavigationItems:(PLNavigationItems *)navigationItems {
     return self.selectingMode;
@@ -122,6 +122,10 @@
     
     if (action & PLOperationMenuActionMoveToOther) {
         [self.contentView.viewModel moveSelectItemsToOtherWorks];
+    }
+    
+    if (action & PLOperationMenuActionShift) {
+        
     }
 }
 

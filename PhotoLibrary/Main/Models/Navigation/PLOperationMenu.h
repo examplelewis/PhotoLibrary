@@ -17,7 +17,7 @@ typedef NS_OPTIONS(NSUInteger, PLOperationMenuAction) {
     PLOperationMenuActionMoveToOther = 1 << 3,
     PLOperationMenuActionMoveToTypes = PLOperationMenuActionMoveToMix | PLOperationMenuActionMoveToEdit | PLOperationMenuActionMoveToOther,
     
-//    PLOperationMenuActionMoveToEdit = 1 << 2,
+    PLOperationMenuActionShift = 1 << 4,
 };
 
 NS_ASSUME_NONNULL_BEGIN
