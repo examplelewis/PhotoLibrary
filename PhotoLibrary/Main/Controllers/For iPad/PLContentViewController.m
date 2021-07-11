@@ -97,17 +97,17 @@
     [self setupTitle];
     [self setupNavigationBar];
 }
+- (void)navigationItems:(PLNavigationItems *)navigationItems didTapShiftBarButtonItem:(UIBarButtonItem *)item shiftMode:(BOOL)shiftMode {
+    self.contentView.viewModel.shiftMode = shiftMode;
+    [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"已%@SHIFT模式", self.contentView.viewModel.shiftMode ? @"打开" : @"关闭"]];
+    
+    [self setupNavigationBar];
+}
 - (void)navigationItems:(PLNavigationItems *)navigationItems didTapSelectAllBarButtonItem:(UIBarButtonItem *)item selectAll:(BOOL)selectAll {
     [self.contentView.viewModel selectAllItems:selectAll];
     [self.contentView reloadCollectionView];
     
     [self setupTitle];
-    [self setupNavigationBar];
-}
-- (void)navigationItems:(PLNavigationItems *)navigationItems didTapShiftBarButtonItem:(UIBarButtonItem *)item shiftMode:(BOOL)shiftMode {
-    self.contentView.viewModel.shiftMode = shiftMode;
-    [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"已%@SHIFT模式", self.contentView.viewModel.shiftMode ? @"打开" : @"关闭"]];
-    
     [self setupNavigationBar];
 }
 - (void)navigationItems:(PLNavigationItems *)navigationItems didTapTrashBarButtonItem:(UIBarButtonItem *)item {

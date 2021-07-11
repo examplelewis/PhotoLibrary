@@ -13,14 +13,14 @@
 typedef NS_OPTIONS(NSInteger, PLNavigationAction) {
     PLNavigationActionNone          = 0,
     PLNavigationActionEdit          = 1 << 0,
-    PLNavigationActionSelectAll     = 1 << 1,
-    PLNavigationActionShift         = 1 << 2,
+    PLNavigationActionShift         = 1 << 1,
+    PLNavigationActionSelectAll     = 1 << 2,
     PLNavigationActionTrash         = 1 << 3,
     PLNavigationActionMenu          = 1 << 4,
     PLNavigationActionSizeSlider    = 1 << 5,
     PLNavigationActionJumpSwitch    = 1 << 6,
     
-    PLNavigationActionContentIPAD   = PLNavigationActionEdit | PLNavigationActionSelectAll | PLNavigationActionShift | PLNavigationActionTrash | PLNavigationActionMenu | PLNavigationActionSizeSlider | PLNavigationActionJumpSwitch,
+    PLNavigationActionContentIPAD   = PLNavigationActionEdit | PLNavigationActionShift | PLNavigationActionSelectAll | PLNavigationActionTrash | PLNavigationActionMenu | PLNavigationActionSizeSlider | PLNavigationActionJumpSwitch,
 };
 
 @class PLNavigationItems;
@@ -39,8 +39,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @optional
 - (void)navigationItems:(PLNavigationItems *)navigationItems didTapEditBarButtonItem:(UIBarButtonItem *)item;
-- (void)navigationItems:(PLNavigationItems *)navigationItems didTapSelectAllBarButtonItem:(UIBarButtonItem *)item selectAll:(BOOL)selectAll;
 - (void)navigationItems:(PLNavigationItems *)navigationItems didTapShiftBarButtonItem:(UIBarButtonItem *)item shiftMode:(BOOL)shiftMode;
+- (void)navigationItems:(PLNavigationItems *)navigationItems didTapSelectAllBarButtonItem:(UIBarButtonItem *)item selectAll:(BOOL)selectAll;
 - (void)navigationItems:(PLNavigationItems *)navigationItems didTapTrashBarButtonItem:(UIBarButtonItem *)item;
 - (void)navigationItems:(PLNavigationItems *)navigationItems didChangeSliderValue:(StepSlider *)sender;
 
@@ -62,8 +62,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setupNavigationItems;
 
 #pragma mark - Update
-- (void)updateAllBarButtonItemTitle:(NSString *)title;
 - (void)updateShiftBarButtonItemTitle:(NSString *)title;
+- (void)updateAllBarButtonItemTitle:(NSString *)title;
 
 @end
 

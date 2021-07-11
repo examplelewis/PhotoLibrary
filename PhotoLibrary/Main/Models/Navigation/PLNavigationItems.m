@@ -10,8 +10,8 @@
 @interface PLNavigationItems ()
 
 @property (nonatomic, strong) UIBarButtonItem *editBBI;
-@property (nonatomic, strong) UIBarButtonItem *allBBI;
 @property (nonatomic, strong) UIBarButtonItem *shiftBBI;
+@property (nonatomic, strong) UIBarButtonItem *allBBI;
 @property (nonatomic, strong) UIBarButtonItem *trashBBI;
 @property (nonatomic, strong) UIBarButtonItem *menuBBI;
 @property (nonatomic, strong) UIBarButtonItem *sliderBBI;
@@ -45,14 +45,14 @@
         self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editBarButtonItemDidPress:)];
     }
     
-    if (self.actions & PLNavigationActionSelectAll) {
-        self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
-        self.allBBI.enabled = NO;
-    }
-    
     if (self.actions & PLNavigationActionShift) {
         self.shiftBBI = [[UIBarButtonItem alloc] initWithTitle:@"shift" style:UIBarButtonItemStylePlain target:self action:@selector(shiftBarButtonItemDidPress:)];
         self.shiftBBI.enabled = NO;
+    }
+    
+    if (self.actions & PLNavigationActionSelectAll) {
+        self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
+        self.allBBI.enabled = NO;
     }
     
     if (self.actions & PLNavigationActionTrash) {
@@ -94,14 +94,14 @@
 }
 
 #pragma mark - Update
-- (void)updateAllBarButtonItemTitle:(NSString *)title {
-    if (self.allBBI) {
-        self.allBBI = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
-    }
-}
 - (void)updateShiftBarButtonItemTitle:(NSString *)title {
     if (self.shiftBBI) {
         self.shiftBBI = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStylePlain target:self action:@selector(shiftBarButtonItemDidPress:)];
+    }
+}
+- (void)updateAllBarButtonItemTitle:(NSString *)title {
+    if (self.allBBI) {
+        self.allBBI = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
     }
 }
 
@@ -116,13 +116,13 @@
     UIBarButtonSystemItem editSystemItem = selectingMode ? UIBarButtonSystemItemEdit : UIBarButtonSystemItemCancel;
     self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:editSystemItem target:self action:@selector(editBarButtonItemDidPress:)];
     
-    // all
-    self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
-    self.allBBI.enabled = !selectingMode;
-    
     // shift
     self.shiftBBI = [[UIBarButtonItem alloc] initWithTitle:@"shift" style:UIBarButtonItemStylePlain target:self action:@selector(shiftBarButtonItemDidPress:)];
     self.shiftBBI.enabled = !selectingMode;
+    
+    // all
+    self.allBBI = [[UIBarButtonItem alloc] initWithTitle:@"全选" style:UIBarButtonItemStylePlain target:self action:@selector(allBarButtonItemDidPress:)];
+    self.allBBI.enabled = !selectingMode;
     
     // trash
     self.trashBBI.enabled = !selectingMode;
@@ -134,20 +134,20 @@
         [self.delegate navigationItems:self didTapEditBarButtonItem:sender];
     }
 }
-- (void)allBarButtonItemDidPress:(UIBarButtonItem *)sender {
-    BOOL selectAll = [self.allBBI.title isEqualToString:@"全选"];
-    [self updateAllBarButtonItemTitle:selectAll ? @"取消全选" : @"全选"];
-    
-    if ([self.delegate respondsToSelector:@selector(navigationItems:didTapSelectAllBarButtonItem:selectAll:)]) {
-        [self.delegate navigationItems:self didTapSelectAllBarButtonItem:sender selectAll:selectAll];
-    }
-}
 - (void)shiftBarButtonItemDidPress:(UIBarButtonItem *)sender {
     BOOL shiftMode = [self.shiftBBI.title isEqualToString:@"shift"];
     [self updateShiftBarButtonItemTitle:shiftMode ? @"SHIFT" : @"shift"];
     
     if ([self.delegate respondsToSelector:@selector(navigationItems:didTapShiftBarButtonItem:shiftMode:)]) {
         [self.delegate navigationItems:self didTapShiftBarButtonItem:sender shiftMode:shiftMode];
+    }
+}
+- (void)allBarButtonItemDidPress:(UIBarButtonItem *)sender {
+    BOOL selectAll = [self.allBBI.title isEqualToString:@"全选"];
+    [self updateAllBarButtonItemTitle:selectAll ? @"取消全选" : @"全选"];
+    
+    if ([self.delegate respondsToSelector:@selector(navigationItems:didTapSelectAllBarButtonItem:selectAll:)]) {
+        [self.delegate navigationItems:self didTapSelectAllBarButtonItem:sender selectAll:selectAll];
     }
 }
 - (void)trashBarButtonItemDidPress:(UIBarButtonItem *)sender {
@@ -173,11 +173,11 @@
     if (self.editBBI) {
         _barButtonItems = [_barButtonItems arrayByAddingObject:self.editBBI];
     }
-    if (self.allBBI) {
-        _barButtonItems = [_barButtonItems arrayByAddingObject:self.allBBI];
-    }
     if (self.shiftBBI) {
         _barButtonItems = [_barButtonItems arrayByAddingObject:self.shiftBBI];
+    }
+    if (self.allBBI) {
+        _barButtonItems = [_barButtonItems arrayByAddingObject:self.allBBI];
     }
     if (self.trashBBI) {
         _barButtonItems = [_barButtonItems arrayByAddingObject:self.trashBBI];
