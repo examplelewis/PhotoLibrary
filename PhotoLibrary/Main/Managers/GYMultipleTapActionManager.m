@@ -95,7 +95,7 @@ static NSTimeInterval const kMaxTimeInterval = 3.0f;
 }
 
 - (void)_triggerAction {
-    if ([self.delegate respondsToSelector:@selector(tapManager:didTriggerTapActiondidTriggerTapAction:)]) {
+    if ([self.delegate respondsToSelector:@selector(tapManager:didTriggerTapAction:)]) {
         [self.delegate tapManager:self didTriggerTapAction:self.tapAction];
     }
 }
