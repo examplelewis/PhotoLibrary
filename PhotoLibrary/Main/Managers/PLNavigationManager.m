@@ -72,6 +72,7 @@
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
         vc = [[PLPhotoPhoneViewController alloc] initWithNibName:@"PLPhotoPhoneViewController" bundle:nil];
         ((PLPhotoPhoneViewController *)vc).folderPath = folderPath;
+        ((PLPhotoPhoneViewController *)vc).currentIndex = index;
     }
     
     if (vc) {

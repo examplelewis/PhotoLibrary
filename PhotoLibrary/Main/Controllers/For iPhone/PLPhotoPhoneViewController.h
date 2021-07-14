@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface PLPhotoPhoneViewController : PLViewController
 
 @property (nonatomic, copy) NSString *folderPath;
+@property (nonatomic, assign) NSInteger currentIndex;
 
 @end
 

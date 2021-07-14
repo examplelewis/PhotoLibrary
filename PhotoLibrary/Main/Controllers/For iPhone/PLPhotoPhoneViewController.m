@@ -115,7 +115,11 @@
     
     self.scrollView.contentSize = CGSizeMake(self.fileModels.count * kScreenWidth, scrollViewHeight);
     
-    [self scrollViewScrollToIndex:0];
+    NSInteger index = self.currentIndex;
+    if (index >= self.fileModels.count) {
+        index = self.fileModels.count - 1;
+    }
+    [self scrollViewScrollToIndex:index];
 }
 
 #pragma mark - Refresh
