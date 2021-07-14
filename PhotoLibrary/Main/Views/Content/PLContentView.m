@@ -59,6 +59,13 @@
     [self setupCollectionView];
 }
 - (void)setupCollectionViewFlowLayout {
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        [self setupCollectionViewFlowLayoutForPad];
+    } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+        [self setupCollectionViewFlowLayoutForPhone];
+    }
+}
+- (void)setupCollectionViewFlowLayoutForPad {
     self.flowLayout = [UICollectionViewFlowLayout new];
     self.flowLayout.minimumInteritemSpacing = [PLUniversalManager defaultManager].rowColumnSpacing;
     self.flowLayout.minimumLineSpacing = [PLUniversalManager defaultManager].rowColumnSpacing;
@@ -74,6 +81,24 @@
     
     // Folder Item Size
     CGFloat folderItemWidth = (screenWidth - (PLFolderColumnsPerRow + 1) * [PLUniversalManager defaultManager].rowColumnSpacing) / PLFolderColumnsPerRow;
+    self.folderItemSize = CGSizeMake(floorf(folderItemWidth), floorf(folderItemWidth));
+}
+- (void)setupCollectionViewFlowLayoutForPhone {
+    self.flowLayout = [UICollectionViewFlowLayout new];
+    self.flowLayout.minimumInteritemSpacing = [PLUniversalManager defaultManager].rowColumnSpacing;
+    self.flowLayout.minimumLineSpacing = [PLUniversalManager defaultManager].rowColumnSpacing;
+    
+    CGFloat itemWidth = (kScreenWidth - (3 + 1) * [PLUniversalManager defaultManager].rowColumnSpacing) / 3;
+    self.flowLayout.itemSize = CGSizeMake(floorf(itemWidth), floorf(itemWidth));
+    
+    self.flowLayout.headerReferenceSize = CGSizeMake(kScreenWidth, 44);
+    self.flowLayout.sectionInset = [PLUniversalManager defaultManager].flowLayoutSectionInset; // 设置每个分区的 上左下右 的内边距
+    self.flowLayout.sectionFootersPinToVisibleBounds = YES; // 设置分区的头视图和尾视图 是否始终固定在屏幕上边和下边
+    
+    self.flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
+    
+    // Folder Item Size
+    CGFloat folderItemWidth = (kScreenWidth - (3 + 1) * [PLUniversalManager defaultManager].rowColumnSpacing) / 3;
     self.folderItemSize = CGSizeMake(floorf(folderItemWidth), floorf(folderItemWidth));
 }
 - (void)setupCollectionView {
