@@ -27,6 +27,18 @@
     // 创建必须的文件夹
     [PLUniversalManager createNeededFolders];
     
+    if (@available(iOS 15.0, *)) {
+        UINavigationBarAppearance *appearance = [UINavigationBarAppearance new];
+        [appearance configureWithOpaqueBackground];
+        appearance.backgroundEffect = nil;
+        appearance.shadowColor = UIColor.clearColor;
+        appearance.backgroundColor = UIColor.secondarySystemBackgroundColor;
+        appearance.titleTextAttributes = @{NSForegroundColorAttributeName: UIColor.blackColor};
+
+        [UINavigationBar appearance].standardAppearance = appearance;
+        [UINavigationBar appearance].scrollEdgeAppearance = appearance;
+    }
+    
     [SVProgressHUD setMinimumDismissTimeInterval:1.0f];
     [SVProgressHUD setMaximumDismissTimeInterval:1.0f];
     

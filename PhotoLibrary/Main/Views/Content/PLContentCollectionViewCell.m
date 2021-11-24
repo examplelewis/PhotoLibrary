@@ -57,39 +57,32 @@
             self.imageView.image = nil;
             @weakify(self);
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                @strongify(self);
-                
-                if ([[SDImageCache sharedImageCache] diskImageDataExistsWithKey:model.itemPath]) {
-                    dispatch_main_async_safe(^{
-                        self.imageView.image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:model.itemPath];
-                    });
+                NSData *data = [[NSData alloc] initWithContentsOfFile:model.itemPath];
+                UIImage *image = nil;
+                if ([model.itemPath.pathExtension.lowercaseString isEqualToString:@"gif"]) {
+                    image = [UIImage sd_imageWithGIFData:data];
                 } else {
-                    NSData *data = [[NSData alloc] initWithContentsOfFile:model.itemPath];
-                    UIImage *image = nil;
-                    if ([model.itemPath.pathExtension.lowercaseString isEqualToString:@"gif"]) {
-                        image = [UIImage sd_imageWithGIFData:data];
-                    } else {
-                        image = [UIImage imageWithData:data];
-                        if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+                    image = [UIImage imageWithData:data];
+                    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+                        image = [image resizeScaleImage:1.0f];
+                    } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+                        // 压缩图片，防止爆内存
+                        if (image.size.width < 1000 && image.size.height < 1000) {
                             image = [image resizeScaleImage:1.0f];
-                        } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-                            // 压缩图片，防止爆内存
-                            if (image.size.width < 1000 && image.size.height < 1000) {
-                                image = [image resizeScaleImage:1.0f];
-                            } else if (image.size.width < 2000 && image.size.height < 2000) {
-                                image = [image resizeScaleImage:0.66f];
-                            } else {
-                                image = [image resizeScaleImage:0.33f];
-                            }
+                        } else if (image.size.width < 2000 && image.size.height < 2000) {
+                            image = [image resizeScaleImage:0.66f];
+                        } else {
+                            image = [image resizeScaleImage:0.33f];
                         }
                     }
-                    [[SDImageCache sharedImageCache] storeImage:image forKey:model.itemPath completion:nil];
-                    
-                    dispatch_main_async_safe(^{
-                        @strongify(self);
-                        self.imageView.image = image;
-                    });
                 }
+                
+                [[SDImageCache sharedImageCache] storeImageToMemory:image forKey:model.itemPath];
+                
+                dispatch_main_async_safe(^{
+                    @strongify(self);
+                    self.imageView.image = image;
+                });
             });
         }
     }
