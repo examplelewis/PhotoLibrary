@@ -33,13 +33,13 @@ PODS:
     - CocoaLumberjack/Core (= 3.7.2)
   - CocoaLumberjack/Core (3.7.2)
   - DateTools (2.0.0)
-  - IQKeyboardManager (6.5.6)
-  - KMNavigationBarTransition (1.1.8)
+  - IQKeyboardManager (6.5.9)
+  - KMNavigationBarTransition (1.1.10)
   - Masonry (1.1.0)
-  - MJRefresh (3.6.1)
-  - SDWebImage (5.11.1):
-    - SDWebImage/Core (= 5.11.1)
-  - SDWebImage/Core (5.11.1)
+  - MJRefresh (3.7.2)
+  - SDWebImage (5.12.1):
+    - SDWebImage/Core (= 5.12.1)
+  - SDWebImage/Core (5.12.1)
   - StepSlider (1.8.0)
   - SVProgressHUD (2.2.5)
   - YYCategories (1.0.4):
@@ -83,11 +83,11 @@ SPEC CHECKSUMS:
   BlocksKit: 7f422b971407001178d181a43b99014ea2591fe6
   CocoaLumberjack: b7e05132ff94f6ae4dfa9d5bce9141893a21d9da
   DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
-  IQKeyboardManager: 2a6e97afdafc7becf0cb17a9a8d795e3a980717f
-  KMNavigationBarTransition: 7ee1a05ff758bce9258845a803f7a8b00585bd58
+  IQKeyboardManager: 241cc94ccabc9deb8f8bd7d12f00d73288d13ecc
+  KMNavigationBarTransition: ceea7a78462b6d9910cf6dba93465a7e9168a1b7
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MJRefresh: d2c1970d1cf6e77fcfcdfe76c943dfab8dbfa5c1
-  SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
+  MJRefresh: 30997d30b347c8e9508a4db11e3a690da0c9b85a
+  SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
   StepSlider: 890db727e779fa99cb32afffc5887c1109e151f4
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   YYCategories: 6bcd4314c6661a561410dce4a793379ebd306abd
@@ -95,4 +95,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: ecc199ced6a783cf5956e6f35552e43341201ddb
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2
