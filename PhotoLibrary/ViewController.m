@@ -99,13 +99,15 @@
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         @strongify(self);
         [self refreshRootRolders];
+        [self refreshOthers];
+        
+        [self.tableView reloadData];
+        [self.tableView.mj_header endRefreshing];
     }];
 }
 
 #pragma mark - Data
 - (void)refreshRootRolders {
-    [self.tableView.mj_header endRefreshing];
-    
     self.folders = [GYFileManager folderPathsInFolder:[GYSettingManager defaultManager].documentPath];
     self.folders = [self.folders sortedArrayUsingDescriptors:@[[PLUniversalManager fileAscendingSortDescriptorWithKey:@"self"]]];
     self.folders = [self.folders filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSString * _Nullable folderPath, NSDictionary<NSString *,id> * _Nullable bindings) {
@@ -118,14 +120,13 @@
         NSInteger filesCount = [GYFileManager filePathsInFolder:self.folders[i]].count;
         self.folderContentCounts = [self.folderContentCounts arrayByAddingObject:[NSString stringWithFormat:@"%ld / %ld", foldersCount, filesCount]];
     }
-    
+}
+- (void)refreshOthers {
     self.sdWebImageCacheFolderSize = [GYFileManager sizeDescriptionFromSize:[[SDImageCache sharedImageCache] totalDiskSize]];
     if ([GYFileManager fileExistsAtPath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath]) {
         self.fileAppCreatdTrashFolderSize = [GYFileManager folderSizeDescriptionAtPath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
     }
     self.documentsFolderSize = [PLUniversalManager neededFoldersSizeDescription];
-    
-    [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDataSource
@@ -238,7 +239,8 @@
 
 #pragma mark - Ops
 - (void)cleanSDWebImageCahce {
-    if ([self.sdWebImageCacheFolderSize isEqualToString:@"0 B"]) {
+    if ([[SDImageCache sharedImageCache] totalDiskSize] == 0) {
+        [SVProgressHUD showInfoWithStatus:@"SDWebImage没有图片缓存"];
         return;
     }
     
@@ -248,11 +250,13 @@
         [SVProgressHUD dismiss];
         
         @strongify(self);
-        [self.tableView.mj_header beginRefreshing];
+        [self refreshOthers];
+        [self.tableView reloadData];
     }];
 }
 - (void)cleanFileAppCreatedTrashFolder {
-    if ([self.fileAppCreatdTrashFolderSize isEqualToString:@"0 B"]) {
+    if ([GYFileManager folderSizeAtPath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath] == 0) {
+        [SVProgressHUD showInfoWithStatus:@"“文件”App创建的.Trash文件夹内没有内容"];
         return;
     }
     
@@ -266,7 +270,8 @@
             [SVProgressHUD dismiss];
             
             @strongify(self);
-            [self.tableView.mj_header beginRefreshing];
+            [self refreshOthers];
+            [self.tableView reloadData];
         });
     });
 }

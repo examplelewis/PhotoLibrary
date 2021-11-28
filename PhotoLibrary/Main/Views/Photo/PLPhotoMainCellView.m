@@ -83,42 +83,36 @@
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             @strongify(self);
             
-            if ([[SDImageCache sharedImageCache] diskImageDataExistsWithKey:fileModel.filePath]) {
-                dispatch_main_async_safe(^{
-                    self.imageView.image = [[SDImageCache sharedImageCache] imageFromCacheForKey:fileModel.filePath];
-                });
+            NSData *data = [[NSData alloc] initWithContentsOfFile:fileModel.filePath];
+            UIImage *image = nil;
+            if ([fileModel.filePath.pathExtension.lowercaseString isEqualToString:@"gif"]) {
+                image = [UIImage sd_imageWithGIFData:data];
             } else {
-                NSData *data = [[NSData alloc] initWithContentsOfFile:fileModel.filePath];
-                UIImage *image = nil;
-                if ([fileModel.filePath.pathExtension.lowercaseString isEqualToString:@"gif"]) {
-                    image = [UIImage sd_imageWithGIFData:data];
-                } else {
-                    image = [UIImage imageWithData:data];
-                    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+                image = [UIImage imageWithData:data];
+                if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+                    image = [image resizeScaleImage:1.0f];
+                } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+                    if ([PLUniversalManager defaultManager].directlyJumpPhoto) {
+                        // 直接跳转到图片页的，因为没有使用列表页的缓存，并且图片页使用ScrollView，没有内存问题，因此使用原尺寸大小
                         image = [image resizeScaleImage:1.0f];
-                    } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-                        if ([PLUniversalManager defaultManager].directlyJumpPhoto) {
-                            // 直接跳转到图片页的，因为没有使用列表页的缓存，并且图片页使用ScrollView，没有内存问题，因此使用原尺寸大小
+                    } else {
+                        // 压缩图片，防止爆内存
+                        if (image.size.width < 1000 && image.size.height < 1000) {
                             image = [image resizeScaleImage:1.0f];
+                        } else if (image.size.width < 2000 && image.size.height < 2000) {
+                            image = [image resizeScaleImage:0.66f];
                         } else {
-                            // 压缩图片，防止爆内存
-                            if (image.size.width < 1000 && image.size.height < 1000) {
-                                image = [image resizeScaleImage:1.0f];
-                            } else if (image.size.width < 2000 && image.size.height < 2000) {
-                                image = [image resizeScaleImage:0.66f];
-                            } else {
-                                image = [image resizeScaleImage:0.33f];
-                            }
+                            image = [image resizeScaleImage:0.33f];
                         }
                     }
                 }
-                [[SDImageCache sharedImageCache] storeImage:image forKey:fileModel.filePath completion:nil];
-                
-                dispatch_main_async_safe(^{
-                    @strongify(self);
-                    self.imageView.image = image;
-                });
             }
+            [[SDImageCache sharedImageCache] storeImageToMemory:image forKey:fileModel.filePath];
+            
+            dispatch_main_async_safe(^{
+                @strongify(self);
+                self.imageView.image = image;
+            });
         });
     }
 }
