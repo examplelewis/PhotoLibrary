@@ -18,6 +18,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     
+    [GYLogManager.defaultManager updateDefaultColor:UIColor.labelColor successColor:UIColor.systemGreenColor warningColor:UIColor.systemYellowColor errorColor:UIColor.systemRedColor font:[UIFont fontWithName:@"PingFangSC-Regular" size:12.0f]];
+    
     [self setupLogger];
     
     // 每次App启动，清空所有SDImageCache的缓存

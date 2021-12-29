@@ -19,7 +19,7 @@
 - (void)setItemPath:(NSString *)itemPath {
     _itemPath = itemPath.copy;
     
-    self.isFolder = [GYFileManager contentIsFolderAtPath:itemPath];
+    self.isFolder = [GYFileManager itemIsFolderAtPath:itemPath];
     if (self.isFolder) {
         self.foldersCount = [GYFileManager folderPathsInFolder:itemPath].count;
         self.filesCount = [GYFileManager filePathsInFolder:itemPath].count;
