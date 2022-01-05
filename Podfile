@@ -5,19 +5,22 @@ use_frameworks!
 
 target 'PhotoLibrary' do
   
-  pod 'AFNetworking'
-  pod 'CocoaLumberjack'
+  #PodsGYCommon
   pod 'BlocksKit'
-  pod 'SDWebImage'
-  pod 'Masonry'
+  pod 'CocoaLumberjack'
   pod 'DateTools'
-  pod 'IQKeyboardManager'
-  pod 'MJRefresh'
-  pod 'YYCategories'
-  pod 'YYModel'
-  pod 'SVProgressHUD'
+  pod 'Masonry'
+  pod 'MJExtension'
   
-  pod 'StepSlider'
+  #PodsGYiOS
+  pod 'IQKeyboardManager'
   pod 'KMNavigationBarTransition'
-
+  pod 'MJRefresh'
+  pod 'SDWebImage'
+  pod 'SVProgressHUD'
+  pod 'YYCategories'
+  
+  #项目
+  pod 'StepSlider'
+  
 end
