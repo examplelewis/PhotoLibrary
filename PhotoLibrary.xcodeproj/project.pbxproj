@@ -99,8 +99,6 @@
 		AC243C83277CA4F1006182C0 /* GYCommonCategoriesHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GYCommonCategoriesHeader.h; sourceTree = "<group>"; };
 		AC243C84277CA4F1006182C0 /* GYCommonManagersHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GYCommonManagersHeader.h; sourceTree = "<group>"; };
 		AC243C85277CA4F1006182C0 /* GYCommonKeysHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GYCommonKeysHeader.h; sourceTree = "<group>"; };
-		AC243C88277CA4F1006182C0 /* RACEXTScope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RACEXTScope.h; sourceTree = "<group>"; };
-		AC243C89277CA4F1006182C0 /* RACMetaMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RACMetaMacros.h; sourceTree = "<group>"; };
 		AC243C8B277CA4F1006182C0 /* NSDictionary+GYCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+GYCommon.m"; sourceTree = "<group>"; };
 		AC243C8C277CA4F1006182C0 /* NSError+GYCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+GYCommon.h"; sourceTree = "<group>"; };
 		AC243C8D277CA4F1006182C0 /* NSArray+GYCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+GYCommon.h"; sourceTree = "<group>"; };
@@ -256,7 +254,6 @@
 				AC243C6F277CA4F1006182C0 /* Base Services */,
 				AC243C78277CA4F1006182C0 /* Managers */,
 				AC243C7D277CA4F1006182C0 /* Models */,
-				AC243C86277CA4F1006182C0 /* Third Parties */,
 			);
 			path = GYCommon;
 			sourceTree = "<group>";
@@ -313,23 +310,6 @@
 				AC243C84277CA4F1006182C0 /* GYCommonManagersHeader.h */,
 			);
 			path = Headers;
-			sourceTree = "<group>";
-		};
-		AC243C86277CA4F1006182C0 /* Third Parties */ = {
-			isa = PBXGroup;
-			children = (
-				AC243C87277CA4F1006182C0 /* RAC */,
-			);
-			path = "Third Parties";
-			sourceTree = "<group>";
-		};
-		AC243C87277CA4F1006182C0 /* RAC */ = {
-			isa = PBXGroup;
-			children = (
-				AC243C88277CA4F1006182C0 /* RACEXTScope.h */,
-				AC243C89277CA4F1006182C0 /* RACMetaMacros.h */,
-			);
-			path = RAC;
 			sourceTree = "<group>";
 		};
 		AC243C8A277CA4F1006182C0 /* Categories */ = {

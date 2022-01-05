@@ -21,7 +21,6 @@
 #import <DateTools/NSDate+DateTools.h>
 #import <Masonry.h>
 #import <MJExtension/MJExtension.h>
-#import "RACEXTScope.h"
 
 // PodsGYCommon
 #import "GYCommonOCHeader.h"
