@@ -35,6 +35,8 @@
 		AC262505265812AA00939375 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AC262504265812AA00939375 /* main.m */; };
 		AC26250F265812AB00939375 /* PhotoLibraryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC26250E265812AB00939375 /* PhotoLibraryTests.m */; };
 		AC26251A265812AB00939375 /* PhotoLibraryUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC262519265812AB00939375 /* PhotoLibraryUITests.m */; };
+		AC2C31872785E67300527DAE /* GYTapAlertManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AC2C31852785E67300527DAE /* GYTapAlertManager.m */; };
+		AC2C31882785E67300527DAE /* GYTapAlertAction.m in Sources */ = {isa = PBXBuildFile; fileRef = AC2C31862785E67300527DAE /* GYTapAlertAction.m */; };
 		AC3C1689269994EF004A260E /* PLContentModel.m in Sources */ = {isa = PBXBuildFile; fileRef = AC3C1688269994EF004A260E /* PLContentModel.m */; };
 		AC3C16A42699A8AA004A260E /* PLNavigationItems.m in Sources */ = {isa = PBXBuildFile; fileRef = AC3C16A32699A8AA004A260E /* PLNavigationItems.m */; };
 		AC3F672426903A81000BF2E7 /* PLContentViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = AC3F672326903A81000BF2E7 /* PLContentViewModel.m */; };
@@ -149,6 +151,11 @@
 		AC262519265812AB00939375 /* PhotoLibraryUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoLibraryUITests.m; sourceTree = "<group>"; };
 		AC26251B265812AB00939375 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AC26270D26581CD900939375 /* PhotoLibrary-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PhotoLibrary-Prefix.pch"; sourceTree = "<group>"; };
+		AC2C31822785E67300527DAE /* GYTapAlertHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GYTapAlertHeader.h; sourceTree = "<group>"; };
+		AC2C31832785E67300527DAE /* GYTapAlertManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GYTapAlertManager.h; sourceTree = "<group>"; };
+		AC2C31842785E67300527DAE /* GYTapAlertAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GYTapAlertAction.h; sourceTree = "<group>"; };
+		AC2C31852785E67300527DAE /* GYTapAlertManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GYTapAlertManager.m; sourceTree = "<group>"; };
+		AC2C31862785E67300527DAE /* GYTapAlertAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GYTapAlertAction.m; sourceTree = "<group>"; };
 		AC3C1687269994EF004A260E /* PLContentModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLContentModel.h; sourceTree = "<group>"; };
 		AC3C1688269994EF004A260E /* PLContentModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLContentModel.m; sourceTree = "<group>"; };
 		AC3C16A22699A8AA004A260E /* PLNavigationItems.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLNavigationItems.h; sourceTree = "<group>"; };
@@ -361,6 +368,7 @@
 			children = (
 				AC243CB4277CB069006182C0 /* Headers */,
 				AC243CBA277CB069006182C0 /* Categories */,
+				AC2C31802785E67300527DAE /* Base Services */,
 			);
 			path = GYiOS;
 			sourceTree = "<group>";
@@ -498,6 +506,26 @@
 				AC26270D26581CD900939375 /* PhotoLibrary-Prefix.pch */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		AC2C31802785E67300527DAE /* Base Services */ = {
+			isa = PBXGroup;
+			children = (
+				AC2C31812785E67300527DAE /* Tap Alert */,
+			);
+			path = "Base Services";
+			sourceTree = "<group>";
+		};
+		AC2C31812785E67300527DAE /* Tap Alert */ = {
+			isa = PBXGroup;
+			children = (
+				AC2C31822785E67300527DAE /* GYTapAlertHeader.h */,
+				AC2C31842785E67300527DAE /* GYTapAlertAction.h */,
+				AC2C31862785E67300527DAE /* GYTapAlertAction.m */,
+				AC2C31832785E67300527DAE /* GYTapAlertManager.h */,
+				AC2C31852785E67300527DAE /* GYTapAlertManager.m */,
+			);
+			path = "Tap Alert";
 			sourceTree = "<group>";
 		};
 		AC3C16962699A84A004A260E /* Content */ = {
@@ -839,6 +867,7 @@
 				ACE03AC2265A95C900BDC5AA /* PLContentCollectionViewCell.m in Sources */,
 				AC2624FA265812A900939375 /* ViewController.m in Sources */,
 				AC2624F4265812A900939375 /* AppDelegate.m in Sources */,
+				AC2C31882785E67300527DAE /* GYTapAlertAction.m in Sources */,
 				AC243CA5277CA4F1006182C0 /* GYFoundationManager.m in Sources */,
 				AC73E6D6268FFB8200191D66 /* PLOperationMenu.m in Sources */,
 				ACA666802662594400338972 /* PLPhotoBottomCellView.m in Sources */,
@@ -849,6 +878,7 @@
 				AC243CA3277CA4F1006182C0 /* NSArray+GYCommon.m in Sources */,
 				AC243CA4277CA4F1006182C0 /* NSDate+GYCommon.m in Sources */,
 				AC761D3D269AD73900508AB3 /* GYMultipleTapActionManager.m in Sources */,
+				AC2C31872785E67300527DAE /* GYTapAlertManager.m in Sources */,
 				AC3C1689269994EF004A260E /* PLContentModel.m in Sources */,
 				AC243CA2277CA4F1006182C0 /* NSError+GYCommon.m in Sources */,
 				AC243CA6277CA4F1006182C0 /* GYUIManager.m in Sources */,

@@ -8,5 +8,6 @@
 #ifndef GYiOSManagersHeader_h
 #define GYiOSManagersHeader_h
 
+#import "GYTapAlertManager.h"
 
 #endif /* GYiOSManagersHeader_h */
