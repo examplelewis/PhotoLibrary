@@ -8,7 +8,4 @@
 #ifndef PLOCHeader_h
 #define PLOCHeader_h
 
-#define screenWidth (MAX(kScreenWidth, kScreenHeight))
-#define screenHeight (MIN(kScreenWidth, kScreenHeight))
-
 #endif /* PLOCHeader_h */
