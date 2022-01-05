@@ -13,9 +13,9 @@
 #import "PLPhotoViewController.h"
 #import "PLPhotoPhoneViewController.h"
 
-#import "GYMultipleTapActionManager.h"
+#import "GYTapAlertManager.h"
 
-@interface ViewController () <UITableViewDataSource, UITableViewDelegate, GYMultipleTapActionManagerDelegate> {
+@interface ViewController () <UITableViewDataSource, UITableViewDelegate, GYTapAlertDelegate> {
     NSArray *ignoreFolders;
 }
 
@@ -30,7 +30,7 @@
 
 @property (nonatomic, strong) UISwitch *jumpSwitch;
 
-@property (nonatomic, strong) GYMultipleTapActionManager *cleanTapManager;
+@property (nonatomic, strong) GYTapAlertManager *cleanTapManager;
 
 @end
 
@@ -72,7 +72,7 @@
     self.fileAppCreatdTrashFolderSize = @"0 B";
     self.documentsFolderSize = @"0 B";
     
-    self.cleanTapManager = [[GYMultipleTapActionManager alloc] initWithTapAction:[GYMultipleTapAction tapActionWithCount:3 timeInterval:0.5 eventName:@"点击" actionName:@"清空所有文件"]];
+    self.cleanTapManager = [GYTapAlertManager.alloc initWithAction:[GYTapAlertAction tapActionWithCount:3 timeInterval:0.5 eventName:@"点击" actionName:@"清空所有文件"]];
     self.cleanTapManager.delegate = self;
     
     // UI
@@ -310,8 +310,8 @@
     });
 }
 
-#pragma mark - GYMultipleTapActionManagerDelegate
-- (void)tapManager:(GYMultipleTapActionManager *)tapManager didTriggerTapAction:(GYMultipleTapAction *)tapAction {
+#pragma mark - GYTapAlertDelegate
+- (void)manager:(GYTapAlertManager *)tapManager didTriggerAction:(GYTapAlertAction *)action {
     if (tapManager == self.cleanTapManager) {
         [self showCleanDocumentsFolderAlert];
     }
