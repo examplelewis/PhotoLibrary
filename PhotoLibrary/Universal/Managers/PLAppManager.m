@@ -1,18 +1,18 @@
 //
-//  GYSettingManager.m
+//  PLAppManager.m
 //  MyUniqueBox
 //
 //  Created by 龚宇 on 20/09/13.
 //  Copyright © 2020 龚宇. All rights reserved.
 //
 
-#import "GYSettingManager.h"
+#import "PLAppManager.h"
 
-@implementation GYSettingManager
+@implementation PLAppManager
 
 #pragma mark - Lifecycle
 + (instancetype)defaultManager {
-    static GYSettingManager *defaultManager = nil;
+    static PLAppManager *defaultManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         defaultManager = [[self alloc] init];

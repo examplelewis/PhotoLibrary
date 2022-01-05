@@ -55,16 +55,16 @@
 - (void)setFilePath:(NSString *)filePath {
     _filePath = [filePath copy];
     
-    _trashFilePath = [filePath stringByReplacingOccurrencesOfString:[GYSettingManager defaultManager].documentPath withString:[GYSettingManager defaultManager].trashFolderPath];
-    _mixWorksFilePath = [[GYSettingManager defaultManager].mixWorksFolderPath stringByAppendingPathComponent:filePath.lastPathComponent];
+    _trashFilePath = [filePath stringByReplacingOccurrencesOfString:[PLAppManager defaultManager].documentPath withString:[PLAppManager defaultManager].trashFolderPath];
+    _mixWorksFilePath = [[PLAppManager defaultManager].mixWorksFolderPath stringByAppendingPathComponent:filePath.lastPathComponent];
     _mixWorksFilePath = [PLUniversalManager nonConflictFilePathForFilePath:self.mixWorksFilePath];
-    _otherWorksFilePath = [[GYSettingManager defaultManager].otherWorksFolderPath stringByAppendingPathComponent:filePath.lastPathComponent];
+    _otherWorksFilePath = [[PLAppManager defaultManager].otherWorksFolderPath stringByAppendingPathComponent:filePath.lastPathComponent];
     _otherWorksFilePath = [PLUniversalManager nonConflictFilePathForFilePath:self.otherWorksFilePath];
     
-    _editWorksOriginFilePath = [filePath stringByReplacingOccurrencesOfString:[GYSettingManager defaultManager].documentPath withString:[GYSettingManager defaultManager].editWorksOriginFolderPath];
+    _editWorksOriginFilePath = [filePath stringByReplacingOccurrencesOfString:[PLAppManager defaultManager].documentPath withString:[PLAppManager defaultManager].editWorksOriginFolderPath];
     _editWorksOriginFilePath = [PLUniversalManager nonStepContentPathFromContentPath:_editWorksOriginFilePath];
     
-    _editWorksEditFilePath = [filePath stringByReplacingOccurrencesOfString:[GYSettingManager defaultManager].documentPath withString:[GYSettingManager defaultManager].editWorksEditFolderPath];
+    _editWorksEditFilePath = [filePath stringByReplacingOccurrencesOfString:[PLAppManager defaultManager].documentPath withString:[PLAppManager defaultManager].editWorksEditFolderPath];
     _editWorksEditFilePath = [PLUniversalManager nonStepContentPathFromContentPath:_editWorksEditFilePath];
 }
 

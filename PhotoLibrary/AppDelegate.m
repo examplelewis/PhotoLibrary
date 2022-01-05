@@ -25,7 +25,7 @@
     // 每次App启动，清空所有SDImageCache的缓存
     [[SDImageCache sharedImageCache] clearWithCacheType:SDImageCacheTypeDisk completion:nil];
     // 删除“文件”App的生成的.Trash文件
-    [GYFileManager removeFilePath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
+    [GYFileManager removeFilePath:[PLAppManager defaultManager].fileAppCreatedTrashFolderPath];
     // 创建必须的文件夹
     [PLUniversalManager createNeededFolders];
     
@@ -73,7 +73,7 @@
 #pragma mark - Setup
 - (void)setupLogger {
     // 在系统上保持一周的日志文件
-    DDLogFileManagerDefault *logFileManager = [[DDLogFileManagerDefault alloc] initWithLogsDirectory:[GYSettingManager defaultManager].documentPath];
+    DDLogFileManagerDefault *logFileManager = [[DDLogFileManagerDefault alloc] initWithLogsDirectory:[PLAppManager defaultManager].documentPath];
     DDFileLogger *fileLogger = [[DDFileLogger alloc] initWithLogFileManager:logFileManager];
     fileLogger.rollingFrequency = 60 * 60 * 24 * 7;
     fileLogger.logFileManager.maximumNumberOfLogFiles = 3;

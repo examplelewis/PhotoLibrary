@@ -108,7 +108,7 @@
 
 #pragma mark - Data
 - (void)refreshRootRolders {
-    self.folders = [GYFileManager folderPathsInFolder:[GYSettingManager defaultManager].documentPath];
+    self.folders = [GYFileManager folderPathsInFolder:[PLAppManager defaultManager].documentPath];
     self.folders = [self.folders sortedArrayUsingDescriptors:@[[PLUniversalManager fileAscendingSortDescriptorWithKey:@"self"]]];
     self.folders = [self.folders filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSString * _Nullable folderPath, NSDictionary<NSString *,id> * _Nullable bindings) {
         return [self->ignoreFolders indexOfObject:folderPath.lastPathComponent] == NSNotFound;
@@ -123,8 +123,8 @@
 }
 - (void)refreshOthers {
     self.sdWebImageCacheFolderSize = [GYFileManager sizeDescriptionFromSize:[[SDImageCache sharedImageCache] totalDiskSize]];
-    if ([GYFileManager fileExistsAtPath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath]) {
-        self.fileAppCreatdTrashFolderSize = [GYFileManager folderSizeDescriptionAtPath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
+    if ([GYFileManager fileExistsAtPath:[PLAppManager defaultManager].fileAppCreatedTrashFolderPath]) {
+        self.fileAppCreatdTrashFolderSize = [GYFileManager folderSizeDescriptionAtPath:[PLAppManager defaultManager].fileAppCreatedTrashFolderPath];
     }
     self.documentsFolderSize = [PLUniversalManager neededFoldersSizeDescription];
 }
@@ -216,11 +216,11 @@
         [PLNavigationManager navigateToContentAtFolderPath:self.folders[indexPath.row]];
     } else if (indexPath.section == 1) {
         if (indexPath.row == 0) {
-            [PLNavigationManager navigateToContentAtFolderPath:[GYSettingManager defaultManager].mixWorksFolderPath];
+            [PLNavigationManager navigateToContentAtFolderPath:[PLAppManager defaultManager].mixWorksFolderPath];
         } else if (indexPath.row == 1) {
-            [PLNavigationManager navigateToContentAtFolderPath:[GYSettingManager defaultManager].editWorksEditFolderPath];
+            [PLNavigationManager navigateToContentAtFolderPath:[PLAppManager defaultManager].editWorksEditFolderPath];
         } else if (indexPath.row == 2) {
-            [PLNavigationManager navigateToContentAtFolderPath:[GYSettingManager defaultManager].otherWorksFolderPath];
+            [PLNavigationManager navigateToContentAtFolderPath:[PLAppManager defaultManager].otherWorksFolderPath];
         }
     } else if (indexPath.section == 2) {
         if (indexPath.row == 0) {
@@ -255,7 +255,7 @@
     }];
 }
 - (void)cleanFileAppCreatedTrashFolder {
-    if ([GYFileManager folderSizeAtPath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath] == 0) {
+    if ([GYFileManager folderSizeAtPath:[PLAppManager defaultManager].fileAppCreatedTrashFolderPath] == 0) {
         [SVProgressHUD showInfoWithStatus:@"“文件”App创建的.Trash文件夹内没有内容"];
         return;
     }
@@ -263,8 +263,8 @@
     [SVProgressHUD show];
     @weakify(self);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [GYFileManager removeFilePath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
-        [GYFileManager createFolderAtPath:[GYSettingManager defaultManager].fileAppCreatedTrashFolderPath];
+        [GYFileManager removeFilePath:[PLAppManager defaultManager].fileAppCreatedTrashFolderPath];
+        [GYFileManager createFolderAtPath:[PLAppManager defaultManager].fileAppCreatedTrashFolderPath];
         
         dispatch_main_async_safe(^{
             [SVProgressHUD dismiss];
@@ -319,7 +319,7 @@
 
 #pragma mark - Action
 - (void)barButtonItemDidPress:(UIBarButtonItem *)sender {
-    [PLNavigationManager navigateToPhotoAtFolderPath:[[GYSettingManager defaultManager] pathOfContentInDocumentFolder:@"~~Test"] index:0];
+    [PLNavigationManager navigateToPhotoAtFolderPath:[[PLAppManager defaultManager] pathOfContentInDocumentFolder:@"~~Test"] index:0];
 }
 - (void)jumpSwitchValueChanged:(UISwitch *)sender {
     [PLUniversalManager defaultManager].directlyJumpPhoto = sender.isOn;

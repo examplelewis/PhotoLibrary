@@ -15,7 +15,7 @@
 @implementation PLNavigationManager
 
 + (PLNavigationType)navigateToContentAtFolderPath:(NSString *)folderPath {
-    NSInteger imageFilesCount = [GYFileManager filePathsInFolder:folderPath extensions:[GYSettingManager defaultManager].mimeImageTypes].count;
+    NSInteger imageFilesCount = [GYFileManager filePathsInFolder:folderPath extensions:[PLAppManager defaultManager].mimeImageTypes].count;
     NSInteger folderCount = [GYFileManager folderPathsInFolder:folderPath].count;
     
     // 啥都没有，不跳转
@@ -57,7 +57,7 @@
 }
 + (PLNavigationType)navigateToPhotoAtFolderPath:(NSString *)folderPath index:(NSInteger)index {
     // 啥都没有，不跳转
-    NSInteger imageFilesCount = [GYFileManager filePathsInFolder:folderPath extensions:[GYSettingManager defaultManager].mimeImageTypes].count;
+    NSInteger imageFilesCount = [GYFileManager filePathsInFolder:folderPath extensions:[PLAppManager defaultManager].mimeImageTypes].count;
     if (imageFilesCount == 0) {
         [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"%@ 内没有可用项目", folderPath.lastPathComponent]];
         return PLNavigationTypeNone;

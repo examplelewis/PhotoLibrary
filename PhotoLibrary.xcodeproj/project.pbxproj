@@ -25,7 +25,7 @@
 		AC243CC3277CB192006182C0 /* UIImage+GYiOS.m in Sources */ = {isa = PBXBuildFile; fileRef = AC243CC2277CB192006182C0 /* UIImage+GYiOS.m */; };
 		AC243CCF277CB267006182C0 /* PLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC243CC6277CB267006182C0 /* PLViewController.m */; };
 		AC243CD0277CB267006182C0 /* PLViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC243CC7277CB267006182C0 /* PLViewController.xib */; };
-		AC243CD2277CB267006182C0 /* GYSettingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AC243CCE277CB267006182C0 /* GYSettingManager.m */; };
+		AC243CD2277CB267006182C0 /* PLAppManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AC243CCE277CB267006182C0 /* PLAppManager.m */; };
 		AC2624F4265812A900939375 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AC2624F3265812A900939375 /* AppDelegate.m */; };
 		AC2624F7265812A900939375 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AC2624F6265812A900939375 /* SceneDelegate.m */; };
 		AC2624FA265812A900939375 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC2624F9265812A900939375 /* ViewController.m */; };
@@ -128,8 +128,8 @@
 		AC243CC6277CB267006182C0 /* PLViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLViewController.m; sourceTree = "<group>"; };
 		AC243CC7277CB267006182C0 /* PLViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PLViewController.xib; sourceTree = "<group>"; };
 		AC243CC8277CB267006182C0 /* PLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLViewController.h; sourceTree = "<group>"; };
-		AC243CCD277CB267006182C0 /* GYSettingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GYSettingManager.h; sourceTree = "<group>"; };
-		AC243CCE277CB267006182C0 /* GYSettingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GYSettingManager.m; sourceTree = "<group>"; };
+		AC243CCD277CB267006182C0 /* PLAppManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLAppManager.h; sourceTree = "<group>"; };
+		AC243CCE277CB267006182C0 /* PLAppManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLAppManager.m; sourceTree = "<group>"; };
 		AC243CD4277CB309006182C0 /* PLOCHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLOCHeader.h; sourceTree = "<group>"; };
 		AC243CD5277CB369006182C0 /* PLManagersHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLManagersHeader.h; sourceTree = "<group>"; };
 		AC2624EF265812A900939375 /* PhotoLibrary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoLibrary.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -419,8 +419,8 @@
 		AC243CC9277CB267006182C0 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				AC243CCD277CB267006182C0 /* GYSettingManager.h */,
-				AC243CCE277CB267006182C0 /* GYSettingManager.m */,
+				AC243CCD277CB267006182C0 /* PLAppManager.h */,
+				AC243CCE277CB267006182C0 /* PLAppManager.m */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -860,7 +860,7 @@
 				AC3C16A42699A8AA004A260E /* PLNavigationItems.m in Sources */,
 				AC243CC3277CB192006182C0 /* UIImage+GYiOS.m in Sources */,
 				AC243C9D277CA4F1006182C0 /* GYExceptionManager.m in Sources */,
-				AC243CD2277CB267006182C0 /* GYSettingManager.m in Sources */,
+				AC243CD2277CB267006182C0 /* PLAppManager.m in Sources */,
 				ACEA4B04265BF2FD00D141D4 /* PLUniversalManager.m in Sources */,
 				ACA33A44266B5E40002E7F67 /* PLNavigationManager.m in Sources */,
 				AC243CA0277CA4F1006182C0 /* NSDictionary+GYCommon.m in Sources */,

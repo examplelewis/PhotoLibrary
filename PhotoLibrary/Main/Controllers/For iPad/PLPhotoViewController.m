@@ -93,7 +93,7 @@
 
 #pragma mark - Read
 - (void)readFiles {
-    NSArray *files = [GYFileManager filePathsInFolder:self.folderPath extensions:[GYSettingManager defaultManager].mimeImageTypes].mutableCopy;
+    NSArray *files = [GYFileManager filePathsInFolder:self.folderPath extensions:[PLAppManager defaultManager].mimeImageTypes].mutableCopy;
     files = [files sortedArrayUsingDescriptors:@[[PLUniversalManager fileAscendingSortDescriptorWithKey:@"self"]]];
     
     [self.fileModels removeAllObjects];

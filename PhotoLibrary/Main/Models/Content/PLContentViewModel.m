@@ -62,7 +62,7 @@
         return [PLContentModel contentModelFromItemPath:folderPath];
     }];
     
-    NSArray *filePaths = [GYFileManager filePathsInFolder:self.folderPath extensions:[GYSettingManager defaultManager].mimeImageTypes];
+    NSArray *filePaths = [GYFileManager filePathsInFolder:self.folderPath extensions:[PLAppManager defaultManager].mimeImageTypes];
     filePaths = [filePaths sortedArrayUsingDescriptors:@[[PLUniversalManager fileAscendingSortDescriptorWithKey:@"self"]]];
     self.files = [filePaths bk_map:^PLContentModel *(NSString *filePath) {
         return [PLContentModel contentModelFromItemPath:filePath];
@@ -304,11 +304,11 @@
 - (void)setFolderPath:(NSString *)folderPath {
     _folderPath = folderPath.copy;
     
-    if ([folderPath hasPrefix:[GYSettingManager defaultManager].trashFolderPath]) {
+    if ([folderPath hasPrefix:[PLAppManager defaultManager].trashFolderPath]) {
         _folderType = PLContentFolderTypeTrash;
-    } else if ([folderPath hasPrefix:[GYSettingManager defaultManager].mixWorksFolderPath]) {
+    } else if ([folderPath hasPrefix:[PLAppManager defaultManager].mixWorksFolderPath]) {
         _folderType = PLContentFolderTypeMixWorks;
-    } else if ([folderPath hasPrefix:[GYSettingManager defaultManager].editWorksFolderPath]) {
+    } else if ([folderPath hasPrefix:[PLAppManager defaultManager].editWorksFolderPath]) {
         _folderType = PLContentFolderTypeEditWorks;
     } else {
         _folderType = PLContentFolderTypeNormal;

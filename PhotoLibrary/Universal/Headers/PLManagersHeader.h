@@ -8,6 +8,6 @@
 #ifndef PLManagersHeader_h
 #define PLManagersHeader_h
 
-#import "GYSettingManager.h"
+#import "PLAppManager.h"
 
 #endif /* PLManagersHeader_h */
