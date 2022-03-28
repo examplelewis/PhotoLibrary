@@ -25,6 +25,7 @@
 @property (nonatomic, copy) NSString *sdWebImageCacheFolderSize; // SDWebImage创建的缓存文件夹大小
 @property (nonatomic, copy) NSString *fileAppCreatdTrashFolderSize; // 由“文件”App创建的.Trash文件夹的大小
 @property (nonatomic, copy) NSString *documentsFolderSize; // SandBox文稿文件夹的大小
+@property (nonatomic, copy) NSString *trashFolderSize; // 废纸篓文件夹的大小
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 
@@ -71,6 +72,7 @@
     self.sdWebImageCacheFolderSize = @"0 B";
     self.fileAppCreatdTrashFolderSize = @"0 B";
     self.documentsFolderSize = @"0 B";
+    self.trashFolderSize = @"0 B";
     
     self.cleanTapManager = [GYTapAlertManager.alloc initWithAction:[GYTapAlertAction tapActionWithCount:3 timeInterval:0.5 eventName:@"点击" actionName:@"清空所有文件"]];
     self.cleanTapManager.delegate = self;
@@ -126,6 +128,7 @@
     if ([GYFileManager fileExistsAtPath:[PLAppManager defaultManager].fileAppCreatedTrashFolderPath]) {
         self.fileAppCreatdTrashFolderSize = [GYFileManager folderSizeDescriptionAtPath:[PLAppManager defaultManager].fileAppCreatedTrashFolderPath];
     }
+    self.trashFolderSize = [GYFileManager folderSizeDescriptionAtPath:[PLAppManager defaultManager].trashFolderPath];
     self.documentsFolderSize = [PLUniversalManager neededFoldersSizeDescription];
 }
 
@@ -139,7 +142,7 @@
     } else if (section == 1) {
         return 3;
     } else if (section == 2) {
-        return 3;
+        return 4;
     } else {
         return 1;
     }
@@ -174,6 +177,10 @@
             cell.accessoryView = nil;
             cell.detailTextLabel.text = self.fileAppCreatdTrashFolderSize;
         } else if (indexPath.row == 2) {
+            cell.textLabel.text = @"清空废纸篓";
+            cell.accessoryView = nil;
+            cell.detailTextLabel.text = self.trashFolderSize;
+        } else if (indexPath.row == 3) {
             cell.textLabel.text = @"清空所有文件";
             cell.accessoryView = nil;
             cell.detailTextLabel.text = self.documentsFolderSize;
@@ -228,6 +235,8 @@
         } else if (indexPath.row == 1) {
             [self cleanFileAppCreatedTrashFolder];
         } else if (indexPath.row == 2) {
+            [self cleanTrashFolder];
+        } else if (indexPath.row == 3) {
             [self.cleanTapManager triggerTap];
         }
     } else {
@@ -265,6 +274,26 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [GYFileManager removeFilePath:[PLAppManager defaultManager].fileAppCreatedTrashFolderPath];
         [GYFileManager createFolderAtPath:[PLAppManager defaultManager].fileAppCreatedTrashFolderPath];
+        
+        dispatch_main_async_safe(^{
+            [SVProgressHUD dismiss];
+            
+            @strongify(self);
+            [self refreshOthers];
+            [self.tableView reloadData];
+        });
+    });
+}
+- (void)cleanTrashFolder {
+    if ([GYFileManager folderSizeAtPath:[PLAppManager defaultManager].trashFolderPath] == 0) {
+        [SVProgressHUD showInfoWithStatus:@"废纸篓内没有内容"];
+    }
+    
+    [SVProgressHUD show];
+    @weakify(self);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [GYFileManager removeFilePath:[PLAppManager defaultManager].trashFolderPath];
+        [GYFileManager createFolderAtPath:[PLAppManager defaultManager].trashFolderPath];
         
         dispatch_main_async_safe(^{
             [SVProgressHUD dismiss];
