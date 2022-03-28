@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="ipad12_9rounded" orientation="landscape" layout="fullscreen" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -29,10 +30,10 @@
                     <viewLayoutGuide key="frameLayoutGuide" id="ibK-Dj-Kzt"/>
                 </scrollView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EEv-N7-qgk">
-                    <rect key="frame" x="1316" y="0.0" width="50" height="1004"/>
+                    <rect key="frame" x="1316" y="24" width="50" height="980"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PFP-Qc-SZ0">
-                            <rect key="frame" x="0.0" y="452" width="50" height="100"/>
+                            <rect key="frame" x="0.0" y="440" width="50" height="100"/>
                             <color key="backgroundColor" systemColor="systemBlueColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="100" id="GHc-yF-GDo"/>
@@ -45,7 +46,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NFN-hH-zY3">
-                            <rect key="frame" x="0.0" y="557" width="50" height="100"/>
+                            <rect key="frame" x="0.0" y="545" width="50" height="100"/>
                             <color key="backgroundColor" systemColor="systemBlueColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="100" id="EOm-mD-cos"/>
@@ -57,8 +58,8 @@
                                 <action selector="deleteButtonPressed:" destination="-1" eventType="touchUpInside" id="FPQ-93-t4Q"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V9l-Ye-dKz">
-                            <rect key="frame" x="0.0" y="677" width="50" height="100"/>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V9l-Ye-dKz">
+                            <rect key="frame" x="0.0" y="665" width="50" height="100"/>
                             <color key="backgroundColor" systemColor="systemBlueColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="100" id="OTc-b8-smj"/>
@@ -71,7 +72,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="trL-mG-bCZ">
-                            <rect key="frame" x="0.0" y="332" width="50" height="100"/>
+                            <rect key="frame" x="0.0" y="320" width="50" height="100"/>
                             <color key="backgroundColor" systemColor="systemBlueColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="100" id="scR-E9-Hic"/>
@@ -84,7 +85,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jRU-TD-6fb">
-                            <rect key="frame" x="0.0" y="227" width="50" height="100"/>
+                            <rect key="frame" x="0.0" y="215" width="50" height="100"/>
                             <color key="backgroundColor" systemColor="systemBlueColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="100" id="8I7-xj-Wv5"/>
@@ -127,10 +128,10 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Nf-MS-STl">
-                    <rect key="frame" x="0.0" y="0.0" width="50" height="1004"/>
+                    <rect key="frame" x="0.0" y="24" width="50" height="980"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mki-cH-sIO">
-                            <rect key="frame" x="0.0" y="452" width="50" height="100"/>
+                            <rect key="frame" x="0.0" y="440" width="50" height="100"/>
                             <color key="backgroundColor" systemColor="systemBlueColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="100" id="DoD-DN-RCs"/>
@@ -143,7 +144,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0RB-7B-OjQ">
-                            <rect key="frame" x="0.0" y="557" width="50" height="100"/>
+                            <rect key="frame" x="0.0" y="545" width="50" height="100"/>
                             <color key="backgroundColor" systemColor="systemBlueColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="100" id="Tpi-dD-tiO"/>
@@ -155,8 +156,8 @@
                                 <action selector="deleteButtonPressed:" destination="-1" eventType="touchUpInside" id="nr6-fY-ec3"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nod-hM-VjB">
-                            <rect key="frame" x="0.0" y="677" width="50" height="100"/>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nod-hM-VjB">
+                            <rect key="frame" x="0.0" y="665" width="50" height="100"/>
                             <color key="backgroundColor" systemColor="systemBlueColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="100" id="ree-ZA-RAr"/>
@@ -182,7 +183,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ed-bd-m8k">
-                            <rect key="frame" x="0.0" y="332" width="50" height="100"/>
+                            <rect key="frame" x="0.0" y="320" width="50" height="100"/>
                             <color key="backgroundColor" systemColor="systemBlueColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="100" id="Fek-iK-s9e"/>
@@ -195,7 +196,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TMt-6t-kar">
-                            <rect key="frame" x="0.0" y="227" width="50" height="100"/>
+                            <rect key="frame" x="0.0" y="215" width="50" height="100"/>
                             <color key="backgroundColor" systemColor="systemBlueColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="100" id="AIF-UF-600"/>
