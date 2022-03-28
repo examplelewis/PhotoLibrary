@@ -277,10 +277,15 @@
         return;
     }
     
-    NSInteger index = roundf(self.mainScrollView.contentOffset.x / mainScrollViewWidth); // 还原操作前，正在看的index
-    NSInteger plIndex = -1; // 如果plIndex == -1，说明还原之前所有文件都删光了
-    if (self.fileModels.count > 0) {
-        plIndex = self.fileModels[index].plIndex; // 还原操作前，正在看的图片对应的plIndex
+    NSInteger jumpPLIndex = -1; // 在还原后需要跳转到图片的plIndex。如果plIndex == -1，说明还原之前所有文件都删光了
+    BOOL needBackToRestorePosition = YES; // 在还原图片后是否需要返回该图片的位置。YES: 返回被删除图片的位置, NO: 停留在当前图片
+    if (needBackToRestorePosition) {
+        jumpPLIndex = self.deleteModels.lastObject.plIndex;
+    } else {
+        NSInteger index = roundf(self.mainScrollView.contentOffset.x / mainScrollViewWidth); // 还原操作前，正在看的index
+        if (self.fileModels.count > 0) {
+            jumpPLIndex = self.fileModels[index].plIndex; // 还原操作前，正在看的图片对应的plIndex
+        }
     }
     
     [self.fileModels addObject:self.deleteModels.lastObject];
@@ -291,8 +296,8 @@
     
     // 还原操作后，根据之前保留下来的plIndex，查找正确的index，并且跳转
     NSInteger scrollIndex = 0; // 如果还原之前所有文件都删光了，那么直接跳转到第一个就可以了
-    if (plIndex != -1) {
-        scrollIndex = [[self.fileModels valueForKey:@"plIndex"] indexOfObject:@(plIndex)];
+    if (jumpPLIndex != -1) {
+        scrollIndex = [[self.fileModels valueForKey:@"plIndex"] indexOfObject:@(jumpPLIndex)];
     }
     if (scrollIndex != NSNotFound) {
         [self mainScrollViewScrollToIndex:scrollIndex];
