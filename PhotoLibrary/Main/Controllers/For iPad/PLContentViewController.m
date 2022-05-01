@@ -170,6 +170,8 @@
     [self.contentView.viewModel removeAllSelectItems];
     [self.contentView reloadCollectionView];
     
+    [self.navigationItems switchSelectingMode:NO];
+    
     [self setupTitle];
     [self setupNavigationBar];
 }
@@ -178,7 +180,9 @@
     
     [self.contentView.viewModel removeAllSelectItems];
     [self.contentView reloadCollectionView];
-            
+    
+    [self.navigationItems switchSelectingMode:NO];
+    
     [self setupTitle];
     [self setupNavigationBar];
 }

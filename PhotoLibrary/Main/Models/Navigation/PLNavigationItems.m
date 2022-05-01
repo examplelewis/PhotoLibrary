@@ -105,13 +105,8 @@
     }
 }
 
-#pragma mark - Actions
-- (void)editBarButtonItemDidPress:(UIBarButtonItem *)sender {
-    if (![self.dataSource respondsToSelector:@selector(selectingModeForNavigationItems:)]) {
-        return;
-    }
-    BOOL selectingMode = [self.dataSource selectingModeForNavigationItems:self];
-    
+#pragma mark - Selecting Mode
+- (void)switchSelectingMode:(BOOL)selectingMode {
     // edit
     UIBarButtonSystemItem editSystemItem = selectingMode ? UIBarButtonSystemItemEdit : UIBarButtonSystemItemCancel;
     self.editBBI = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:editSystemItem target:self action:@selector(editBarButtonItemDidPress:)];
@@ -129,6 +124,16 @@
     
     // menu
     self.menuBBI.enabled = !selectingMode;
+}
+
+#pragma mark - Actions
+- (void)editBarButtonItemDidPress:(UIBarButtonItem *)sender {
+    if (![self.dataSource respondsToSelector:@selector(selectingModeForNavigationItems:)]) {
+        return;
+    }
+    
+    BOOL selectingMode = [self.dataSource selectingModeForNavigationItems:self];
+    [self switchSelectingMode:selectingMode];
     
     if ([self.delegate respondsToSelector:@selector(navigationItems:didTapEditBarButtonItem:)]) {
         [self.delegate navigationItems:self didTapEditBarButtonItem:sender];

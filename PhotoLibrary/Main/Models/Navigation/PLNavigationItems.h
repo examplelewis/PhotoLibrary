@@ -65,6 +65,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)updateShiftBarButtonItemTitle:(NSString *)title;
 - (void)updateAllBarButtonItemTitle:(NSString *)title;
 
+#pragma mark - Selecting Mode
+- (void)switchSelectingMode:(BOOL)selectingMode;
+
 @end
 
 NS_ASSUME_NONNULL_END
