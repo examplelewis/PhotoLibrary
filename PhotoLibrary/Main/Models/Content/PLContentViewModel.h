@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)viewModelDidFinishRefreshingItems;
 - (void)viewModelDidFinishOperatingFiles;
 - (void)viewModelDidSwitchShiftMode;
+- (void)viewModelDidFinishDeparting;
+- (void)viewModelDidFinishMerging;
 
 @end
 
@@ -55,6 +57,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)moveSelectItemsToEditWorks;
 - (void)moveSelectItemsToOtherWorks;
 - (void)moveSelectItemsToTrash;
+
+#pragma mark - Folder
+- (BOOL)canMergeFolder;
+- (void)mergeFolder;
+- (BOOL)canDepartFolder;
+- (void)departFolderByNumber:(NSInteger)number;
 
 #pragma mark - Shift Mode
 - (void)shiftModeTapIndexPath:(NSIndexPath *)indexPath withModel:(PLContentModel *)model;

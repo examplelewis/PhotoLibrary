@@ -212,6 +212,97 @@
     }];
 }
 
+#pragma mark - Folder
+- (BOOL)canMergeFolder {
+    if (self.selects.count <= 1) {
+        return NO;
+    }
+    
+    BOOL foundFile = NO;
+    for (NSInteger i = 0; i < self.selects.count; i++) {
+        if (!self.selects[i].isFolder) {
+            foundFile = YES;
+            break;
+        }
+    }
+    
+    return !foundFile;
+}
+- (void)mergeFolder {
+    @weakify(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @strongify(self);
+        // 创建不会冲突的合并文件夹
+        NSString *newFolderName = [NSString stringWithFormat:@"%@ 合并", self.selects.firstObject.itemPath.lastPathComponent];
+        NSString *newFolderPath = [self.folderPath stringByAppendingPathComponent:newFolderName];
+        newFolderPath = [GYFileManager nonConflictFilePathForFilePath:newFolderPath];
+        [GYFileManager createFolderAtPath:newFolderPath];
+        
+        // 移动文件
+        for (NSInteger i = 0; i < self.selects.count; i++) {
+            NSArray *filePaths = [GYFileManager filePathsInFolder:self.selects[i].itemPath];
+            for (NSInteger j = 0; j < filePaths.count; j++) {
+                NSString *filePath = filePaths[j];
+                NSString *newFilePath = [newFolderPath stringByAppendingPathComponent:filePath.lastPathComponent];
+                newFilePath = [GYFileManager nonConflictFilePathForFilePath:newFilePath];
+                
+                [GYFileManager moveItemFromPath:filePath toPath:newFilePath];
+            }
+        }
+        
+        // 删除原有的文件夹
+        for (NSInteger i = 0; i < self.selects.count; i++) {
+            [GYFileManager removeFilePath:self.selects[i].itemPath];
+        }
+        
+        // 回调
+        if ([self.delegate respondsToSelector:@selector(viewModelDidFinishMerging)]) {
+            [self.delegate viewModelDidFinishMerging];
+        }
+    });
+}
+- (BOOL)canDepartFolder {
+    return (self.selects.count == 1 && self.selects.firstObject.isFolder);
+}
+- (void)departFolderByNumber:(NSInteger)number {
+    @weakify(self)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @strongify(self);
+        NSArray *filePaths = [GYFileManager filePathsInFolder:self.selects.firstObject.itemPath];
+        if (filePaths.count <= number) {
+            [SVProgressHUD showInfoWithStatus:@"选中的文件夹内文件数量小于输入的数字，已忽略"];
+            return;
+        }
+        
+        NSInteger loopTimes = ceilf(filePaths.count * 1.0f / number);
+        
+        // 创建文件夹
+        for (NSInteger i = 0; i < loopTimes; i++) {
+            NSString *folderPath = [self.selects.firstObject.itemPath stringByAppendingFormat:@" %ld", i + 1];
+            [GYFileManager createFolderAtPath:folderPath];
+        }
+        
+        // 移动文件
+        for (NSInteger i = 0; i < filePaths.count; i++) {
+            NSInteger loopTime = floorf(i * 1.0f / number);
+            NSString *newFolderPath = [self.selects.firstObject.itemPath stringByAppendingFormat:@" %ld", loopTime + 1];
+            
+            NSString *filePath = filePaths[i];
+            NSString *newFilePath = [newFolderPath stringByAppendingPathComponent:filePath.lastPathComponent];
+            
+            [GYFileManager moveItemFromPath:filePath toPath:newFilePath];
+        }
+        
+        // 删除原有的文件夹
+        [GYFileManager removeFilePath:self.selects.firstObject.itemPath];
+        
+        // 回调
+        if ([self.delegate respondsToSelector:@selector(viewModelDidFinishDeparting)]) {
+            [self.delegate viewModelDidFinishDeparting];
+        }
+    });
+}
+
 #pragma mark - Shift Mode
 - (void)shiftModeTapIndexPath:(NSIndexPath *)indexPath withModel:(nonnull PLContentModel *)model {
     if (!self.shiftModeStartIndexPath) {
@@ -238,15 +329,17 @@
     NSInteger shiftStart = MIN(self.shiftModeStartIndexPath.row, indexPath.row);
     NSInteger shiftEnd = MAX(self.shiftModeStartIndexPath.row, indexPath.row);
     BOOL allSelected = [self _isAllSelectedInShiftModeBetween:shiftStart and:shiftEnd isFolder:model.isFolder];
-    [self _processModelsFrom:shiftStart to:shiftEnd allSelectd:allSelected];
+    [self _processModelsFrom:shiftStart to:shiftEnd allSelectd:allSelected isFolder:model.isFolder];
     [self _switchShiftMode];
 }
 - (BOOL)_isAllSelectedInShiftModeBetween:(NSInteger)start and:(NSInteger)end isFolder:(BOOL)isFolder {
     BOOL allSelected = YES;
     for (NSInteger i = start; i <= end; i++) {
-        PLContentModel *model = self.files[i];
+        PLContentModel *model;
         if (isFolder) {
             model = self.folders[i];
+        } else {
+            model = self.files[i];
         }
         
         if (![self isSelectedForModel:model]) {
@@ -257,11 +350,13 @@
     
     return allSelected;
 }
-- (void)_processModelsFrom:(NSInteger)shiftStart to:(NSInteger)shiftEnd allSelectd:(BOOL)allSelected {
+- (void)_processModelsFrom:(NSInteger)shiftStart to:(NSInteger)shiftEnd allSelectd:(BOOL)allSelected isFolder:(BOOL)isFolder {
     for (NSInteger i = shiftStart; i <= shiftEnd; i++) {
-        PLContentModel *model = self.files[i];
-        if (model.isFolder) {
+        PLContentModel *model;
+        if (isFolder) {
             model = self.folders[i];
+        } else {
+            model = self.files[i];
         }
         
         if (allSelected) {

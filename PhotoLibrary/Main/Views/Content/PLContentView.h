@@ -24,6 +24,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)contentViewModelDidFinishOperatingFiles:(PLContentView *)contentView;
 // viewModel内部切换了shiftMode
 - (void)contentViewModelDidSwitchShiftMode:(PLContentView *)contentView;
+// viewModel内部完成了合并
+- (void)contentViewModelDidFinishMerging:(PLContentView *)contentView;
+// viewModel内部完成了拆分
+- (void)contentViewModelDidFinishDeparting:(PLContentView *)contentView;
 
 @end
 
@@ -41,6 +45,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setupCollectionViewFlowLayout;
 - (void)refreshWhenViewDidAppear;
 - (void)reloadCollectionView;
+
+#pragma mark - Folder
+- (void)mergeFolder;
+- (void)departFolder;
 
 @end
 

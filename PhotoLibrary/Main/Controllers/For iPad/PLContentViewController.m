@@ -81,7 +81,7 @@
 
 #pragma mark - PLNavigationItemsDatasource
 - (PLOperationMenuAction)menuActionForForNavigationItems:(PLNavigationItems *)navigationItems {
-    return PLOperationMenuActionMoveToTypes;
+    return PLOperationMenuActionMoveToTypes | PLOperationMenuActionDepart | PLOperationMenuActionMerge;
 }
 - (BOOL)selectingModeForNavigationItems:(PLNavigationItems *)navigationItems {
     return self.selectingMode;
@@ -132,6 +132,14 @@
     if (action & PLOperationMenuActionMoveToOther) {
         [self.contentView.viewModel moveSelectItemsToOtherWorks];
     }
+    
+    if (action & PLOperationMenuActionMerge) {
+        [self.contentView mergeFolder];
+    }
+    
+    if (action & PLOperationMenuActionDepart) {
+        [self.contentView departFolder];
+    }
 }
 
 #pragma mark - PLContentViewDelegate
@@ -154,6 +162,24 @@
     [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"已%@SHIFT模式", self.contentView.viewModel.shiftMode ? @"打开" : @"关闭"]];
     
     [self setupShiftBBI];
+    [self setupNavigationBar];
+}
+- (void)contentViewModelDidFinishMerging:(PLContentView *)contentView {
+    self.selectingMode = NO;
+    
+    [self.contentView.viewModel removeAllSelectItems];
+    [self.contentView reloadCollectionView];
+    
+    [self setupTitle];
+    [self setupNavigationBar];
+}
+- (void)contentViewModelDidFinishDeparting:(PLContentView *)contentView {
+    self.selectingMode = NO;
+    
+    [self.contentView.viewModel removeAllSelectItems];
+    [self.contentView reloadCollectionView];
+            
+    [self setupTitle];
     [self setupNavigationBar];
 }
 

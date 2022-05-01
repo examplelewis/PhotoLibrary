@@ -431,11 +431,17 @@
     return itemPathCopy;
 }
 + (NSString *)nonConflictFilePathForFilePath:(NSString *)filePath {
+    BOOL isFolder = [GYFileManager itemIsFolderAtPath:filePath];
     NSString *outputFilePath = filePath.copy;
     NSInteger i = 2;
     
     while ([GYFileManager fileExistsAtPath:outputFilePath]) {
-        outputFilePath = [filePath.stringByDeletingPathExtension stringByAppendingFormat:@" %ld.%@", i, filePath.pathExtension];
+        if (isFolder) {
+            outputFilePath = [filePath stringByAppendingFormat:@" %ld", i];
+        } else {
+            outputFilePath = [filePath.stringByDeletingPathExtension stringByAppendingFormat:@" %ld.%@", i, filePath.pathExtension];
+        }
+        
         i += 1;
     }
     

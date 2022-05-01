@@ -138,6 +138,47 @@
     [self.collectionView reloadData];
 }
 
+#pragma mark - Folder
+- (void)mergeFolder {
+    if (!self.viewModel.canMergeFolder) {
+        [SVProgressHUD showInfoWithStatus:@"目前只支持至少两个文件夹合并"];
+        return;
+    }
+    
+    [self.viewModel mergeFolder];
+}
+- (void)departFolder {
+    if (!self.viewModel.canDepartFolder) {
+        [SVProgressHUD showInfoWithStatus:@"目前只支持选中根文件夹后拆分"];
+        return;
+    }
+    
+    UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"提示" message:@"请输入拆分的数量" preferredStyle:UIAlertControllerStyleAlert];
+    [ac addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"默认为 100";
+        textField.keyboardType = UIKeyboardTypeNumberPad;
+    }];
+    @weakify(self);
+    [ac addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if (ac.textFields.count == 0) {
+            [SVProgressHUD showErrorWithStatus:@"UIAlertController 内部出错"];
+            return;
+        }
+        
+        NSInteger departNumber = 100;
+        NSInteger inputNumber = [((UITextField *)ac.textFields.firstObject).text integerValue];
+        if (inputNumber > 0) {
+            departNumber = inputNumber;
+        }
+        
+        @strongify(self);
+        [self.viewModel departFolderByNumber:departNumber];
+    }]];
+    [ac addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+
+    [self.viewController presentViewController:ac animated:true completion:nil];
+}
+
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return self.viewModel.bothFoldersAndFiles ? 2 : 1;
@@ -307,6 +348,24 @@
     
     if ([self.delegate respondsToSelector:@selector(contentViewModelDidSwitchShiftMode:)]) {
         [self.delegate contentViewModelDidSwitchShiftMode:self];
+    }
+}
+- (void)viewModelDidFinishMerging {
+    // 合并完成之后，直接刷新页面
+    [self.collectionView.mj_header beginRefreshing];
+    
+    // 修改导航栏
+    if ([self.delegate respondsToSelector:@selector(contentViewModelDidFinishMerging:)]) {
+        [self.delegate contentViewModelDidFinishMerging:self];
+    }
+}
+- (void)viewModelDidFinishDeparting {
+    // 拆分完成之后，直接刷新页面
+    [self.collectionView.mj_header beginRefreshing];
+    
+    // 修改导航栏
+    if ([self.delegate respondsToSelector:@selector(contentViewModelDidFinishDeparting:)]) {
+        [self.delegate contentViewModelDidFinishDeparting:self];
     }
 }
 

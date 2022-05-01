@@ -75,6 +75,30 @@
         [actions addObject:action];
     }
     
+    if (self.action & PLOperationMenuActionMerge) {
+        UIAction *action = [UIAction actionWithTitle:@"合并文件夹" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+            @strongify(self);
+            
+            if ([self.delegate respondsToSelector:@selector(operationMenu:didTapAction:)]) {
+                [self.delegate operationMenu:self didTapAction:PLOperationMenuActionMerge];
+            }
+        }];
+        
+        [actions addObject:action];
+    }
+    
+    if (self.action & PLOperationMenuActionDepart) {
+        UIAction *action = [UIAction actionWithTitle:@"拆分文件夹" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+            @strongify(self);
+            
+            if ([self.delegate respondsToSelector:@selector(operationMenu:didTapAction:)]) {
+                [self.delegate operationMenu:self didTapAction:PLOperationMenuActionDepart];
+            }
+        }];
+        
+        [actions addObject:action];
+    }
+    
     _menu = [UIMenu menuWithTitle:@"" children:actions.copy];
 }
 
