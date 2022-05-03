@@ -83,6 +83,38 @@
         return PLNavigationTypeNone;
     }
 }
++ (PLNavigationType)navigateToPhotoAtFolderPath:(NSString *)folderPath recursivelyReading:(BOOL)recursivelyReading {
+    // 啥都没有，不跳转
+    NSInteger imageFilesCount = 0;
+    if (recursivelyReading) {
+        imageFilesCount = [GYFileManager allFilePathsInFolder:folderPath extensions:[PLAppManager defaultManager].mimeImageTypes].count;
+    } else {
+        imageFilesCount = [GYFileManager filePathsInFolder:folderPath extensions:[PLAppManager defaultManager].mimeImageTypes].count;
+    }
+    if (imageFilesCount == 0) {
+        [SVProgressHUD showInfoWithStatus:[NSString stringWithFormat:@"%@ 内没有可用项目", folderPath.lastPathComponent]];
+        return PLNavigationTypeNone;
+    }
+    
+    UIViewController *vc = nil;
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        vc = [[PLPhotoViewController alloc] initWithNibName:@"PLPhotoViewController" bundle:nil];
+        ((PLPhotoViewController *)vc).folderPath = folderPath;
+        ((PLPhotoViewController *)vc).recursivelyReading = recursivelyReading;
+    }
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+        vc = [[PLPhotoPhoneViewController alloc] initWithNibName:@"PLPhotoPhoneViewController" bundle:nil];
+        ((PLPhotoPhoneViewController *)vc).folderPath = folderPath;
+    }
+    
+    if (vc) {
+        [[self currentNavigationController] pushViewController:vc animated:YES];
+        return PLNavigationTypePhoto;
+    } else {
+        [SVProgressHUD showInfoWithStatus:@"设备类型不正确"];
+        return PLNavigationTypeNone;
+    }
+}
 
 #pragma mark - Tools
 + (nullable UIWindow *)currentWindow {

@@ -50,6 +50,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)mergeFolder;
 - (void)departFolder;
 
+#pragma mark - ViewAll
+- (void)viewAll;
+
 @end
 
 NS_ASSUME_NONNULL_END

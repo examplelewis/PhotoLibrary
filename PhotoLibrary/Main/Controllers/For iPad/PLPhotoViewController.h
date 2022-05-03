@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) NSString *folderPath;
 @property (nonatomic, assign) NSInteger currentIndex;
+@property (nonatomic, assign) BOOL recursivelyReading; // 是否递归文件夹，默认为NO
 
 @end
 

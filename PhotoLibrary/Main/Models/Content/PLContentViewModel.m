@@ -303,6 +303,14 @@
     });
 }
 
+#pragma mark - View All
+- (BOOL)canViewAll {
+    return (self.selects.count == 1 && self.selects.firstObject.isFolder);
+}
+- (PLContentModel *)viewAllModel {
+    return self.selects.firstObject;
+}
+
 #pragma mark - Shift Mode
 - (void)shiftModeTapIndexPath:(NSIndexPath *)indexPath withModel:(nonnull PLContentModel *)model {
     if (!self.shiftModeStartIndexPath) {

@@ -93,7 +93,12 @@
 
 #pragma mark - Read
 - (void)readFiles {
-    NSArray *files = [GYFileManager filePathsInFolder:self.folderPath extensions:[PLAppManager defaultManager].mimeImageTypes].mutableCopy;
+    NSArray *files = @[];
+    if (self.recursivelyReading) {
+        files = [GYFileManager allFilePathsInFolder:self.folderPath extensions:[PLAppManager defaultManager].mimeImageTypes].mutableCopy;
+    } else {
+        files = [GYFileManager filePathsInFolder:self.folderPath extensions:[PLAppManager defaultManager].mimeImageTypes].mutableCopy;
+    }
     files = [files sortedArrayUsingDescriptors:@[[PLUniversalManager fileAscendingSortDescriptorWithKey:@"self"]]];
     
     [self.fileModels removeAllObjects];

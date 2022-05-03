@@ -99,6 +99,18 @@
         [actions addObject:action];
     }
     
+    if (self.action & PLOperationMenuActionViewAll) {
+        UIAction *action = [UIAction actionWithTitle:@"查看全部图片" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+            @strongify(self);
+            
+            if ([self.delegate respondsToSelector:@selector(operationMenu:didTapAction:)]) {
+                [self.delegate operationMenu:self didTapAction:PLOperationMenuActionViewAll];
+            }
+        }];
+        
+        [actions addObject:action];
+    }
+    
     _menu = [UIMenu menuWithTitle:@"" children:actions.copy];
 }
 

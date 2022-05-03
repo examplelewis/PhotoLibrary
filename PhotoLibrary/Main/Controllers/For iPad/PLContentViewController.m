@@ -81,7 +81,7 @@
 
 #pragma mark - PLNavigationItemsDatasource
 - (PLOperationMenuAction)menuActionForForNavigationItems:(PLNavigationItems *)navigationItems {
-    return PLOperationMenuActionMoveToTypes | PLOperationMenuActionDepart | PLOperationMenuActionMerge;
+    return PLOperationMenuActionMoveToTypes | PLOperationMenuActionDepart | PLOperationMenuActionMerge | PLOperationMenuActionViewAll;
 }
 - (BOOL)selectingModeForNavigationItems:(PLNavigationItems *)navigationItems {
     return self.selectingMode;
@@ -139,6 +139,10 @@
     
     if (action & PLOperationMenuActionDepart) {
         [self.contentView departFolder];
+    }
+    
+    if (action & PLOperationMenuActionViewAll) {
+        [self.contentView viewAll];
     }
 }
 

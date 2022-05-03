@@ -179,6 +179,17 @@
     [self.viewController presentViewController:ac animated:true completion:nil];
 }
 
+#pragma mark - View All
+- (void)viewAll {
+    if (!self.viewModel.canViewAll) {
+        [SVProgressHUD showInfoWithStatus:@"目前仅支持选取根文件夹进行全部查看"];
+        return;
+    }
+    
+    PLNavigationType type = [PLNavigationManager navigateToPhotoAtFolderPath:self.viewModel.viewAllModel.itemPath recursivelyReading:YES];
+    self.refreshFilesWhenViewDidAppear = type == PLNavigationTypePhoto; // 跳转到 PLPhotoViewController 后，返回需要刷新文件
+}
+
 #pragma mark - UICollectionViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return self.viewModel.bothFoldersAndFiles ? 2 : 1;

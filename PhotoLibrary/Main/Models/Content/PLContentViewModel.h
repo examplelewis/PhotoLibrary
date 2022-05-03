@@ -64,6 +64,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)canDepartFolder;
 - (void)departFolderByNumber:(NSInteger)number;
 
+#pragma mark - View All
+- (BOOL)canViewAll;
+- (PLContentModel *)viewAllModel;
+
 #pragma mark - Shift Mode
 - (void)shiftModeTapIndexPath:(NSIndexPath *)indexPath withModel:(PLContentModel *)model;
 

@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (PLNavigationType)navigateToContentAtFolderPath:(NSString *)folderPath;
 + (PLNavigationType)navigateToPhotoAtFolderPath:(NSString *)folderPath index:(NSInteger)index;
++ (PLNavigationType)navigateToPhotoAtFolderPath:(NSString *)folderPath recursivelyReading:(BOOL)recursivelyReading;
 
 @end
 
