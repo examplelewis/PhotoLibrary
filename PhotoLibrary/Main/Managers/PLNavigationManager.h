@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface PLNavigationManager : NSObject
 
 + (PLNavigationType)navigateToContentAtFolderPath:(NSString *)folderPath;
++ (PLNavigationType)navigateToContentAtFolderPath:(NSString *)folderPath recursivelyReading:(BOOL)recursivelyReading;
 + (PLNavigationType)navigateToPhotoAtFolderPath:(NSString *)folderPath index:(NSInteger)index;
 + (PLNavigationType)navigateToPhotoAtFolderPath:(NSString *)folderPath recursivelyReading:(BOOL)recursivelyReading;
 

@@ -99,12 +99,24 @@
         [actions addObject:action];
     }
     
-    if (self.action & PLOperationMenuActionViewAll) {
-        UIAction *action = [UIAction actionWithTitle:@"查看全部图片" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+    if (self.action & PLOperationMenuActionViewAllInList) {
+        UIAction *action = [UIAction actionWithTitle:@"查看全部图片(列表页)" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
             @strongify(self);
             
             if ([self.delegate respondsToSelector:@selector(operationMenu:didTapAction:)]) {
-                [self.delegate operationMenu:self didTapAction:PLOperationMenuActionViewAll];
+                [self.delegate operationMenu:self didTapAction:PLOperationMenuActionViewAllInList];
+            }
+        }];
+        
+        [actions addObject:action];
+    }
+    
+    if (self.action & PLOperationMenuActionViewAllInDetail) {
+        UIAction *action = [UIAction actionWithTitle:@"查看全部图片(详情页)" image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+            @strongify(self);
+            
+            if ([self.delegate respondsToSelector:@selector(operationMenu:didTapAction:)]) {
+                [self.delegate operationMenu:self didTapAction:PLOperationMenuActionViewAllInDetail];
             }
         }];
         

@@ -81,7 +81,7 @@
 
 #pragma mark - PLNavigationItemsDatasource
 - (PLOperationMenuAction)menuActionForForNavigationItems:(PLNavigationItems *)navigationItems {
-    return PLOperationMenuActionMoveToTypes | PLOperationMenuActionDepart | PLOperationMenuActionMerge | PLOperationMenuActionViewAll;
+    return PLOperationMenuActionMoveToTypes | PLOperationMenuActionDepart | PLOperationMenuActionMerge | PLOperationMenuActionViewAllInDetail | PLOperationMenuActionViewAllInList;
 }
 - (BOOL)selectingModeForNavigationItems:(PLNavigationItems *)navigationItems {
     return self.selectingMode;
@@ -141,8 +141,12 @@
         [self.contentView departFolder];
     }
     
-    if (action & PLOperationMenuActionViewAll) {
-        [self.contentView viewAll];
+    if (action & PLOperationMenuActionViewAllInList) {
+        [self.contentView viewAllInList];
+    }
+    
+    if (action & PLOperationMenuActionViewAllInDetail) {
+        [self.contentView viewAllInDetail];
     }
 }
 
@@ -218,6 +222,11 @@
     _selectingMode = selectingMode;
     
     self.contentView.selectingMode = selectingMode;
+}
+- (void)setRecursivelyReading:(BOOL)recursivelyReading {
+    _recursivelyReading = recursivelyReading;
+    
+    self.contentView.viewModel.recursivelyReading = recursivelyReading;
 }
 
 @end

@@ -20,7 +20,8 @@ typedef NS_OPTIONS(NSUInteger, PLOperationMenuAction) {
     PLOperationMenuActionDepart = 1 << 4,
     PLOperationMenuActionMerge = 1 << 5,
     
-    PLOperationMenuActionViewAll = 1 << 6,
+    PLOperationMenuActionViewAllInList = 1 << 6,
+    PLOperationMenuActionViewAllInDetail = 1 << 7,
 };
 
 NS_ASSUME_NONNULL_BEGIN

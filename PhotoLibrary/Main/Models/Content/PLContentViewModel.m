@@ -56,17 +56,27 @@
     });
 }
 - (void)_refreshItems {
-    NSArray *folderPaths = [GYFileManager folderPathsInFolder:self.folderPath];
-    folderPaths = [folderPaths sortedArrayUsingDescriptors:@[[PLUniversalManager fileAscendingSortDescriptorWithKey:@"self"]]];
-    self.folders = [folderPaths bk_map:^PLContentModel *(NSString *folderPath) {
-        return [PLContentModel contentModelFromItemPath:folderPath];
-    }];
-    
-    NSArray *filePaths = [GYFileManager filePathsInFolder:self.folderPath extensions:[PLAppManager defaultManager].mimeImageTypes];
-    filePaths = [filePaths sortedArrayUsingDescriptors:@[[PLUniversalManager fileAscendingSortDescriptorWithKey:@"self"]]];
-    self.files = [filePaths bk_map:^PLContentModel *(NSString *filePath) {
-        return [PLContentModel contentModelFromItemPath:filePath];
-    }];
+    if (self.recursivelyReading) {
+        self.folders = @[];
+        
+        NSArray *filePaths = [GYFileManager allFilePathsInFolder:self.folderPath extensions:[PLAppManager defaultManager].mimeImageTypes];
+        filePaths = [filePaths sortedArrayUsingDescriptors:@[[PLUniversalManager fileAscendingSortDescriptorWithKey:@"self"]]];
+        self.files = [filePaths bk_map:^PLContentModel *(NSString *filePath) {
+            return [PLContentModel contentModelFromItemPath:filePath];
+        }];
+    } else {
+        NSArray *folderPaths = [GYFileManager folderPathsInFolder:self.folderPath];
+        folderPaths = [folderPaths sortedArrayUsingDescriptors:@[[PLUniversalManager fileAscendingSortDescriptorWithKey:@"self"]]];
+        self.folders = [folderPaths bk_map:^PLContentModel *(NSString *folderPath) {
+            return [PLContentModel contentModelFromItemPath:folderPath];
+        }];
+        
+        NSArray *filePaths = [GYFileManager filePathsInFolder:self.folderPath extensions:[PLAppManager defaultManager].mimeImageTypes];
+        filePaths = [filePaths sortedArrayUsingDescriptors:@[[PLUniversalManager fileAscendingSortDescriptorWithKey:@"self"]]];
+        self.files = [filePaths bk_map:^PLContentModel *(NSString *filePath) {
+            return [PLContentModel contentModelFromItemPath:filePath];
+        }];
+    }
     
     self.bothFoldersAndFiles = (self.folders.count > 0 && self.files.count > 0);
 }

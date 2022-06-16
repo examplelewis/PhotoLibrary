@@ -51,7 +51,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)departFolder;
 
 #pragma mark - ViewAll
-- (void)viewAll;
+- (void)viewAllInList;
+- (void)viewAllInDetail;
 
 @end
 

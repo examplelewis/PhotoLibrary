@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface PLContentViewController : PLViewController
 
 @property (nonatomic, copy) NSString *folderPath;
+@property (nonatomic, assign) BOOL recursivelyReading;
 
 @end
 

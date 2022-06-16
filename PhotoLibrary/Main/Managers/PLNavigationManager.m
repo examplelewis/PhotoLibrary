@@ -15,8 +15,18 @@
 @implementation PLNavigationManager
 
 + (PLNavigationType)navigateToContentAtFolderPath:(NSString *)folderPath {
-    NSInteger imageFilesCount = [GYFileManager filePathsInFolder:folderPath extensions:[PLAppManager defaultManager].mimeImageTypes].count;
-    NSInteger folderCount = [GYFileManager folderPathsInFolder:folderPath].count;
+    return [PLNavigationManager navigateToContentAtFolderPath:folderPath recursivelyReading:NO];
+}
++ (PLNavigationType)navigateToContentAtFolderPath:(NSString *)folderPath recursivelyReading:(BOOL)recursivelyReading {
+    NSInteger imageFilesCount = 0;
+    NSInteger folderCount = 0;
+    if (recursivelyReading) {
+        imageFilesCount = [GYFileManager allFilePathsInFolder:folderPath extensions:[PLAppManager defaultManager].mimeImageTypes].count;
+        folderCount = [GYFileManager allFolderPathsInFolder:folderPath].count;
+    } else {
+        imageFilesCount = [GYFileManager filePathsInFolder:folderPath extensions:[PLAppManager defaultManager].mimeImageTypes].count;
+        folderCount = [GYFileManager folderPathsInFolder:folderPath].count;
+    }
     
     // 啥都没有，不跳转
     if (imageFilesCount == 0 && folderCount == 0) {
@@ -41,6 +51,7 @@
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         vc = [[PLContentViewController alloc] initWithNibName:@"PLContentViewController" bundle:nil];
         ((PLContentViewController *)vc).folderPath = folderPath;
+        ((PLContentViewController *)vc).recursivelyReading = recursivelyReading;
     }
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
         vc = [[PLContentPhoneViewController alloc] initWithNibName:@"PLContentPhoneViewController" bundle:nil];

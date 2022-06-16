@@ -30,6 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger filesCount;
 @property (nonatomic, assign) NSInteger selectsCount;
 @property (nonatomic, assign) BOOL bothFoldersAndFiles;
+@property (nonatomic, assign) BOOL recursivelyReading;
 
 @property (nonatomic, assign) BOOL shiftMode;
 
